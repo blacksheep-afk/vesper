@@ -1,0 +1,37 @@
+{
+  "command": [
+    "C:\\Users\\LEARNER\\Documents\\mlab\\Blacksheep\\vesper\\.tools\\apache-maven-3.9.9/bin\\mvn.CMD",
+    "-B",
+    "clean",
+    "test",
+    "-Dvesper.reportsDirectory=C:\\Users\\LEARNER\\Documents\\mlab\\Blacksheep\\vesper\\.vesper\\runs\\workflow-20260925-231048-a534f44c\\05-candidate-regression\\reports",
+    "-DfailIfNoTests=true",
+    "-Dsurefire.failIfNoSpecifiedTests=true"
+  ],
+  "workspace": "C:\\Users\\LEARNER\\Documents\\mlab\\Blacksheep\\vesper\\.vesper\\runs\\workflow-20260925-231048-a534f44c\\candidate",
+  "started_at": 1790370695.196812,
+  "status": "passed",
+  "counts": {
+    "tests": 12,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "test_ids": [
+    "dev.vesper.CheckoutTest#invalidPercentRejected",
+    "dev.vesper.CheckoutTest#zeroPercent",
+    "dev.vesper.CheckoutTest#fractionalDiscountRoundsDown",
+    "dev.vesper.CheckoutTest#negativeSubtotalRejected",
+    "dev.vesper.CheckoutTest#fullDiscount",
+    "dev.vesper.CheckoutTest#validDiscount",
+    "dev.vesper.CheckoutTest#largeSubtotalDoesNotOverflow",
+    "dev.vesper.CheckoutTest#zeroSubtotal",
+    "dev.vesper.CheckoutTest#expiryDayIsInclusive",
+    "dev.vesper.CheckoutTest#missingDatesRejected",
+    "dev.vesper.CheckoutTest#expiredDiscountIsRejected",
+    "dev.vesper.ReproducerR3Test#expiryDayMustReceiveDiscount_R3"
+  ],
+  "exit_code": 0,
+  "inputs_unchanged": true,
+  "duration_seconds": 12.135
+}
