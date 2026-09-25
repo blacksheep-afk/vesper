@@ -1,0 +1,20 @@
+{
+  "attempt": 1,
+  "working_directory": "C:\\Users\\Learner\\Documents\\spring-petclinic",
+  "command": ".\\mvnw.cmd -B verify",
+  "rationale": "Documented CI command from .github/workflows/maven-build.yml: ./mvnw -B verify",
+  "environment": {
+    "JAVA_HOME": "C:\\Users\\Learner\\Documents\\vesper\\.tools\\jdk-17.0.14+7",
+    "MAVEN_OPTS": "-Dmaven.repo.local=C:\\Users\\Learner\\Documents\\vesper\\.tools\\m2",
+    "java_version": "17.0.14",
+    "maven_version": "3.9.9",
+    "os": "Windows 10 10.0.19045 amd64"
+  },
+  "source": {
+    "repo": "https://github.com/spring-projects/spring-petclinic",
+    "commit": "818c4136ea971c21674525f9053de0d9c7ad8cfe",
+    "branch": "main",
+    "tag": "vesper-baseline-sprint1-20260925",
+    "status": "clean"
+  }
+}
