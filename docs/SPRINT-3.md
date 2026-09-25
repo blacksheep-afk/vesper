@@ -132,6 +132,41 @@ Exit code: 0
 
 ---
 
+## Integration run — 2026-09-25 21:31:58 SAST
+
+**Run ID:** `sprint3-integrated-20260925-213158`
+**Command:** `mvn -B clean test -f demo/pom.xml -Dvesper.reportsDirectory=... -DfailIfNoTests=true`
+**Source:** `Checkout.java` line 14 — `today.isAfter(expiry)` (fix integrated)
+
+```
+[INFO] --- clean:3.2.0:clean (default-clean) @ checkout-demo ---
+[INFO] Deleting C:\Users\Learner\sam\vesper\demo\target
+
+[INFO] --- compiler:3.13.0:compile (default-compile) @ checkout-demo ---
+[INFO] Compiling 1 source file with javac [debug release 17] to target\classes
+
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ checkout-demo ---
+[INFO] Compiling 2 source files with javac [debug release 17] to target\test-classes
+
+[INFO]  T E S T S
+[INFO] Running dev.vesper.CheckoutTest
+Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.159 s
+[INFO] Running dev.vesper.ReproducerR3Test
+Tests run:  1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.000 s
+
+Results:
+Tests run: 12, Failures: 0, Errors: 0, Skipped: 0
+
+[INFO] BUILD SUCCESS
+[INFO] Total time:  10.830 s
+[INFO] Finished at: 2026-09-25T21:32:14+02:00
+Exit code: 0
+```
+
+**Summary: 12 run · 0 failures · 0 errors · 0 skipped · exit 0**
+
+---
+
 ## Classification
 
 | Dimension | Value |
