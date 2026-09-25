@@ -12,7 +12,7 @@ public final class Checkout {
         Objects.requireNonNull(expiry, "expiry");
         Objects.requireNonNull(today, "today");
         if (today.isAfter(expiry)) return subtotalCents;  // R3: expiry is inclusive; discount expires only after the expiry date
-        // Split before multiplying to avoid overflow for large subtotals.
+        // Split before multiplying to avoid overflow for large subtotals
         long discount = (subtotalCents / 100) * percent + ((subtotalCents % 100) * percent) / 100;
         return subtotalCents - discount;
     }
