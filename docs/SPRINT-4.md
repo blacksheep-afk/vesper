@@ -45,7 +45,7 @@ The workflow supports the supplied Maven demo's report-directory property and R3
 
 Python tests use clearly labelled synthetic fixtures to check orchestration failure paths. They are not evidence of Java application behavior. Actual Maven runs must be evaluated separately. Passing tests do not prove complete correctness.
 
-Each workflow report leaves human review pending and performs no integration. Historical Sprint 3 approval is not reused as approval of a new snapshot. No Bobcoin or productivity measurement is fabricated. A teammate's complete Bob walkthrough and real Bob task-summary screenshot still require a Bob session.
+Each workflow report leaves human review pending and performs no integration. Historical Sprint 3 approval is not reused as approval of a new snapshot. No Bobcoin or productivity measurement is fabricated. The developer has supplied a real Bob task-summary screenshot (see below); execution results are documented separately in the run evidence.
 
 ## Actual local verification — 25 September 2026
 
@@ -56,8 +56,12 @@ Each workflow report leaves human review pending and performs no integration. Hi
 - Recorded workflow duration: 77.156 seconds; this is execution timing, not a productivity comparison.
 - [Actual local report](../.vesper/runs/workflow-20260925-225639-8ad672ce/report.md) and adjacent raw evidence are ignored local run artifacts; regenerate them on another checkout.
 - Java 17 and Maven 3.9.9 were provisioned under ignored `.tools` without global settings changes. Java source and tests in the accepted demo were unchanged.
-- Bob walkthrough and real task-summary screenshot remain pending. Implementation and these checks were performed in Codex.
+- Implementation and the local checks above were performed in Codex. The developer subsequently supplied a Bob Sprint 4 review task-summary screenshot; see below.
 
 ## Visible Sprint 4 evidence
 
 The manually executed run is preserved in [evidence/sprint-4/workflow-20260925-231048-a534f44c/report.md](../evidence/sprint-4/workflow-20260925-231048-a534f44c/report.md). New workflow runs default to `evidence/sprint-4/`, a visible, Git-trackable folder. Original logs and metadata retain their original execution paths. Build outputs are excluded. This is manual test evidence, not a Bob AI consumption-summary screenshot.
+
+## Bob session screenshot
+
+[Nyakalo_Kgwale Sprint 4 task summary](../bob_sessions/black_sheep_nyakalo_kgwale_task04_sprint4_summary.png) is the unmodified screenshot supplied by the developer. It shows the Sprint 4 review request in workspace `vesper` and **0.503 Bobcoins** consumed. The screenshot records session usage; it does not itself display test execution results.
