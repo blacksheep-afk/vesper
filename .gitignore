@@ -1,0 +1,10 @@
+.vesper/
+__pycache__/
+*.pyc
+.venv/
+**/target/
+.env
+.env.*
+!.env.example
+
+.tools/
