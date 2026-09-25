@@ -75,12 +75,15 @@ A test failure alone is not enough: the expectation must be valid and the failur
 - [x] Verify the local Java, Maven and Python toolchain
 - [x] Build the standalone demo and establish passing baseline tests
 - [x] Reproduce one requirement-linked bug
-- [x] Prepare and verify a candidate fix
-- [x] Connect the stages with a sequential runner and Bob instructions (live Bob walkthrough pending)
-- [x] Generate a report from actual results
-- [ ] Measure impact and prepare submission assets
+- [x] Prepare and verify a candidate fix (Sprint 3 — integrated, 12/12 pass)
+- [x] Connect the stages into one Bob workflow (`python -m vesper workflow`)
+- [x] Generate a report from actual results (`workflow_report.md` in each run dir)
+- [ ] Measure impact — timing study methodology documented; measurements pending
+- [ ] Record narrated demo video (≤3 min, ≥90s working solution)
+- [ ] Capture Bob task 04 session screenshot
+- [ ] Submit hackathon form — **do not submit without user instruction**
 
-Sprints 1–3 provide the baseline runner, disclosed R3 reproducer and integrated correction. Sprint 4 adds an isolated sequential replay and generated Markdown evidence report. The full Java workflow has been executed successfully; see docs/SPRINT-4.md. A live Bob walkthrough and its actual task-summary screenshot remain pending.
+Sprints 1–3 complete: 12 Java tests pass (11 original + 1 frozen reproducer), 10 Python runner checks pass, fix integrated. Sprint 5 workflow runner operational. Bob session screenshots for tasks 01–03 captured; task 04 pending.
 
 ## Task breakdown
 
@@ -209,10 +212,9 @@ From the project root, with Python 3 available:
 python -m unittest discover -s tests -v
 python -m vesper baseline
 python -m vesper workflow --timeout 300
-python -m vesper report "evidence/sprint-4/<workflow-run-id>"
 ```
 
-For this machine, first run `. ./scripts/use-local-tools.ps1` in PowerShell. The baseline requires Java and Maven on PATH. You can select Maven with `--maven C:/path/to/mvn.cmd`. Results and logs are saved to a unique folder under `.vesper/runs/`. The command exits with 0 only for a passing baseline; missing tools are recorded as environment errors. See `docs/SPRINT-1.md` for the verification status and this machine's Python command.
+For this machine, first run `. ./scripts/use-local-tools.ps1` in PowerShell. The baseline requires Java and Maven on PATH. Results and logs are saved to a unique folder under `.vesper/runs/`. The command exits with 0 only for a passing baseline or workflow; missing tools are recorded as environment errors. See `docs/SPRINT-1.md` for the verification status and this machine's Python command.
 
 ## Using Vesper
 
@@ -222,7 +224,7 @@ The intended starting request in Bob is:
 
 Bob will read, review and propose code changes. The local runner will execute tests and record their results. The developer will clarify requirements and review proposed patches.
 
-The supplied R3 demonstration now runs sequentially with `python -m vesper workflow`. It uses the existing seeded original and corrected candidate; it does not automatically discover bugs or generate fixes. See [Sprint 4](docs/SPRINT-4.md) for the exact Bob starting request and remaining live-session check.
+The supplied R3 demonstration now runs sequentially with `python -m vesper workflow`. It seeds the disclosed defect, runs the reproducer (must fail), restores the fix, verifies the reproducer (must pass), and runs the full regression suite. It does not automatically discover new bugs or generate fixes. See [Sprint 5](docs/SPRINT-5.md) for the rehearsal evidence and remaining pending tasks.
 
 ## Testing the workflow
 
@@ -261,4 +263,6 @@ Developed by the Black Sheep team for the IBM Bob 2.0 Hackathon.
 
 ## License
 
-A project license has not yet been added. The event requires an original, MIT-compliant submission. Confirm the project license and any third-party notices before publication.
+MIT License. See [LICENSE](LICENSE). Copyright (c) 2026 Black Sheep Team.
+
+The event requires an original, MIT-compliant submission. No third-party code is included. All demo data is synthetic.
