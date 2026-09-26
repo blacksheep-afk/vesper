@@ -1,25 +1,58 @@
-name: Verify Vesper
-on: [push, pull_request, workflow_dispatch]
+name: Verify evidence contract
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
 permissions:
   contents: read
+
 jobs:
-  verify:
-    runs-on: ubuntu-latest
+  verification:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '17'
-      - run: python -m unittest discover -s tests -v
-      - run: python -m experiments.gate_challenge
-      - run: python -m vesper workflow --timeout 300
-      - uses: actions/upload-artifact@v4
-        if: always()
+          cache: maven
+          cache-dependency-path: demo/pom.xml
+      - uses: actions/setup-node@v7
         with:
-          name: verification-evidence
-          path: .vesper/
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Build local React workspace
+        run: |
+          npm ci --prefix web
+          npm run build --prefix web
+          git diff --exit-code -- vesper/assets/workspace.js vesper/assets/workspace.css vesper/assets/workspace.js.LEGAL.txt
+      - name: Python contract checks
+        run: python -m unittest discover -s tests -v
+      - name: Synthetic gate qualification
+        run: python -m experiments.gate_challenge
+      - name: Real disclosed Java replay
+        run: python -m vesper workflow --timeout 300
+      - name: Retain generated evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: verification-${{ matrix.os }}
           include-hidden-files: true
+          retention-days: 14
+          path: |
+            .vesper/runs/**
+            .vesper/experiments/**
+            !**/target/**
