@@ -16,6 +16,22 @@ Read AGENTS.md, docs/requirements.md and docs/SPRINT-4.md. Use docs/system-desig
 5. The candidate is verified separately from human approval. Ask for a patch decision only if integration is actually requested and not already authorized. Never record approval on the developer's behalf. This demo command does not integrate changes; the accepted demo already contains the historical Sprint 3 fix.
 6. Remind the developer to capture this actual Bob task's consumption summary in bob_sessions. Do not invent screenshots, task usage or measured productivity improvements.
 
+## Gate challenge and final demonstration
+
+Read docs/VERIFICATION-20260926.md for the current evidence and docs/SUBMISSION-READINESS.md
+for remaining work. Run `python -m experiments.gate_challenge` to exercise 16
+deliberate synthetic conditions against the actual gate. This command does not
+run Java or an AI agent. Its exit 0 means the expected accept/reject decisions
+were observed, not that every fixture is a verified patch. Show one rejected
+changed-assertion case alongside the actual Maven replay. Never describe the
+fixture counts as an agent error rate. Attribute this repair's engineering and
+execution to Codex; a new Bob session must have its own real task summary.
+
 ## New investigations
 
 The implemented workflow is specific to the supplied R3 demo. Do not claim it accepts arbitrary findings or generates repairs. For a new requirement, confirm its interpretation, establish a passing baseline, review bounded scope, and prepare a valid reproducer in a separate workspace. A passing test is not reproduced, and setup errors are not bugs. Preserve unsuccessful attempts. Freeze an accepted test during repair, keep the candidate separate, verify actual test identities and fresh regression evidence, and show the exact diff before human-approved integration. Implement further runner support only when requested.
+
+
+## Interactive workspace
+
+For the supported local demo, read docs/WORKSPACE.md. Launch `python -m vesper workspace` from a Java/Maven-ready terminal. The browser starts actual R3 verification after the developer confirms its expected result. React presents observed progress, logs and evidence; it does not invoke Bob or generate a repair. Keep the optional human decision separate from verification and never enter one on the developer's behalf. Preserve the real Bob session summary for the launch and interpretation task.
