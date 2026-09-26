@@ -228,6 +228,13 @@ The supplied R3 demonstration now runs sequentially with `python -m vesper workf
 
 ## Testing the workflow
 
+The merged runner has known verification gaps. The next experiment tests whether
+its gate rejects misleading evidence before comparing Codex alone with Codex plus
+Vesper. See the [experiment results](docs/EXPERIMENT-1-RESULTS.md) and
+[comparison protocol](docs/EXPERIMENT-1-VERIFICATION-GATE.md). Run the synthetic
+challenge with `python -m experiments.gate_challenge`; it currently exits nonzero
+because the gate fails several acceptance checks. This is not a live agent benchmark.
+
 1. Run the existing suite and establish a passing, nonempty baseline.
 2. Confirm the meaning of the selected requirement.
 3. Run the reproducer on the original code and inspect the actual failure.
