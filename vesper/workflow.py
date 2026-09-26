@@ -18,6 +18,10 @@ import os
 import shutil
 import subprocess
 import sys
+
+# Ensure console output handles Unicode on Windows (cp1252 terminals)
+if sys.stdout.encoding and sys.stdout.encoding.lower().replace("-", "") != "utf8":
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 import time
 from pathlib import Path
 
@@ -92,7 +96,7 @@ def stage_baseline(run_dir, timeout):
                           and counts.get("errors",   0) == 0
                           and counts.get("skipped",  0) == 0) else "failed"
     print(out[-3000:])
-    print(f"→ {status}  ({counts})  {dur}s")
+    print(f">> {status}  ({counts})  {dur}s")
     return dict(stage="baseline", status=status, exit_code=code,
                 counts=counts, test_ids=ids, duration_seconds=dur)
 
@@ -127,7 +131,7 @@ def stage_reproduce(run_dir, timeout):
     reproduced = (counts.get("failures", 0) > 0 and code != 0)
     status = "reproduced" if reproduced else "not_reproduced"
     print(out[-3000:])
-    print(f"→ {status}  ({counts})  {dur}s")
+    print(f">> {status}  ({counts})  {dur}s")
     return dict(stage="reproduce", status=status, exit_code=code,
                 counts=counts, test_ids=ids, duration_seconds=dur,
                 note="EXPECTED failure on seeded code — confirms defect is present")
@@ -145,7 +149,7 @@ def stage_regress_bug(run_dir, timeout):
     )
     counts, ids = _parse_surefire(reports)
     print(out[-3000:])
-    print(f"→ exit {code}  ({counts})  {dur}s")
+    print(f">> exit {code}  ({counts})  {dur}s")
     return dict(stage="regress_bug", exit_code=code,
                 counts=counts, test_ids=ids, duration_seconds=dur,
                 note="Full regression on seeded code — failures expected from R3 boundary bug")
@@ -179,7 +183,7 @@ def stage_verify(run_dir, timeout):
                 and counts.get("errors", 0) == 0)
     status = "verified" if verified else "failed"
     print(out[-3000:])
-    print(f"→ {status}  ({counts})  {dur}s")
+    print(f">> {status}  ({counts})  {dur}s")
     return dict(stage="verify", status=status, exit_code=code,
                 counts=counts, test_ids=ids, duration_seconds=dur)
 
@@ -202,7 +206,7 @@ def stage_regress_fix(run_dir, timeout):
                 and counts.get("skipped",  0) == 0)
     status = "all_passed" if all_pass else "failed"
     print(out[-3000:])
-    print(f"→ {status}  ({counts})  {dur}s")
+    print(f">> {status}  ({counts})  {dur}s")
     return dict(stage="regress_fix", status=status, exit_code=code,
                 counts=counts, test_ids=ids, duration_seconds=dur)
 
@@ -308,7 +312,7 @@ def run_workflow(timeout):
     regress = next((s for s in stages if s["stage"] == "regress_fix"), {})
     ok = (verify.get("status") == "verified"
           and regress.get("status") == "all_passed")
-    print(f"\n{'✓ WORKFLOW PASSED' if ok else '✗ WORKFLOW FAILED'}  "
+    print(f"\n{'WORKFLOW PASSED [OK]' if ok else 'WORKFLOW FAILED [!!]'}  "
           f"({round(workflow_duration, 1)}s total)")
     return 0 if ok else 1
 
