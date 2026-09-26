@@ -2,7 +2,7 @@
 
 Date: 26 September 2026. Tested merged main: `0b882ce815bced03a5dd4a5bac70715c79d3140f`.
 
-**Outcome: the current gate does not qualify for the live Codex comparison.**
+**Historical pre-repair result:** the runner at the revision above failed qualification. The restored runner on master now passes all 16 known cases; see [continuation verification](VERIFICATION-20260926.md). A live comparison still requires independently supplied candidate support.
 
 The merges include the Petclinic baseline, repair evidence and Sprint 5 report.
 All remaining remote branch tips were ancestors of main at inspection. The
@@ -37,8 +37,8 @@ This shows lack of repeat verification; no real flaky Java execution is claimed.
 
 ## Meaning and limits
 
-The current gate accepts multiple kinds of incomplete or inconsistent evidence.
-It cannot presently substantiate a claim that it independently enforces a more
+The pre-repair gate accepted multiple kinds of incomplete or inconsistent evidence.
+That implementation could not substantiate a claim that it independently enforces a more
 reliable acceptance standard than Codex alone.
 
 This does **not** measure how frequently Codex produces these mistakes, prove

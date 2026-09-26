@@ -1,0 +1,212 @@
+[
+  {
+    "task": "expiry_b",
+    "condition": "A",
+    "family": "expiry",
+    "sessions": [
+      {
+        "session_id": "01a0ddf0-5f13-7182-bbda-0c55a3ce57fd",
+        "exit_code": 0,
+        "timed_out": false,
+        "duration_seconds": 206.743,
+        "usage": [
+          {
+            "input_tokens": 223432,
+            "cached_input_tokens": 203648,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 2505,
+            "reasoning_output_tokens": 42
+          }
+        ],
+        "final": "Fixed the expiry check in `Checkout.java` from `>= 0` to `> 0`. Discounts now apply on the final valid date, as required. Public API and existing tests remain unchanged.\n\nAdded six tests covering inclusive expiry, rounding, invalid inputs, null dates, extreme dates, and arithmetic against a `BigInteger` oracle across all percentages and 261 subtotal samples.\n\nVerification using Java 17 and Maven `-B test`:\n- Before repair: 9 tests ran; 3 failed on expiry-day cases.\n- After repair: all 9 passed, with no errors or skipped tests.\n\nInitial sandbox runs encountered dependency-cache access errors; elevated execution succeeded. Numeric testing samples the `long` range rather than exhaustively enumerating it; review also confirmed the existing arithmetic avoids overflow.\n\nNo unresolved business-rule questions. Nothing committed or published.",
+        "model": "gpt-6-astra",
+        "reasoning": null,
+        "reasoning_config": null
+      }
+    ],
+    "first_evaluation": {
+      "code_correct": true,
+      "production_unchanged": false,
+      "exit_code": 0,
+      "cases": [
+        {
+          "identity": "dev.vesper.HeldOutTest#allBoundaries",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.HeldOutTest#rejectsInvalid",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#expired",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#normal",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#invalid",
+          "passed": true
+        }
+      ],
+      "error": null,
+      "duration_seconds": 14.513,
+      "candidate_source_hashes": {
+        "java/dev/vesper/Checkout.java": "9a363f099595d62ef7879dd697a5b1d99fc4e4f5a46da97e36be96d2abb02fc0"
+      },
+      "oracle_sha256": "90ff9d92c9f9aac962a986c787fddb5e2ae098712f605d5b8ce89d6a4220a81f"
+    },
+    "final_evaluation": {
+      "code_correct": true,
+      "production_unchanged": false,
+      "exit_code": 0,
+      "cases": [
+        {
+          "identity": "dev.vesper.HeldOutTest#allBoundaries",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.HeldOutTest#rejectsInvalid",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#expired",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#normal",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#invalid",
+          "passed": true
+        }
+      ],
+      "error": null,
+      "duration_seconds": 14.513,
+      "candidate_source_hashes": {
+        "java/dev/vesper/Checkout.java": "9a363f099595d62ef7879dd697a5b1d99fc4e4f5a46da97e36be96d2abb02fc0"
+      },
+      "oracle_sha256": "90ff9d92c9f9aac962a986c787fddb5e2ae098712f605d5b8ce89d6a4220a81f"
+    },
+    "gate_checks": [],
+    "human_active_minutes": null,
+    "monetary_cost": null
+  },
+  {
+    "task": "expiry_a",
+    "condition": "B",
+    "family": "expiry",
+    "sessions": [
+      {
+        "session_id": "01a0ddf3-c07a-7412-8247-04d067278c4f",
+        "exit_code": 1,
+        "timed_out": false,
+        "duration_seconds": 172.593,
+        "usage": [],
+        "final": null,
+        "model": "gpt-6-astra",
+        "reasoning": null,
+        "reasoning_config": null
+      }
+    ],
+    "first_evaluation": null,
+    "final_evaluation": null,
+    "gate_checks": [],
+    "human_active_minutes": null,
+    "monetary_cost": null
+  },
+  {
+    "task": "arithmetic_b",
+    "condition": "A",
+    "family": "arithmetic",
+    "sessions": [
+      {
+        "session_id": "01a0ddf6-626d-7990-8606-5084a40f1022",
+        "exit_code": 1,
+        "timed_out": false,
+        "duration_seconds": 8.57,
+        "usage": [],
+        "final": null,
+        "model": "gpt-6-astra",
+        "reasoning": null,
+        "reasoning_config": null
+      }
+    ],
+    "first_evaluation": null,
+    "final_evaluation": null,
+    "gate_checks": [],
+    "human_active_minutes": null,
+    "monetary_cost": null
+  },
+  {
+    "task": "arithmetic_a",
+    "condition": "B",
+    "family": "arithmetic",
+    "sessions": [
+      {
+        "session_id": "01a0ddf6-8438-7b90-b710-4ab6ab41d42d",
+        "exit_code": 1,
+        "timed_out": false,
+        "duration_seconds": 8.849,
+        "usage": [],
+        "final": null,
+        "model": "gpt-6-astra",
+        "reasoning": null,
+        "reasoning_config": null
+      }
+    ],
+    "first_evaluation": null,
+    "final_evaluation": null,
+    "gate_checks": [],
+    "human_active_minutes": null,
+    "monetary_cost": null
+  },
+  {
+    "task": "control_correct",
+    "condition": "A",
+    "family": "control",
+    "sessions": [
+      {
+        "session_id": "01a0ddf6-a76c-7f51-9cd6-ef2375381af1",
+        "exit_code": 1,
+        "timed_out": false,
+        "duration_seconds": 8.83,
+        "usage": [],
+        "final": null,
+        "model": "gpt-6-astra",
+        "reasoning": null,
+        "reasoning_config": null
+      }
+    ],
+    "first_evaluation": null,
+    "final_evaluation": null,
+    "gate_checks": [],
+    "human_active_minutes": null,
+    "monetary_cost": null
+  },
+  {
+    "task": "control_ambiguous",
+    "condition": "B",
+    "family": "control",
+    "sessions": [
+      {
+        "session_id": "01a0ddf6-c9fe-7903-a94c-8b02381d1676",
+        "exit_code": 1,
+        "timed_out": false,
+        "duration_seconds": 8.606,
+        "usage": [],
+        "final": null,
+        "model": "gpt-6-astra",
+        "reasoning": null,
+        "reasoning_config": null
+      }
+    ],
+    "first_evaluation": null,
+    "final_evaluation": null,
+    "gate_checks": [],
+    "human_active_minutes": null,
+    "monetary_cost": null
+  }
+]

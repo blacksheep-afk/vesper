@@ -28,8 +28,7 @@ experiment result, not a failed Maven build. Each case retains its fixture copy,
 XML, workflow output, console record and structured result. The report binds the
 tested workflow and harness to their exact SHA-256 hashes and repository revision.
 
-Only `_mvn` is replaced. The actual workflow, XML parser, stage decisions, source
-swapping and final exit decision run in an isolated copy of the supplied demo.
+For the restored runner, process execution and version capture are replaced by labeled fixtures. The actual workflow, XML parser, snapshot checks and final exit decision run in isolated copies of the supplied demo. The historical runner comparison replaces its `_mvn` helper.
 Neither Java nor Maven runs. Two synthetic test identities stand in for a suite;
 do not describe their counts as the actual Java suite's counts. No agent is asked
 to cheat, and no intent is inferred from a result.
@@ -66,7 +65,9 @@ arbitrary Maven build behavior, or a real process kill. Frozen inputs and record
 identities alone are not a security boundary against an agent that can rewrite
 the checker or fabricate its trusted inputs.
 
-## Phase B: Codex comparison (not yet executed)
+## Phase B: Codex comparison protocol
+
+A bounded live pilot has now been executed. See [results, deviations and limits](LIVE-CODEX-COMPARISON-20260926.md). The frozen pilot-specific protocol and interruption records are retained with its evidence. The broader study design below remains a plan, not a claim that every element was completed.
 
 Start only after Phase A qualifies a specific gate revision. Freeze the protocol
 and acceptance criteria before collecting outcomes. Preserve failed and unresolved

@@ -1,0 +1,8 @@
+{
+  "status": "accepted_no_change",
+  "explanation": "No repair claimed; original and candidate ordinary tests pass and production is unchanged.",
+  "run": "C:\\Users\\Sibusiso Nkosi\\Documents\\Codex\\2026-09-26\\i-x20\\work\\live-pilot\\post-study\\gate-111a09bcb6",
+  "frozen_gate_sha256": "5b1e8ded1169e7ea8a3763f95ff5f4d44dcb4a492425f839662049ade1af8707",
+  "fixed_gate_sha256": "1e0281df0ff856cb7c1f7c0e9da66fe7e60cad32ab5c0a7b8e61d9a51bb8cdf8",
+  "note": "Post-study rerun of the same unchanged candidate. Does not replace the false rejection recorded in the live trial."
+}

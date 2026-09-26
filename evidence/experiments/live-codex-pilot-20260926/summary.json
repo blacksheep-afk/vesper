@@ -1,0 +1,131 @@
+{
+  "rows": [
+    {
+      "task": "expiry_b",
+      "condition": "Codex alone",
+      "outcome": "Correct repair",
+      "agent_seconds": 206.743,
+      "gate_seconds": 0,
+      "correction_turns": 0,
+      "feedback_attempts": 0,
+      "model": "gpt-6-astra",
+      "first_code_correct": true,
+      "final_code_correct": true,
+      "production_unchanged": false,
+      "adjudication": {
+        "outcome": "Correct repair",
+        "additional_detection": false,
+        "false_gate_rejection": false,
+        "basis": "Independent held-out Java results and review of the final response.",
+        "first_completion_correct": true
+      }
+    },
+    {
+      "task": "expiry_a",
+      "condition": "Codex + experimental Vesper gate",
+      "outcome": "Correct repair",
+      "agent_seconds": 206.226,
+      "gate_seconds": 66.645,
+      "correction_turns": 0,
+      "feedback_attempts": 0,
+      "model": "gpt-6-astra",
+      "first_code_correct": true,
+      "final_code_correct": true,
+      "production_unchanged": false,
+      "adjudication": {
+        "outcome": "Correct repair",
+        "additional_detection": false,
+        "false_gate_rejection": false,
+        "basis": "Independent held-out Java results and review of the final response.",
+        "first_completion_correct": true
+      }
+    },
+    {
+      "task": "arithmetic_b",
+      "condition": "Codex alone",
+      "outcome": "Correct repair",
+      "agent_seconds": 198.694,
+      "gate_seconds": 0,
+      "correction_turns": 0,
+      "feedback_attempts": 0,
+      "model": "gpt-6-astra",
+      "first_code_correct": true,
+      "final_code_correct": true,
+      "production_unchanged": false,
+      "adjudication": {
+        "outcome": "Correct repair",
+        "additional_detection": false,
+        "false_gate_rejection": false,
+        "basis": "Independent held-out Java results and review of the final response.",
+        "first_completion_correct": true
+      }
+    },
+    {
+      "task": "arithmetic_a",
+      "condition": "Codex + experimental Vesper gate",
+      "outcome": "Correct repair",
+      "agent_seconds": 194.919,
+      "gate_seconds": 66.501,
+      "correction_turns": 0,
+      "feedback_attempts": 0,
+      "model": "gpt-6-astra",
+      "first_code_correct": true,
+      "final_code_correct": true,
+      "production_unchanged": false,
+      "adjudication": {
+        "outcome": "Correct repair",
+        "additional_detection": false,
+        "false_gate_rejection": false,
+        "basis": "Independent held-out Java results and review of the final response.",
+        "first_completion_correct": true
+      }
+    },
+    {
+      "task": "control_correct",
+      "condition": "Codex alone",
+      "outcome": "Correctly left production unchanged",
+      "agent_seconds": 365.372,
+      "gate_seconds": 0,
+      "correction_turns": 0,
+      "feedback_attempts": 0,
+      "model": "gpt-6-astra",
+      "first_code_correct": true,
+      "final_code_correct": true,
+      "production_unchanged": true,
+      "adjudication": {
+        "outcome": "Correctly left production unchanged",
+        "additional_detection": false,
+        "false_gate_rejection": false,
+        "basis": "Independent held-out Java results and review of the final response.",
+        "first_completion_correct": true
+      }
+    },
+    {
+      "task": "control_ambiguous",
+      "condition": "Codex + experimental Vesper gate",
+      "outcome": "Correct clarification; falsely blocked by gate",
+      "agent_seconds": 210.716,
+      "gate_seconds": 74.321,
+      "correction_turns": 1,
+      "feedback_attempts": 2,
+      "model": "gpt-6-astra",
+      "first_code_correct": true,
+      "final_code_correct": true,
+      "production_unchanged": true,
+      "adjudication": {
+        "outcome": "Correct clarification; falsely blocked by gate",
+        "additional_detection": false,
+        "false_gate_rejection": true,
+        "basis": "Independent held-out Java results and review of the final response.",
+        "first_completion_correct": true
+      }
+    }
+  ],
+  "setup_launch_failures": 6,
+  "model_sessions": 6,
+  "human_active_minutes": null,
+  "monetary_cost": null,
+  "additional_detection": 0,
+  "false_gate_rejections": 1,
+  "notes": "Small seeded pilot. Procedural evaluator separation. No productivity estimate."
+}

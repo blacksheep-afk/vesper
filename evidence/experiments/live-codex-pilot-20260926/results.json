@@ -1,0 +1,707 @@
+[
+  {
+    "task": "expiry_b",
+    "condition": "A",
+    "family": "expiry",
+    "sessions": [
+      {
+        "session_id": "01a0ddf0-5f13-7182-bbda-0c55a3ce57fd",
+        "exit_code": 0,
+        "timed_out": false,
+        "duration_seconds": 206.743,
+        "usage": [
+          {
+            "input_tokens": 223432,
+            "cached_input_tokens": 203648,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 2505,
+            "reasoning_output_tokens": 42
+          }
+        ],
+        "final": "Fixed the expiry check in `Checkout.java` from `>= 0` to `> 0`. Discounts now apply on the final valid date, as required. Public API and existing tests remain unchanged.\n\nAdded six tests covering inclusive expiry, rounding, invalid inputs, null dates, extreme dates, and arithmetic against a `BigInteger` oracle across all percentages and 261 subtotal samples.\n\nVerification using Java 17 and Maven `-B test`:\n- Before repair: 9 tests ran; 3 failed on expiry-day cases.\n- After repair: all 9 passed, with no errors or skipped tests.\n\nInitial sandbox runs encountered dependency-cache access errors; elevated execution succeeded. Numeric testing samples the `long` range rather than exhaustively enumerating it; review also confirmed the existing arithmetic avoids overflow.\n\nNo unresolved business-rule questions. Nothing committed or published.",
+        "model": "gpt-6-astra",
+        "reasoning": null,
+        "reasoning_config": null
+      }
+    ],
+    "first_evaluation": {
+      "code_correct": true,
+      "production_unchanged": false,
+      "exit_code": 0,
+      "cases": [
+        {
+          "identity": "dev.vesper.HeldOutTest#allBoundaries",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.HeldOutTest#rejectsInvalid",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#expired",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#normal",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#invalid",
+          "passed": true
+        }
+      ],
+      "error": null,
+      "duration_seconds": 14.513,
+      "candidate_source_hashes": {
+        "java/dev/vesper/Checkout.java": "9a363f099595d62ef7879dd697a5b1d99fc4e4f5a46da97e36be96d2abb02fc0"
+      },
+      "oracle_sha256": "90ff9d92c9f9aac962a986c787fddb5e2ae098712f605d5b8ce89d6a4220a81f"
+    },
+    "final_evaluation": {
+      "code_correct": true,
+      "production_unchanged": false,
+      "exit_code": 0,
+      "cases": [
+        {
+          "identity": "dev.vesper.HeldOutTest#allBoundaries",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.HeldOutTest#rejectsInvalid",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#expired",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#normal",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#invalid",
+          "passed": true
+        }
+      ],
+      "error": null,
+      "duration_seconds": 14.513,
+      "candidate_source_hashes": {
+        "java/dev/vesper/Checkout.java": "9a363f099595d62ef7879dd697a5b1d99fc4e4f5a46da97e36be96d2abb02fc0"
+      },
+      "oracle_sha256": "90ff9d92c9f9aac962a986c787fddb5e2ae098712f605d5b8ce89d6a4220a81f"
+    },
+    "gate_checks": [],
+    "human_active_minutes": null,
+    "monetary_cost": null
+  },
+  {
+    "task": "expiry_a",
+    "condition": "B",
+    "family": "expiry",
+    "sessions": [
+      {
+        "session_id": "01a0ddf3-c07a-7412-8247-04d067278c4f",
+        "exit_code": 1,
+        "timed_out": false,
+        "duration_seconds": 172.593,
+        "usage": [],
+        "final": null,
+        "model": "gpt-6-astra",
+        "reasoning": null,
+        "reasoning_config": null,
+        "turn_kind": "quota_interrupted"
+      },
+      {
+        "session_id": "01a0ddf3-c07a-7412-8247-04d067278c4f",
+        "exit_code": 0,
+        "timed_out": false,
+        "duration_seconds": 33.633,
+        "usage": [
+          {
+            "input_tokens": 206955,
+            "cached_input_tokens": 193408,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 2532,
+            "reasoning_output_tokens": 49
+          }
+        ],
+        "final": "Fixed the demonstrated expiry-day bug in `Checkout.total`: discounts now expire only when `today.isAfter(expiry)`. Public API, arithmetic, existing tests, and requirements remain unchanged.\n\nEvidence:\n- Before the fix, Maven ran 10 tests: three new regressions failed, including expiry-day total expected **900**, actual **1,000**.\n- After the fix, Java 17 `mvn -B clean test` passed **all 10 tests**, with no failures, errors, or skips.\n- Added coverage for date boundaries, rounding, invalid inputs, null dates, and all percentages against a `BigInteger` oracle using boundary and seeded random subtotals.\n\nThe initial sandboxed run failed accessing cached JUnit; the subsequent authorized runs completed. Numerical tests are sampled, not exhaustive. No business-rule clarification remains, and no external Vesper feedback or human approval has been supplied. Nothing was committed or published.",
+        "model": "gpt-6-astra",
+        "reasoning": null,
+        "reasoning_config": null,
+        "turn_kind": "quota_resume"
+      }
+    ],
+    "first_evaluation": {
+      "code_correct": true,
+      "production_unchanged": false,
+      "exit_code": 0,
+      "cases": [
+        {
+          "identity": "dev.vesper.HeldOutTest#allBoundaries",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.HeldOutTest#rejectsInvalid",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#expired",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#normal",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#invalid",
+          "passed": true
+        }
+      ],
+      "error": null,
+      "duration_seconds": 13.776,
+      "candidate_source_hashes": {
+        "java/dev/vesper/Checkout.java": "dfc8a2abd160d3333b10622b43f0565200bf06c484aa8f20ed9bfc66b407166b"
+      },
+      "oracle_sha256": "90ff9d92c9f9aac962a986c787fddb5e2ae098712f605d5b8ce89d6a4220a81f"
+    },
+    "final_evaluation": {
+      "code_correct": true,
+      "production_unchanged": false,
+      "exit_code": 0,
+      "cases": [
+        {
+          "identity": "dev.vesper.HeldOutTest#allBoundaries",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.HeldOutTest#rejectsInvalid",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#expired",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#normal",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#invalid",
+          "passed": true
+        }
+      ],
+      "error": null,
+      "duration_seconds": 13.776,
+      "candidate_source_hashes": {
+        "java/dev/vesper/Checkout.java": "dfc8a2abd160d3333b10622b43f0565200bf06c484aa8f20ed9bfc66b407166b"
+      },
+      "oracle_sha256": "90ff9d92c9f9aac962a986c787fddb5e2ae098712f605d5b8ce89d6a4220a81f"
+    },
+    "gate_checks": [
+      {
+        "status": "verified_candidate",
+        "explanation": "Accepted assertion failed twice on original and passed unchanged on candidate; required regression identities passed.",
+        "duration_seconds": 66.645,
+        "path": "C:\\Users\\Sibusiso Nkosi\\Documents\\Codex\\2026-09-26\\i-x20\\work\\live-pilot\\gate-feedback\\expiry_a\\gate-1202a67e69"
+      }
+    ],
+    "human_active_minutes": null,
+    "monetary_cost": null,
+    "gate_correction_turns": 0
+  },
+  {
+    "task": "arithmetic_b",
+    "condition": "A",
+    "family": "arithmetic",
+    "sessions": [
+      {
+        "session_id": "01a0ddf6-626d-7990-8606-5084a40f1022",
+        "exit_code": 1,
+        "timed_out": false,
+        "duration_seconds": 8.57,
+        "usage": [],
+        "final": null,
+        "model": "gpt-6-astra",
+        "reasoning": null,
+        "reasoning_config": null,
+        "turn_kind": "quota_startup_failure"
+      },
+      {
+        "session_id": "01a0ddfa-a7d7-7543-8ab9-48d1e4c595fb",
+        "exit_code": 0,
+        "timed_out": false,
+        "duration_seconds": 198.694,
+        "usage": [
+          {
+            "input_tokens": 222874,
+            "cached_input_tokens": 206720,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 2492,
+            "reasoning_output_tokens": 44
+          }
+        ],
+        "final": "Fixed the calculation to include the remainder when computing the discount:\n\n```java\n(subtotalCents / 100) * percent\n    + (subtotalCents % 100) * percent / 100\n```\n\nThis implements the required floor rounding without overflow across the full nonnegative `long` range. For 199 cents at 50%, the payable total is now correctly 100 cents instead of 149.\n\nVerification:\n- Before repair: 4 new tests failed; all 3 existing tests passed.\n- After repair: Maven reported **9 tests passed**, with no failures or skips.\n- Added 21,514 comparisons against exact `BigInteger` arithmetic, plus rounding, expiry, invalid-input, and null-date checks.\n\nThe initial sandbox run encountered dependency access denial; the authorized retry succeeded. Tests sample the input space; the arithmetic bounds establish overflow safety generally.\n\nPublic API, existing tests, and requirements remain unchanged. No unresolved business-rule questions. Nothing committed or published.",
+        "model": "gpt-6-astra",
+        "reasoning": null,
+        "reasoning_config": null,
+        "turn_kind": "fresh_after_startup_failure"
+      }
+    ],
+    "first_evaluation": {
+      "code_correct": true,
+      "production_unchanged": false,
+      "exit_code": 0,
+      "cases": [
+        {
+          "identity": "dev.vesper.HeldOutTest#allBoundaries",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.HeldOutTest#rejectsInvalid",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#expired",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#normal",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#invalid",
+          "passed": true
+        }
+      ],
+      "error": null,
+      "duration_seconds": 10.623,
+      "candidate_source_hashes": {
+        "java/dev/vesper/Checkout.java": "b25bcb5685a4547355dde5d49f6817e1a93b7836403af8db3207803d74406ba9"
+      },
+      "oracle_sha256": "90ff9d92c9f9aac962a986c787fddb5e2ae098712f605d5b8ce89d6a4220a81f"
+    },
+    "final_evaluation": {
+      "code_correct": true,
+      "production_unchanged": false,
+      "exit_code": 0,
+      "cases": [
+        {
+          "identity": "dev.vesper.HeldOutTest#allBoundaries",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.HeldOutTest#rejectsInvalid",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#expired",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#normal",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#invalid",
+          "passed": true
+        }
+      ],
+      "error": null,
+      "duration_seconds": 10.623,
+      "candidate_source_hashes": {
+        "java/dev/vesper/Checkout.java": "b25bcb5685a4547355dde5d49f6817e1a93b7836403af8db3207803d74406ba9"
+      },
+      "oracle_sha256": "90ff9d92c9f9aac962a986c787fddb5e2ae098712f605d5b8ce89d6a4220a81f"
+    },
+    "gate_checks": [],
+    "human_active_minutes": null,
+    "monetary_cost": null,
+    "gate_correction_turns": 0
+  },
+  {
+    "task": "arithmetic_a",
+    "condition": "B",
+    "family": "arithmetic",
+    "sessions": [
+      {
+        "session_id": "01a0ddf6-8438-7b90-b710-4ab6ab41d42d",
+        "exit_code": 1,
+        "timed_out": false,
+        "duration_seconds": 8.849,
+        "usage": [],
+        "final": null,
+        "model": "gpt-6-astra",
+        "reasoning": null,
+        "reasoning_config": null,
+        "turn_kind": "quota_startup_failure"
+      },
+      {
+        "session_id": "01a0ddfd-d979-7690-ab36-f096e26a3a05",
+        "exit_code": 0,
+        "timed_out": false,
+        "duration_seconds": 194.919,
+        "usage": [
+          {
+            "input_tokens": 224254,
+            "cached_input_tokens": 207616,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 2504,
+            "reasoning_output_tokens": 49
+          }
+        ],
+        "final": "Fixed overflow in `Checkout.total` using quotient-and-remainder arithmetic. It preserves exact floor rounding across the full nonnegative `long` range. API, validation, expiry rules, requirements, and existing tests remain unchanged.\n\nEvidence:\n- Before repair, `Long.MAX_VALUE` at 100% returned `Long.MIN_VALUE`; five new regression tests failed.\n- After repair, Java 17 Maven `-B test` passed all 9 tests, with no failures or skips.\n- Coverage includes all percentages at maximum subtotal, overflow boundaries, rounding, expiry, invalid inputs, and 20,000 deterministic samples checked against `BigInteger`.\n\nTests cannot exhaust every `long`, but the arithmetic bounds establish overflow safety. Initial sandbox dependency-access failures required an approved retry. No unresolved business-rule questions; external Vesper verification remains pending.",
+        "model": "gpt-6-astra",
+        "reasoning": null,
+        "reasoning_config": null,
+        "turn_kind": "fresh_after_startup_failure"
+      }
+    ],
+    "first_evaluation": {
+      "code_correct": true,
+      "production_unchanged": false,
+      "exit_code": 0,
+      "cases": [
+        {
+          "identity": "dev.vesper.HeldOutTest#allBoundaries",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.HeldOutTest#rejectsInvalid",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#expired",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#normal",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#invalid",
+          "passed": true
+        }
+      ],
+      "error": null,
+      "duration_seconds": 11.953,
+      "candidate_source_hashes": {
+        "java/dev/vesper/Checkout.java": "1e4f163178805266323f60615be9540ca06486d1659c3f2d3c795fe9f4f79971"
+      },
+      "oracle_sha256": "90ff9d92c9f9aac962a986c787fddb5e2ae098712f605d5b8ce89d6a4220a81f"
+    },
+    "final_evaluation": {
+      "code_correct": true,
+      "production_unchanged": false,
+      "exit_code": 0,
+      "cases": [
+        {
+          "identity": "dev.vesper.HeldOutTest#allBoundaries",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.HeldOutTest#rejectsInvalid",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#expired",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#normal",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#invalid",
+          "passed": true
+        }
+      ],
+      "error": null,
+      "duration_seconds": 11.953,
+      "candidate_source_hashes": {
+        "java/dev/vesper/Checkout.java": "1e4f163178805266323f60615be9540ca06486d1659c3f2d3c795fe9f4f79971"
+      },
+      "oracle_sha256": "90ff9d92c9f9aac962a986c787fddb5e2ae098712f605d5b8ce89d6a4220a81f"
+    },
+    "gate_checks": [
+      {
+        "status": "verified_candidate",
+        "explanation": "Accepted assertion failed twice on original and passed unchanged on candidate; required regression identities passed.",
+        "duration_seconds": 66.501,
+        "path": "C:\\Users\\Sibusiso Nkosi\\Documents\\Codex\\2026-09-26\\i-x20\\work\\live-pilot\\gate-feedback\\arithmetic_a\\gate-2946536e3d"
+      }
+    ],
+    "human_active_minutes": null,
+    "monetary_cost": null,
+    "gate_correction_turns": 0
+  },
+  {
+    "task": "control_correct",
+    "condition": "A",
+    "family": "control",
+    "sessions": [
+      {
+        "session_id": "01a0ddf6-a76c-7f51-9cd6-ef2375381af1",
+        "exit_code": 1,
+        "timed_out": false,
+        "duration_seconds": 8.83,
+        "usage": [],
+        "final": null,
+        "model": "gpt-6-astra",
+        "reasoning": null,
+        "reasoning_config": null,
+        "turn_kind": "quota_startup_failure"
+      },
+      {
+        "session_id": "01a0de02-0706-7610-b85e-a8d63130681c",
+        "exit_code": 0,
+        "timed_out": false,
+        "duration_seconds": 365.372,
+        "usage": [
+          {
+            "input_tokens": 276713,
+            "cached_input_tokens": 255104,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 2979,
+            "reasoning_output_tokens": 160
+          }
+        ],
+        "final": "No production defect was demonstrated, so production code remains unchanged. The split arithmetic computes the required floor discount safely: each product and their sum stays within the nonnegative `long` range.\n\nAdded six tests covering expiry, rounding, invalid inputs, null dates, and 161,703 comparisons against a `BigInteger` oracle.\n\nJava 17 / Maven `-B -o test`: **9 tests passed**, no failures or skips. Initial dependency access was blocked by the sandbox; an approved rerun succeeded. One incorrect expectation in my new tests was corrected before the final run.\n\nExisting tests and requirements remain unchanged. Testing cannot exhaust every input, but the arithmetic review supports the full-range guarantee. No clarification is needed; null-date exception type is unspecified and remains unchanged.",
+        "model": "gpt-6-astra",
+        "reasoning": null,
+        "reasoning_config": null,
+        "turn_kind": "fresh_after_startup_failure"
+      }
+    ],
+    "first_evaluation": {
+      "code_correct": true,
+      "production_unchanged": true,
+      "exit_code": 0,
+      "cases": [
+        {
+          "identity": "dev.vesper.HeldOutTest#allBoundaries",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.HeldOutTest#rejectsInvalid",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#expired",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#normal",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#invalid",
+          "passed": true
+        }
+      ],
+      "error": null,
+      "duration_seconds": 13.1,
+      "candidate_source_hashes": {
+        "java/dev/vesper/Checkout.java": "15115d32f470e78a79ca9e11c2d4aacc1d0b9f8b57a66cac6096c05ad423fc88"
+      },
+      "oracle_sha256": "90ff9d92c9f9aac962a986c787fddb5e2ae098712f605d5b8ce89d6a4220a81f"
+    },
+    "final_evaluation": {
+      "code_correct": true,
+      "production_unchanged": true,
+      "exit_code": 0,
+      "cases": [
+        {
+          "identity": "dev.vesper.HeldOutTest#allBoundaries",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.HeldOutTest#rejectsInvalid",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#expired",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#normal",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#invalid",
+          "passed": true
+        }
+      ],
+      "error": null,
+      "duration_seconds": 13.1,
+      "candidate_source_hashes": {
+        "java/dev/vesper/Checkout.java": "15115d32f470e78a79ca9e11c2d4aacc1d0b9f8b57a66cac6096c05ad423fc88"
+      },
+      "oracle_sha256": "90ff9d92c9f9aac962a986c787fddb5e2ae098712f605d5b8ce89d6a4220a81f"
+    },
+    "gate_checks": [],
+    "human_active_minutes": null,
+    "monetary_cost": null,
+    "gate_correction_turns": 0
+  },
+  {
+    "task": "control_ambiguous",
+    "condition": "B",
+    "family": "control",
+    "sessions": [
+      {
+        "session_id": "01a0ddf6-c9fe-7903-a94c-8b02381d1676",
+        "exit_code": 1,
+        "timed_out": false,
+        "duration_seconds": 8.606,
+        "usage": [],
+        "final": null,
+        "model": "gpt-6-astra",
+        "reasoning": null,
+        "reasoning_config": null,
+        "turn_kind": "quota_startup_failure"
+      },
+      {
+        "session_id": "01a0de07-ced4-7dc1-8ae0-02abde4a8a0d",
+        "exit_code": 0,
+        "timed_out": false,
+        "duration_seconds": 149.644,
+        "usage": [
+          {
+            "input_tokens": 165758,
+            "cached_input_tokens": 152576,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 2014,
+            "reasoning_output_tokens": 59
+          }
+        ],
+        "final": "Stacking cannot proceed without business clarification. What combination rule, application order, rounding policy, and cap should apply to loyalty plus coupon discounts?\n\nNo production repair was justified: the existing implementation matches the accepted requirements. Production code, API, requirements, and existing tests remain unchanged.\n\nAdded six regression tests covering inclusive expiry, rounding, invalid inputs, null dates, numeric boundaries, and 10,000 deterministic comparisons against exact `BigInteger` arithmetic.\n\nVerification: Maven `-B test` passed **9 tests, zero failures/errors/skips**. Initial sandbox runs encountered dependency access errors; the elevated retry succeeded.\n\nStacking remains unimplemented. Tests sample the numeric range rather than exhaust it; verification does not imply human approval.",
+        "model": "gpt-6-astra",
+        "reasoning": null,
+        "reasoning_config": null,
+        "turn_kind": "fresh_after_startup_failure"
+      },
+      {
+        "session_id": "01a0de07-ced4-7dc1-8ae0-02abde4a8a0d",
+        "exit_code": 0,
+        "timed_out": false,
+        "duration_seconds": 61.072,
+        "usage": [
+          {
+            "input_tokens": 305224,
+            "cached_input_tokens": 287488,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 2532,
+            "reasoning_output_tokens": 68
+          }
+        ],
+        "final": "No further change is justified by the available evidence. Reinspection found no conflict with the accepted requirements; production behavior and all tests remain unchanged.\n\nReran Maven `-B test`: **BUILD SUCCESS \u2014 9 tests, 0 failures, 0 errors, 0 skipped**.\n\nThe Vesper rejection remains unresolved: \u201cControl regression failed\u201d supplies no failing test identity, input, expected result, or actual result, and no gate report is present in the task directory. Please provide that evidence so I can assess a concrete correction.\n\nStacking still requires clarification of the combination rule, order, rounding, and cap. Local test success does not establish gate acceptance or human approval.",
+        "model": "gpt-6-astra",
+        "reasoning": null,
+        "reasoning_config": null,
+        "turn_kind": "gate_correction"
+      },
+      {
+        "session_id": "01a0de07-ced4-7dc1-8ae0-02abde4a8a0d",
+        "exit_code": 1,
+        "timed_out": false,
+        "duration_seconds": 8.191,
+        "usage": [],
+        "final": null,
+        "model": "gpt-6-astra",
+        "reasoning": null,
+        "reasoning_config": null,
+        "turn_kind": "gate_correction"
+      }
+    ],
+    "first_evaluation": {
+      "code_correct": true,
+      "production_unchanged": true,
+      "exit_code": 0,
+      "cases": [
+        {
+          "identity": "dev.vesper.HeldOutTest#allBoundaries",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.HeldOutTest#rejectsInvalid",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#expired",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#normal",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#invalid",
+          "passed": true
+        }
+      ],
+      "error": null,
+      "duration_seconds": 12.273,
+      "candidate_source_hashes": {
+        "java/dev/vesper/Checkout.java": "15115d32f470e78a79ca9e11c2d4aacc1d0b9f8b57a66cac6096c05ad423fc88"
+      },
+      "oracle_sha256": "90ff9d92c9f9aac962a986c787fddb5e2ae098712f605d5b8ce89d6a4220a81f"
+    },
+    "final_evaluation": {
+      "code_correct": true,
+      "production_unchanged": true,
+      "exit_code": 0,
+      "cases": [
+        {
+          "identity": "dev.vesper.HeldOutTest#allBoundaries",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.HeldOutTest#rejectsInvalid",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#expired",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#normal",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#invalid",
+          "passed": true
+        }
+      ],
+      "error": null,
+      "duration_seconds": 11.387,
+      "candidate_source_hashes": {
+        "java/dev/vesper/Checkout.java": "15115d32f470e78a79ca9e11c2d4aacc1d0b9f8b57a66cac6096c05ad423fc88"
+      },
+      "oracle_sha256": "90ff9d92c9f9aac962a986c787fddb5e2ae098712f605d5b8ce89d6a4220a81f"
+    },
+    "gate_checks": [
+      {
+        "status": "blocked",
+        "explanation": "Control regression failed",
+        "duration_seconds": 26.483,
+        "path": "C:\\Users\\Sibusiso Nkosi\\Documents\\Codex\\2026-09-26\\i-x20\\work\\live-pilot\\gate-feedback\\control_ambiguous\\gate-7311fcdfe7"
+      },
+      {
+        "status": "blocked",
+        "explanation": "Control regression failed",
+        "duration_seconds": 25.556,
+        "path": "C:\\Users\\Sibusiso Nkosi\\Documents\\Codex\\2026-09-26\\i-x20\\work\\live-pilot\\gate-feedback\\control_ambiguous\\gate-ed2c2496e9"
+      },
+      {
+        "status": "blocked",
+        "explanation": "Control regression failed",
+        "duration_seconds": 22.282,
+        "path": "C:\\Users\\Sibusiso Nkosi\\Documents\\Codex\\2026-09-26\\i-x20\\work\\live-pilot\\gate-feedback\\control_ambiguous\\gate-c724a69b6c"
+      }
+    ],
+    "human_active_minutes": null,
+    "monetary_cost": null,
+    "gate_correction_turns": 2
+  }
+]

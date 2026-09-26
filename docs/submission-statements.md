@@ -1,62 +1,23 @@
-# Vesper — hackathon submission statements
+# Vesper submission statements
 
-Both statements are written to satisfy the lablab.ai submission form requirements:
-- Each statement: 500–4000 characters (form constraint).
-- Total word count per statement: at most 500 words (event guide constraint).
-- Content: original, honest, based on implemented and verified work only.
+Drafts for team review. Confirm current form constraints before submission. Attribution must match retained session evidence.
 
----
+## Problem and Solution Statement
 
-## Statement 1: Problem and Solution Statement
+Developers reviewing AI-proposed fixes need to know what was actually tested. A successful command alone can hide missing tests, skipped tests or a changed assertion. Vesper makes the evidence for a patch decision inspectable: the requirement, original failure, unchanged candidate test, regression scope and exact diff.
 
-(Target: 500–4000 characters, at most 500 words)
+The prototype combines an IBM Bob IDE workflow skill with a local Python and Maven runner. For its disclosed checkout demonstration, the runner creates separate baseline, original and candidate snapshots. It requires the expected expiry-boundary failure twice, checks that the same test passes on the candidate, and verifies that the baseline test identities remain present in the regression run. Input hashes and fresh per-attempt reports help detect changed or missing evidence. Developer approval and source integration remain separate from verification.
 
----
+The saved Java replay records 12 baseline passes, the expected original failure twice, a passing candidate reproducer and 12 regression passes. A synthetic challenge of 16 known cases accepts its valid control and rejects all 15 invalid cases. These are controlled development checks, not measurements of how frequently coding agents make mistakes. The demonstration uses a seeded defect and an existing corrected candidate; it does not claim a newly discovered bug or an automatically authored repair.
 
-**Problem**
+Vesper aims to reduce the effort of checking AI proposals. That benefit has not yet been measured against an ordinary agent workflow. A six-task seeded Codex pilot using an experimental supplied-snapshot gate produced correct repairs and appropriate control behavior in both conditions. The gate found no additional error and falsely blocked one correct control; that defect was fixed separately after the trial. This small pilot does not establish an accuracy or productivity advantage. Human judgment about the requirement remains essential.
 
-AI code review tools surface suspected bugs, but they do not show whether the bugs are real. A developer who receives a list of findings faces an investigation problem: read the source code, understand the requirement, write a test, run it, and decide whether the failure comes from the application or from a faulty assumption in the test. That investigation can take as long as fixing the bug itself. When the AI also proposes a fix, the developer faces a second question: does this change solve the problem without breaking other behaviour? Without evidence, the answer requires another manual pass.
+## IBM Bob Usage Statement
 
-The result is that AI assistance creates work before it saves work. Developers spend time verifying findings and validating fixes that are supposed to have been verified already.
+IBM Bob IDE is the intended user-facing environment for Vesper's sequential investigation workflow. The repository provides a reusable Bob skill in .bob/skills/vesper/SKILL.md and operating rules in AGENTS.md. Bob can read the requirement, invoke the local runner, inspect saved reports and explain the patch and remaining uncertainty to the developer.
 
-**Solution**
+For the implemented R3 demonstration, Bob invokes python -m vesper workflow --timeout 300. The Python runner creates isolated copies and applies deterministic acceptance checks to Maven results. It records the repeated original failure, unchanged candidate reproducer, regression identities, logs, hashes and diff. Bob interprets those artifacts; the demo command itself does not discover a new bug or generate a new fix.
 
-Vesper connects IBM Bob IDE to a local test runner in one sequential workflow. The developer makes a single starting request. Bob reads the requirements document and the selected source module, presents up to five expected behaviours, and waits for the developer to confirm the interpretation. This confirmation step prevents findings based on misread requirements.
+The project retains Bob session evidence in bob_sessions and describes historical investigation work in its sprint reports. The team must retain actual task-consumption summaries for all relevant participant sessions and confirm final attribution against those records. No new Bob session or Bobcoin usage was measured during this continuation.
 
-Once a requirement is confirmed, Bob writes a targeted reproducer test and runs it through the local Maven test runner. If the test fails with a valid assertion failure on the application logic, the finding is marked as reproduced. The test is then frozen — it cannot be modified during the repair phase.
-
-Bob prepares a candidate fix as a separate patch and shows the developer the exact diff before applying anything. The unchanged reproducer and the full existing regression suite are run against the candidate. All results — test identities, counts, exit codes, timestamps — are saved in a unique run directory. Nothing is summarised from memory; the evidence comes from the actual Surefire XML reports.
-
-The developer reviews the recorded diff and test results and decides whether to accept the change. Candidate verification, developer approval, and source integration are kept as separate states.
-
-For the hackathon demonstration, Vesper runs on a small synthetic Java checkout service with a disclosed seeded defect in the discount-expiry boundary condition. All findings are labelled as seeded demo bugs. The workflow completes the full requirement-to-tested-fix cycle in one Bob task, leaving a verifiable evidence trail: passing baseline, failing reproducer on the buggy code, single-line diff, passing reproducer on the fixed code, 12/12 regression pass.
-
-Vesper does not claim to find all bugs or to eliminate the need for human judgment. It reduces the manual investigation burden by making the evidence concrete and reviewable before the developer decides.
-
----
-
-## Statement 2: IBM Bob Usage Statement
-
-(Target: 500–4000 characters, at most 500 words)
-
----
-
-**How IBM Bob IDE is used in Vesper**
-
-IBM Bob IDE is the core of the Vesper workflow, not a peripheral tool. Every stage that involves reading, reasoning, writing, or proposing a change is performed by Bob. The local Python runner and the Maven test executor provide only execution infrastructure; they do not make decisions.
-
-**Reading and scoping.** Bob reads the requirements document and the selected Java source file at the start of each task. It extracts expected behaviours and presents them to the developer in plain language. This reading step replaces the developer's initial manual review of both documents.
-
-**Requirement confirmation.** Bob presents up to five expected behaviours and waits for the developer's interpretation decision before proceeding. This explicit confirmation step is implemented in the Vesper Bob skill (`/.bob/skills/vesper/SKILL.md`) and enforced through the task conversation. Bob does not proceed to investigation without developer input.
-
-**Reproducer authorship.** Bob writes the JUnit reproducer test. The test includes the input, the expected value derived from the confirmed requirement interpretation, and a descriptive assertion message linking back to the requirement identifier. The developer reviews the test before it is run.
-
-**Candidate patch authorship.** Bob prepares the candidate fix as a separate file and presents the exact unified diff to the developer. No change is applied to the accepted source until the developer approves it in the conversation.
-
-**Evidence coordination.** Bob invokes the local runner commands (`python -m vesper baseline`, `python -m vesper workflow`) through the IDE terminal. It reads and interprets the result JSON and Surefire XML reports, then presents the per-test results, counts, and classification to the developer. The raw files are preserved in `.vesper/runs/` for independent inspection.
-
-**Task evidence.** Each relevant Bob task ends with the developer capturing the task consumption summary screenshot from the Bob IDE Tasks panel. These screenshots are stored in `bob_sessions/` in the repository. The Bobcoin figures are read from the actual screenshot; they are not estimated.
-
-**Skill and agent instruction.** The project includes a Bob skill file (`.bob/skills/vesper/SKILL.md`) that encodes the Vesper workflow as a reusable Bob instruction. The `AGENTS.md` file in the project root provides the agent operating rules, including the prohibition on fabricated results, synthesised screenshots, and self-recorded approvals.
-
-Bob 2.0's extended context and instruction-following capability make the sequential, evidence-separated workflow practical in a single task session. The workflow was developed and tested using the hackathon-provisioned Bob account. Sprint task-summary screenshots are retained in `bob_sessions/` as required by the event guide.
+Development also used Codex for verification repairs, synthetic challenge work and documentation. These contributions must not be described as entirely Bob-authored. The runner makes mechanical classification decisions, while requirement interpretation and the final patch decision require human judgment. The current implementation supports the supplied checkout replay; broader investigations require separately prepared evidence and further runner support.

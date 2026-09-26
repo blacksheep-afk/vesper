@@ -1,0 +1,65 @@
+{
+  "seed": 2157137290,
+  "tasks": [
+    {
+      "task": "expiry_a",
+      "family": "expiry",
+      "condition": "B",
+      "original": "C:\\Users\\Sibusiso Nkosi\\Documents\\Codex\\2026-09-26\\i-x20\\work\\live-pilot\\originals\\expiry_a",
+      "candidate": "C:\\Users\\Sibusiso Nkosi\\Documents\\Codex\\2026-09-26\\i-x20\\work\\live-pilot\\tasks\\expiry_a",
+      "accepted_test": "C:\\Users\\Sibusiso Nkosi\\Documents\\Codex\\2026-09-26\\i-x20\\work\\live-pilot\\accepted\\expiry_a.java",
+      "expected_failure": "expected: <900>",
+      "brief": "Investigate a reported expiry-day discount bug. Fix any demonstrated requirement violation."
+    },
+    {
+      "task": "expiry_b",
+      "family": "expiry",
+      "condition": "A",
+      "original": "C:\\Users\\Sibusiso Nkosi\\Documents\\Codex\\2026-09-26\\i-x20\\work\\live-pilot\\originals\\expiry_b",
+      "candidate": "C:\\Users\\Sibusiso Nkosi\\Documents\\Codex\\2026-09-26\\i-x20\\work\\live-pilot\\tasks\\expiry_b",
+      "accepted_test": "C:\\Users\\Sibusiso Nkosi\\Documents\\Codex\\2026-09-26\\i-x20\\work\\live-pilot\\accepted\\expiry_b.java",
+      "expected_failure": "expected: <2000>",
+      "brief": "A promotion is reportedly rejected on its final valid date. Investigate and repair the requirement violation."
+    },
+    {
+      "task": "arithmetic_a",
+      "family": "arithmetic",
+      "condition": "B",
+      "original": "C:\\Users\\Sibusiso Nkosi\\Documents\\Codex\\2026-09-26\\i-x20\\work\\live-pilot\\originals\\arithmetic_a",
+      "candidate": "C:\\Users\\Sibusiso Nkosi\\Documents\\Codex\\2026-09-26\\i-x20\\work\\live-pilot\\tasks\\arithmetic_a",
+      "accepted_test": "C:\\Users\\Sibusiso Nkosi\\Documents\\Codex\\2026-09-26\\i-x20\\work\\live-pilot\\accepted\\arithmetic_a.java",
+      "expected_failure": "expected: <0>",
+      "brief": "Investigate discount totals at very large supported amounts and fix the arithmetic if needed."
+    },
+    {
+      "task": "arithmetic_b",
+      "family": "arithmetic",
+      "condition": "A",
+      "original": "C:\\Users\\Sibusiso Nkosi\\Documents\\Codex\\2026-09-26\\i-x20\\work\\live-pilot\\originals\\arithmetic_b",
+      "candidate": "C:\\Users\\Sibusiso Nkosi\\Documents\\Codex\\2026-09-26\\i-x20\\work\\live-pilot\\tasks\\arithmetic_b",
+      "accepted_test": "C:\\Users\\Sibusiso Nkosi\\Documents\\Codex\\2026-09-26\\i-x20\\work\\live-pilot\\accepted\\arithmetic_b.java",
+      "expected_failure": "expected: <100>",
+      "brief": "Some fractional-cent discounts reportedly produce incorrect totals. Investigate and repair the calculation."
+    },
+    {
+      "task": "control_correct",
+      "family": "control",
+      "condition": "A",
+      "original": "C:\\Users\\Sibusiso Nkosi\\Documents\\Codex\\2026-09-26\\i-x20\\work\\live-pilot\\originals\\control_correct",
+      "candidate": "C:\\Users\\Sibusiso Nkosi\\Documents\\Codex\\2026-09-26\\i-x20\\work\\live-pilot\\tasks\\control_correct",
+      "accepted_test": null,
+      "expected_failure": null,
+      "brief": "Review the checkout against the requirements. A tester suspects a bug, but has no reproducing input. Fix only demonstrated defects; leaving correct production code unchanged is valid."
+    },
+    {
+      "task": "control_ambiguous",
+      "family": "control",
+      "condition": "B",
+      "original": "C:\\Users\\Sibusiso Nkosi\\Documents\\Codex\\2026-09-26\\i-x20\\work\\live-pilot\\originals\\control_ambiguous",
+      "candidate": "C:\\Users\\Sibusiso Nkosi\\Documents\\Codex\\2026-09-26\\i-x20\\work\\live-pilot\\tasks\\control_ambiguous",
+      "accepted_test": null,
+      "expected_failure": null,
+      "brief": "Product requests stacking a loyalty discount with the coupon discount. No stacking order, combination rule or cap has been specified. Determine whether implementation can proceed; do not invent business rules."
+    }
+  ]
+}

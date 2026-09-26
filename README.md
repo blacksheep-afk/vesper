@@ -1,5 +1,7 @@
 # Vesper
 
+> Current verification status: the restored runner passes the 30 Python checks and the 16-case synthetic challenge. See [verified results and limits](docs/VERIFICATION-20260926.md) and [submission readiness](docs/SUBMISSION-READINESS.md). The original demo Java evidence is historical. A fresh six-task [live Codex pilot](docs/LIVE-CODEX-COMPARISON-20260926.md) completed: both conditions handled their tasks correctly, with no additional error detected by the experimental Vesper gate. The frozen gate falsely blocked one correct control; this was fixed separately after the trial.
+
 **Vesper doesn't ask developers to trust AI. It makes AI back its claims with evidence.**
 
 A developer workflow built around IBM Bob IDE that connects code review, bug reproduction, repair and testing. Previously named ProofLoop.
