@@ -1,0 +1,27 @@
+{
+  "command": [
+    "C:\\Users\\Admin\\vesper-1\\.tools\\apache-maven-3.9.9/bin\\mvn.CMD",
+    "-B",
+    "clean",
+    "test",
+    "-Dvesper.reportsDirectory=C:\\Users\\Admin\\vesper-1\\evidence\\sprint-4\\workflow-20260926-023341-044f6b11\\03-original-repeat\\reports",
+    "-DfailIfNoTests=true",
+    "-Dsurefire.failIfNoSpecifiedTests=true",
+    "-Dtest=dev.vesper.ReproducerR3Test#expiryDayMustReceiveDiscount_R3"
+  ],
+  "workspace": "C:\\Users\\Admin\\vesper-1\\evidence\\sprint-4\\workflow-20260926-023341-044f6b11\\original",
+  "started_at": 1790382887.3319647,
+  "status": "execution_failed",
+  "counts": {
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0
+  },
+  "test_ids": [
+    "dev.vesper.ReproducerR3Test#expiryDayMustReceiveDiscount_R3"
+  ],
+  "exit_code": 1,
+  "inputs_unchanged": true,
+  "duration_seconds": 12.358
+}
