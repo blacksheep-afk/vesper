@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vesper Workflow Results</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo-section">
+                <div class="logo-row">
+                    <div class="ladybug-logo">
+                        <svg viewBox="0 0 100 100" class="ladybug-svg">
+                            <!-- Ladybug body -->
+                            <ellipse cx="50" cy="50" rx="35" ry="30" fill="#e63946"/>
+                            <!-- Ladybug head -->
+                            <circle cx="50" cy="85" r="12" fill="#e63946"/>
+                            <!-- Gold stars instead of dots -->
+                            <text x="32" y="45" font-size="14" fill="#FFD700">★</text>
+                            <text x="50" y="35" font-size="14" fill="#FFD700">★</text>
+                            <text x="68" y="45" font-size="14" fill="#FFD700">★</text>
+                            <text x="32" y="65" font-size="14" fill="#FFD700">★</text>
+                            <text x="50" y="75" font-size="14" fill="#FFD700">★</text>
+                            <text x="68" y="65" font-size="14" fill="#FFD700">★</text>
+                            <!-- Eyes -->
+                            <circle cx="45" cy="82" r="2" fill="white"/>
+                            <circle cx="55" cy="82" r="2" fill="white"/>
+                        </svg>
+                    </div>
+                    <h1 class="app-name">Vesper</h1>
+                </div>
+                <p class="slogan">Don't trust the fix, test it.</p>
+            </div>
+            
+            <nav class="nav-links">
+                <a href="#" class="nav-link active">Dashboard</a>
+                <a href="#" class="nav-link">Findings</a>
+                <a href="#" class="nav-link">Evidence</a>
+                <a href="#" class="nav-link">Settings</a>
+            </nav>
+            
+            <div class="connection-status" id="connection-status">
+                <span class="status-dot"></span>
+                <span class="status-text">Connecting...</span>
+            </div>
+        </aside>
+        
+        <!-- Main content -->
+        <main class="main-content">
+            <header class="main-header">
+                <h2>Workflow Results</h2>
+                <div class="overall-status">
+                    <span class="status-badge" id="overall-status">Running</span>
+                    <span class="timing" id="total-duration">--</span>
+                </div>
+            </header>
+            
+            <div class="content-grid">
+                <!-- Workflow stages -->
+                <section class="stages-section">
+                    <h3>Workflow Stages</h3>
+                    <div class="stages-container" id="stages-container">
+                        <!-- Stages will be dynamically inserted here -->
+                    </div>
+                </section>
+                
+                <!-- Bug vs Fix section -->
+                <section class="diff-section">
+                    <h3>Candidate Patch</h3>
+                    <div class="diff-container" id="diff-container">
+                        <div class="diff-placeholder">
+                            <p>Waiting for workflow completion to show diff...</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            
+            <!-- Session summary -->
+            <section class="session-summary">
+                <h3>Session Summary</h3>
+                <div class="summary-content" id="session-summary">
+                    <div class="summary-item">
+                        <span class="label">Total Duration:</span>
+                        <span class="value" id="summary-duration">--</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="label">Stages Completed:</span>
+                        <span class="value" id="summary-stages">0/8</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="label">Tests Run:</span>
+                        <span class="value" id="summary-tests">--</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="label">Findings:</span>
+                        <span class="value" id="summary-findings">--</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>

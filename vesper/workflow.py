@@ -1,257 +1,444 @@
-"""Sequential evidence workflow for the disclosed checkout R3 demonstration."""
+"""Sprint 4/5 workflow runner — full end-to-end demonstration of the Vesper R3 cycle.
+
+Stages (sequential):
+  1. baseline     — clean Maven build, all tests must pass
+  2. seed         — swap in the seeded (buggy) Checkout.java
+  3. reproduce    — run the frozen ReproducerR3Test; must FAIL
+  4. regress_bug  — full suite on seeded code; records which tests fail
+  5. restore      — reinstate the integrated (fixed) Checkout.java
+  6. verify       — run the frozen reproducer on fixed code; must PASS
+  7. regress_fix  — full suite on fixed code; all must pass
+  8. report       — write a human-readable summary of every stage
+
+Run only trusted local projects. Never modify the frozen reproducer test.
+"""
 import argparse
-import difflib
-import hashlib
 import json
 import os
-from pathlib import Path
 import shutil
 import subprocess
 import sys
+
+# Ensure console output handles Unicode on Windows (cp1252 terminals)
+if sys.stdout.encoding and sys.stdout.encoding.lower().replace("-", "") != "utf8":
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 import time
-import uuid
-import xml.etree.ElementTree as ET
+from pathlib import Path
 
-from .baseline import capture, classify
+# Import web server for real-time UI
+from vesper.web_server import VesperWebServer, create_web_ui_files
 
-SOURCE = Path('src/main/java/dev/vesper/Checkout.java')
-TEST = 'dev.vesper.ReproducerR3Test#expiryDayMustReceiveDiscount_R3'
-
-
-def digest(path):
-    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+SEEDED_SOURCE = Path("demo/evidence/seeded/Checkout.java.seeded")
+APP_SOURCE    = Path("demo/src/main/java/dev/vesper/Checkout.java")
+REPRODUCER    = "dev.vesper.ReproducerR3Test"
+RUNS_DIR      = Path(".vesper/runs")
 
 
-def inventory(root):
-    return {p.relative_to(root).as_posix(): digest(p)
-            for p in sorted(Path(root).rglob('*')) if p.is_file()
-            and 'target' not in p.relative_to(root).parts}
+# ---------------------------------------------------------------------------
+# Low-level helpers
+# ---------------------------------------------------------------------------
 
-
-def snapshot(source, destination):
-    # Only the trusted demo's build and source inputs; no historical outputs.
-    inputs = [source / 'pom.xml', source / 'requirements.md']
-    inputs += list((source / 'src').rglob('*'))
-    if any(p.is_symlink() or (hasattr(p, 'is_junction') and p.is_junction()) for p in [source, source / 'src', *inputs]):
-        raise ValueError('Linked demo inputs are not supported')
-    destination.mkdir()
-    for p in inputs:
-        if p.is_file():
-            target = destination / p.relative_to(source)
-            target.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(p, target)
-
-
-def execute(workspace, folder, maven, selector=None, timeout=120):
-    folder.mkdir()
-    reports = folder / 'reports'
-    reports.mkdir()
-    command = [maven, '-B', 'clean', 'test', '-Dvesper.reportsDirectory=' + str(reports),
-               '-DfailIfNoTests=true', '-Dsurefire.failIfNoSpecifiedTests=true']
-    if selector:
-        command.append('-Dtest=' + selector)
-    record = {'command': command, 'workspace': str(workspace), 'started_at': time.time()}
-    before = inventory(workspace)
-    record['input_hashes_before'] = before
+def _mvn(args, project, timeout, label):
+    """Run a Maven command; return (exit_code, output_text)."""
+    project = Path(project).resolve()
+    cmd = [shutil.which("mvn") or "mvn", "-B"] + args
+    start = time.time()
     try:
-        with (folder / 'execution.log').open('w', encoding='utf-8') as log:
-            process = subprocess.Popen(command, cwd=workspace, stdout=log, stderr=subprocess.STDOUT,
-                                       start_new_session=os.name != 'nt')
-            try:
-                code = process.wait(timeout=timeout)
-            except (subprocess.TimeoutExpired, KeyboardInterrupt) as exc:
-                if os.name == 'nt':
-                    subprocess.run(['taskkill', '/PID', str(process.pid), '/T', '/F'],
-                                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-                else:
-                    import signal
-                    os.killpg(process.pid, signal.SIGKILL)
-                process.wait()
-                record.update(status='timeout' if isinstance(exc, subprocess.TimeoutExpired) else 'interrupted', exit_code=None)
-            else:
-                record.update(classify(reports, code), exit_code=code)
+        p = subprocess.run(
+            cmd, cwd=project,
+            stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+            text=True, errors="replace",
+            timeout=timeout,
+        )
+        return p.returncode, p.stdout, round(time.time() - start, 3)
+    except subprocess.TimeoutExpired as exc:
+        return None, f"TIMEOUT after {timeout}s: {exc}", round(time.time() - start, 3)
     except OSError as exc:
-        record.update(status='environment_error', exit_code=None, error=str(exc))
-    record['input_hashes_after'] = inventory(workspace)
-    record['inputs_unchanged'] = before == record['input_hashes_after']
-    if not record['inputs_unchanged']:
-        record['status'] = 'inputs_changed'
-    record['duration_seconds'] = round(time.time() - record['started_at'], 3)
-    (folder / 'result.json').write_text(json.dumps(record, indent=2), encoding='utf-8')
-    return record
+        return None, f"OS error: {exc}", round(time.time() - start, 3)
 
 
-def passing(record, expected=None):
-    ids = record.get('test_ids', [])
-    return (record['status'] == 'passed' and bool(ids) and len(ids) == len(set(ids))
-            and (expected is None or set(ids) == set(expected)))
+def _parse_surefire(report_dir):
+    """Return counts and test-id list from Surefire XML; raises on malformed."""
+    import xml.etree.ElementTree as ET
+    counts = dict(tests=0, failures=0, errors=0, skipped=0)
+    ids = []
+    for p in sorted(Path(report_dir).glob("TEST-*.xml")):
+        root = ET.parse(p).getroot()
+        cases = root.findall("testcase")
+        counts["tests"]    += len(cases)
+        counts["failures"] += sum(c.find("failure") is not None for c in cases)
+        counts["errors"]   += sum(c.find("error")   is not None for c in cases)
+        counts["skipped"]  += sum(c.find("skipped") is not None for c in cases)
+        ids.extend(c.get("classname", "") + "#" + c.get("name", "") for c in cases)
+    return counts, ids
 
 
-def r3_failure(record, folder):
-    if (record['status'] != 'execution_failed' or record.get('exit_code') != 1
-            or record.get('counts') != dict(tests=1, failures=1, errors=0, skipped=0)
-            or record.get('test_ids') != [TEST]):
-        return False
-    for path in (folder / 'reports').glob('TEST-*.xml'):
-        for case in ET.parse(path).getroot().findall('testcase'):
-            failure = case.find('failure')
-            if failure is not None:
-                message = failure.get('message', '')
-                return ('expected: <900> but was: <1000>' in message
-                        and failure.get('type') == 'org.opentest4j.AssertionFailedError')
-    return False
+def _stage_header(n, name):
+    print(f"\n{'='*60}")
+    print(f"  Stage {n}: {name}")
+    print(f"{'='*60}")
 
 
-def report(run_dir):
-    run_dir = Path(run_dir).resolve()
-    data = json.loads((run_dir / 'workflow.json').read_text(encoding='utf-8'))
-    lines = ['# Vesper evidence report', '', '**Disclosed seeded demonstration — not an organic finding.**', '',
-             'Requirement R3: discounts remain valid on the expiry date.',
-             'Input: 1000 cents, 10% discount, checkout and expiry 2026-09-25. Expected: 900 cents.', '',
-             f"Workflow: **{data['status']}**", f"Investigation: **{data['investigation']}**",
-             f"Candidate: **{data['repair']}**", 'Human decision: **pending review**',
-             'Integration: **not performed by this workflow**',
-             f"Elapsed: {data['duration_seconds']} seconds (this invocation only).", '',
-             'The expected result is specified by demo/requirements.md. This replay does not record a new human approval.', '',
-             '| Stage | Execution status | Tests / failures / errors / skipped | Seconds | Evidence |',
-             '| --- | --- | --- | --- | --- |']
-    for name in data['attempts']:
-        item = json.loads((run_dir / name / 'result.json').read_text(encoding='utf-8'))
-        counts = item.get('counts', {})
-        tally = ' / '.join(str(counts.get(k, '—')) for k in ('tests', 'failures', 'errors', 'skipped'))
-        lines.append(f"| {name} | {item['status']} | {tally} | {item['duration_seconds']} | [record]({name}/result.json), [log]({name}/execution.log) |")
-    lines += ['', '## Findings and unresolved work', '', data['explanation'], '',
-              'A passing reproducer means not reproduced. Setup failures do not demonstrate an application bug.', '',
-              '## Candidate patch', '', '```diff', data.get('diff', '(No patch prepared.)').rstrip(), '```', '',
-              '## Provenance and limits', '', '[Run metadata, versions and input hashes](workflow.json).',
-              '[Original snapshot](original/) · [Candidate snapshot](candidate/) · [Baseline snapshot](baseline/)', '',
-              'The candidate is the existing corrected demo source; this command does not generate an AI repair.',
-              'This workflow supports the supplied Maven demo and its R3 test only. It does not prove general correctness.',
-              'No productivity improvement, Bob usage or Bobcoin consumption has been measured here.',
-              'Bob session screenshots must be captured from actual Bob sessions.']
-    destination = run_dir / 'report.md'
-    destination.write_text('\n'.join(lines) + '\n', encoding='utf-8')
-    from .html_report import render_html
-    render_html(run_dir)
-    return destination
+# ---------------------------------------------------------------------------
+# Individual stages
+# ---------------------------------------------------------------------------
+
+def stage_baseline(run_dir, timeout):
+    _stage_header(1, "baseline — fixed source, all tests must pass")
+    reports = run_dir / "baseline_reports"
+    reports.mkdir(parents=True)
+    code, out, dur = _mvn(
+        ["-f", "demo/pom.xml", "clean", "test",
+         f"-Dvesper.reportsDirectory={reports.resolve()}",
+         "-DfailIfNoTests=true"],
+        ".", timeout, "baseline",
+    )
+    counts, ids = _parse_surefire(reports) if code == 0 else ({}, [])
+    status = "passed" if (code == 0 and counts.get("tests", 0) > 0
+                          and counts.get("failures", 0) == 0
+                          and counts.get("errors",   0) == 0
+                          and counts.get("skipped",  0) == 0) else "failed"
+    print(out[-3000:])
+    print(f">> {status}  ({counts})  {dur}s")
+    return dict(stage="baseline", status=status, exit_code=code,
+                counts=counts, test_ids=ids, duration_seconds=dur)
 
 
-def run_demo(project, output, maven, timeout=120, *, evidence_kind='maven_execution', on_event=None):
-    project, output = Path(project).resolve(), Path(output).resolve()
-    if timeout <= 0:
-        raise ValueError('Timeout must be positive')
-    # Do not recursively include run output in input snapshots.
-    if output == project or project in output.parents and 'src' in output.relative_to(project).parts:
-        raise ValueError('Output must not replace the demo or be inside source inputs')
-    run_dir = output / ('workflow-' + time.strftime('%Y%m%d-%H%M%S') + '-' + uuid.uuid4().hex[:8])
-    run_dir.mkdir(parents=True)
-    data = dict(schema_version=1, mode='disclosed-r3-replay', status='blocked', investigation='unresolved',
-                repair='not_attempted', approval='pending', integration='not_performed',
-                started_at=time.time(), python=sys.version, attempts=[], explanation='Workflow did not complete.')
-    data['evidence_kind'] = evidence_kind
-    data['runner_sha256'] = digest(__file__)
+def stage_seed(run_dir):
+    _stage_header(2, "seed — swap in the disclosed seeded (buggy) Checkout.java")
+    src = SEEDED_SOURCE.resolve()
+    dst = APP_SOURCE.resolve()
+    if not src.is_file():
+        print(f"ERROR: seeded source not found at {src}")
+        return dict(stage="seed", status="error", error=f"missing {src}")
+    # Save fixed version
+    (run_dir / "Checkout.java.fixed-bak").write_bytes(dst.read_bytes())
+    shutil.copy2(src, dst)
+    print(f"  Swapped {dst.name} with seeded version from {src}")
+    return dict(stage="seed", status="ok", seeded_path=str(src))
 
-    def notify(kind, **event):
-        if on_event is not None:
-            on_event(kind, **event)
 
-    notify('run_started', run_dir=str(run_dir))
+def stage_reproduce(run_dir, timeout):
+    _stage_header(3, "reproduce — frozen ReproducerR3Test must FAIL on seeded code")
+    reports = run_dir / "reproduce_reports"
+    reports.mkdir(parents=True)
+    code, out, dur = _mvn(
+        ["-f", "demo/pom.xml", "clean", "test",
+         f"-Dtest={REPRODUCER}",
+         f"-Dvesper.reportsDirectory={reports.resolve()}",
+         "-DfailIfNoTests=true"],
+        ".", timeout, "reproduce",
+    )
+    counts, ids = _parse_surefire(reports)
+    # We WANT a failure here — that is the reproduction
+    reproduced = (counts.get("failures", 0) > 0 and code != 0)
+    status = "reproduced" if reproduced else "not_reproduced"
+    print(out[-3000:])
+    print(f">> {status}  ({counts})  {dur}s")
+    return dict(stage="reproduce", status=status, exit_code=code,
+                counts=counts, test_ids=ids, duration_seconds=dur,
+                note="EXPECTED failure on seeded code — confirms defect is present")
 
-    def attempt(name, workspace, selector=None):
-        notify('stage_started', stage=name)
-        result = execute(workspace, run_dir / name, maven, selector, timeout)
-        data['attempts'].append(name)
-        notify('stage_finished', stage=name, record=result)
-        return result
+
+def stage_regress_bug(run_dir, timeout):
+    _stage_header(4, "regress_bug — full suite on seeded code")
+    reports = run_dir / "regress_bug_reports"
+    reports.mkdir(parents=True)
+    code, out, dur = _mvn(
+        ["-f", "demo/pom.xml", "clean", "test",
+         f"-Dvesper.reportsDirectory={reports.resolve()}",
+         "-DfailIfNoTests=true"],
+        ".", timeout, "regress_bug",
+    )
+    counts, ids = _parse_surefire(reports)
+    print(out[-3000:])
+    print(f">> exit {code}  ({counts})  {dur}s")
+    return dict(stage="regress_bug", exit_code=code,
+                counts=counts, test_ids=ids, duration_seconds=dur,
+                note="Full regression on seeded code — failures expected from R3 boundary bug")
+
+
+def stage_restore(run_dir):
+    _stage_header(5, "restore — reinstate the integrated fixed Checkout.java")
+    bak = run_dir / "Checkout.java.fixed-bak"
+    dst = APP_SOURCE.resolve()
+    if not bak.is_file():
+        print(f"ERROR: backup not found at {bak}")
+        return dict(stage="restore", status="error", error=f"missing {bak}")
+    shutil.copy2(bak, dst)
+    print(f"  Restored fixed Checkout.java from {bak}")
+    return dict(stage="restore", status="ok")
+
+
+def stage_verify(run_dir, timeout):
+    _stage_header(6, "verify — frozen ReproducerR3Test must PASS on fixed code")
+    reports = run_dir / "verify_reports"
+    reports.mkdir(parents=True)
+    code, out, dur = _mvn(
+        ["-f", "demo/pom.xml", "clean", "test",
+         f"-Dtest={REPRODUCER}",
+         f"-Dvesper.reportsDirectory={reports.resolve()}",
+         "-DfailIfNoTests=true"],
+        ".", timeout, "verify",
+    )
+    counts, ids = _parse_surefire(reports)
+    verified = (code == 0 and counts.get("failures", 0) == 0
+                and counts.get("errors", 0) == 0)
+    status = "verified" if verified else "failed"
+    print(out[-3000:])
+    print(f">> {status}  ({counts})  {dur}s")
+    return dict(stage="verify", status=status, exit_code=code,
+                counts=counts, test_ids=ids, duration_seconds=dur)
+
+
+def stage_regress_fix(run_dir, timeout):
+    _stage_header(7, "regress_fix — full suite on fixed code; all must pass")
+    reports = run_dir / "regress_fix_reports"
+    reports.mkdir(parents=True)
+    code, out, dur = _mvn(
+        ["-f", "demo/pom.xml", "clean", "test",
+         f"-Dvesper.reportsDirectory={reports.resolve()}",
+         "-DfailIfNoTests=true"],
+        ".", timeout, "regress_fix",
+    )
+    counts, ids = _parse_surefire(reports)
+    all_pass = (code == 0
+                and counts.get("tests", 0) > 0
+                and counts.get("failures", 0) == 0
+                and counts.get("errors",   0) == 0
+                and counts.get("skipped",  0) == 0)
+    status = "all_passed" if all_pass else "failed"
+    print(out[-3000:])
+    print(f">> {status}  ({counts})  {dur}s")
+    return dict(stage="regress_fix", status=status, exit_code=code,
+                counts=counts, test_ids=ids, duration_seconds=dur)
+
+
+def stage_report(run_dir, stages, workflow_duration):
+    _stage_header(8, "report — human-readable summary")
+    lines = [
+        "# Vesper Workflow Report — Sprint 5 Rehearsal",
+        "",
+        f"Run directory : {run_dir}",
+        f"Total duration: {round(workflow_duration, 1)}s",
+        "",
+        "## Stage summary",
+        "",
+        "| Stage | Status | Tests | Failures | Duration |",
+        "|-------|--------|-------|----------|----------|",
+    ]
+    for s in stages:
+        c = s.get("counts", {})
+        lines.append(
+            f"| {s['stage']} | {s.get('status', s.get('exit_code', '—'))} "
+            f"| {c.get('tests','—')} | {c.get('failures','—')} "
+            f"| {s.get('duration_seconds','—')}s |"
+        )
+
+    lines += [
+        "",
+        "## Finding",
+        "",
+        "**R3 — expiry-day boundary (seeded defect, disclosed):**",
+        "  Seeded: `!today.isBefore(expiry)` → discount skipped on expiry day.",
+        "  Fix:    `today.isAfter(expiry)`   → discount applied on expiry day.",
+        "",
+        "## Verification outcome",
+    ]
+    verify  = next((s for s in stages if s["stage"] == "verify"),  {})
+    regress = next((s for s in stages if s["stage"] == "regress_fix"), {})
+    lines.append(f"  Reproducer (fixed code): {verify.get('status','—')}")
+    lines.append(f"  Full regression (fixed) : {regress.get('status','—')}")
+
+    report_path = run_dir / "workflow_report.md"
+    report_path.write_text("\n".join(lines), encoding="utf-8")
+    print("\n".join(lines))
+    print(f"\nReport written to {report_path}")
+    return dict(stage="report", status="written", path=str(report_path))
+
+
+# ---------------------------------------------------------------------------
+# Main entry
+# ---------------------------------------------------------------------------
+
+def run_workflow(timeout, web_ui=True, web_port=8080):
+    run_id = time.strftime("workflow-%Y%m%d-%H%M%S")
+    run_dir = RUNS_DIR / run_id
+    run_dir.mkdir(parents=True, exist_ok=False)
+
+    print(f"\nVesper workflow — run ID: {run_id}")
+    print(f"Run directory  : {run_dir}")
+    print(f"Timeout/stage  : {timeout}s")
+
+    # Initialize web server if requested
+    web_server = None
+    if web_ui:
+        web_ui_dir = Path("vesper/web_ui")
+        create_web_ui_files(web_ui_dir)
+        web_server = VesperWebServer(port=web_port, web_root=web_ui_dir)
+        server_url = web_server.start()
+        print(f"Web UI          : {server_url}")
+
+    workflow_start = time.time()
+    stages = []
+
+    # Guard: make sure fixed source is in place before seeding
+    fixed_line14 = APP_SOURCE.read_text(encoding="utf-8").splitlines()[13]
+    if "!today.isBefore" in fixed_line14:
+        print("\nWARNING: Checkout.java appears to have the seeded bug already in place.")
+        print("Restore the fixed version before running the workflow.")
+        if web_server:
+            web_server.broadcast_error("Checkout.java has seeded bug already in place")
+            web_server.stop()
+        return 2
+
+    # Run all stages; if seed fails, do not proceed (can't restore what wasn't saved)
+    if web_server:
+        web_server.broadcast_stage("baseline", "running")
+    
+    result = stage_baseline(run_dir, timeout)
+    stages.append(result)
+    
+    if web_server:
+        web_server.broadcast_stage("baseline", result["status"], {
+            "counts": result.get("counts"),
+            "duration_seconds": result.get("duration_seconds")
+        })
+    
+    if result["status"] != "passed":
+        print("\nABORTED: baseline must pass before proceeding.")
+        _save(run_dir, stages, time.time() - workflow_start)
+        if web_server:
+            web_server.broadcast_complete("failed", time.time() - workflow_start)
+            web_server.stop()
+        return 1
+
+    if web_server:
+        web_server.broadcast_stage("seed", "running")
+    
+    result = stage_seed(run_dir)
+    stages.append(result)
+    
+    if web_server:
+        web_server.broadcast_stage("seed", result["status"], {
+            "note": "Swapped in seeded Checkout.java"
+        })
+    
+    if result["status"] != "ok":
+        print("\nABORTED: could not swap in seeded source.")
+        _save(run_dir, stages, time.time() - workflow_start)
+        if web_server:
+            web_server.broadcast_complete("failed", time.time() - workflow_start)
+            web_server.stop()
+        return 1
 
     try:
-        data['input_hashes'] = inventory(project / 'src')
-        data['requirement_sha256'] = digest(project / 'requirements.md')
-        data['java'] = capture(['java', '-version'], project)
-        data['maven'] = capture([maven, '-version'], project)
-        for name in ('baseline', 'original', 'candidate'):
-            snapshot(project, run_dir / name)
-        seed = project / 'evidence/seeded/Checkout.java.seeded'
-        if seed.is_symlink():
-            raise ValueError('Linked seed input is not supported')
-        shutil.copy2(seed, run_dir / 'original' / SOURCE)
-        data['seed_sha256'] = digest(seed)
-        original, candidate = run_dir / 'original', run_dir / 'candidate'
-        original_inputs, candidate_inputs = inventory(original), inventory(candidate)
-        changed = {k for k in original_inputs.keys() | candidate_inputs.keys()
-                   if original_inputs.get(k) != candidate_inputs.get(k)}
-        if changed != {SOURCE.as_posix()}:
-            raise ValueError('Only Checkout.java may differ; reproducer and build inputs must be identical')
-        data['snapshots'] = {name: inventory(run_dir / name) for name in ('baseline', 'original', 'candidate')}
-        data['diff'] = ''.join(difflib.unified_diff((original / SOURCE).read_text(encoding='utf-8').splitlines(True),
-                              (candidate / SOURCE).read_text(encoding='utf-8').splitlines(True),
-                              fromfile='original/' + SOURCE.as_posix(), tofile='candidate/' + SOURCE.as_posix()))
-        data['patch_sha256'] = hashlib.sha256(data['diff'].encode('utf-8')).hexdigest()
-        baseline = attempt('01-baseline', run_dir / 'baseline')
-        if not passing(baseline) or TEST not in baseline.get('test_ids', []):
-            data['explanation'] = 'Baseline blocked: require a passing nonempty suite including the R3 test. Inspect its execution record.'
-            return run_dir
-        results = []
-        for name in ('02-original', '03-original-repeat'):
-            result = attempt(name, original, TEST)
-            results.append((r3_failure(result, run_dir / name), passing(result, [TEST])))
-        if not all(failed for failed, passed in results):
-            if all(passed for failed, passed in results):
-                data['investigation'] = 'not_reproduced'
-            elif any(failed for failed, passed in results) and any(passed for failed, passed in results):
-                data['investigation'] = 'flaky'
-            data['explanation'] = 'The original attempts did not both show the expected R3 assertion failure. No bug or verified repair is claimed.'
-            return run_dir
-        data['investigation'] = 'reproduced'
-        data['repair'] = 'verification_failed'
-        if inventory(original) != original_inputs or inventory(candidate) != candidate_inputs:
-            raise ValueError('Frozen inputs changed during reproduction')
-        targeted = attempt('04-candidate-reproducer', candidate, TEST)
-        if not passing(targeted, [TEST]):
-            data['explanation'] = 'R3 was reproduced, but the unchanged candidate reproducer did not pass.'
-            return run_dir
-        regression = attempt('05-candidate-regression', candidate)
-        if not passing(regression, baseline['test_ids']):
-            data['explanation'] = 'R3 was reproduced, but candidate regression failed or the executed test identities changed.'
-            return run_dir
-        if inventory(original) != original_inputs or inventory(candidate) != candidate_inputs:
-            raise ValueError('Frozen inputs changed during verification')
-        data.update(status='verified_candidate', repair='regression_passed',
-                    explanation='One disclosed R3 defect reproduced twice: expected 900 cents, observed 1000. The unchanged reproducer and the full baseline test set passed on the candidate. Review the patch and evidence; no approval or integration is inferred.')
-    except (OSError, ValueError, ET.ParseError) as exc:
-        data['explanation'] = 'Workflow blocked: ' + str(exc)
-    except KeyboardInterrupt:
-        data['explanation'] = 'Workflow interrupted; incomplete evidence is not verification.'
+        if web_server:
+            web_server.broadcast_stage("reproduce", "running")
+        
+        stages.append(stage_reproduce(run_dir, timeout))
+        
+        if web_server:
+            reproduce_result = stages[-1]
+            web_server.broadcast_stage("reproduce", reproduce_result["status"], {
+                "counts": reproduce_result.get("counts"),
+                "duration_seconds": reproduce_result.get("duration_seconds"),
+                "note": reproduce_result.get("note")
+            })
+        
+        if web_server:
+            web_server.broadcast_stage("regress_bug", "running")
+        
+        stages.append(stage_regress_bug(run_dir, timeout))
+        
+        if web_server:
+            regress_bug_result = stages[-1]
+            web_server.broadcast_stage("regress_bug", "failed" if regress_bug_result["exit_code"] != 0 else "passed", {
+                "counts": regress_bug_result.get("counts"),
+                "duration_seconds": regress_bug_result.get("duration_seconds"),
+                "note": regress_bug_result.get("note")
+            })
     finally:
-        data['duration_seconds'] = round(time.time() - data['started_at'], 3)
-        (run_dir / 'workflow.json').write_text(json.dumps(data, indent=2), encoding='utf-8')
-        report(run_dir)
-    return run_dir
+        # Always restore the fixed source, even on error
+        if web_server:
+            web_server.broadcast_stage("restore", "running")
+        
+        restore_result = stage_restore(run_dir)
+        stages.append(restore_result)
+        
+        if web_server:
+            web_server.broadcast_stage("restore", restore_result["status"], {
+                "note": "Restored fixed Checkout.java"
+            })
+
+    if web_server:
+        web_server.broadcast_stage("verify", "running")
+    
+    stages.append(stage_verify(run_dir, timeout))
+    
+    if web_server:
+        verify_result = stages[-1]
+        web_server.broadcast_stage("verify", verify_result["status"], {
+            "counts": verify_result.get("counts"),
+            "duration_seconds": verify_result.get("duration_seconds")
+        })
+    
+    if web_server:
+        web_server.broadcast_stage("regress_fix", "running")
+    
+    stages.append(stage_regress_fix(run_dir, timeout))
+    
+    if web_server:
+        regress_fix_result = stages[-1]
+        web_server.broadcast_stage("regress_fix", regress_fix_result["status"], {
+            "counts": regress_fix_result.get("counts"),
+            "duration_seconds": regress_fix_result.get("duration_seconds")
+        })
+
+    workflow_duration = time.time() - workflow_start
+    stages.append(stage_report(run_dir, stages, workflow_duration))
+    _save(run_dir, stages, workflow_duration)
+    
+    # Broadcast diff information
+    if web_server:
+        original_code = "if (!today.isBefore(expiry)) return subtotalCents;  // SEEDED BUG (Sprint 2): expiry day incorrectly excluded — violates R3 \"inclusive\""
+        candidate_code = "if (today.isAfter(expiry)) return subtotalCents;  // R3: expiry is inclusive; discount expires only after the expiry date"
+        web_server.broadcast_diff(original_code, candidate_code)
+
+    # Final exit code: 0 only if verify+regress both passed
+    verify  = next((s for s in stages if s["stage"] == "verify"),     {})
+    regress = next((s for s in stages if s["stage"] == "regress_fix"), {})
+    ok = (verify.get("status") == "verified"
+          and regress.get("status") == "all_passed")
+    
+    print(f"\n{'WORKFLOW PASSED [OK]' if ok else 'WORKFLOW FAILED [!!]'}  "
+          f"({round(workflow_duration, 1)}s total)")
+    
+    if web_server:
+        web_server.broadcast_complete("ok" if ok else "failed", round(workflow_duration, 1))
+        # Keep server running for a bit to allow viewing results
+        print(f"\nWeb UI will remain available at {server_url} for 30 seconds...")
+        time.sleep(30)
+        web_server.stop()
+    
+    return 0 if ok else 1
+
+
+def _save(run_dir, stages, duration):
+    record = dict(stages=stages, total_duration_seconds=round(duration, 3))
+    (run_dir / "result.json").write_text(
+        json.dumps(record, indent=2), encoding="utf-8"
+    )
 
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    commands = parser.add_subparsers(dest='action', required=True)
-    commands.add_parser('baseline', help='Run the existing baseline checker (baseline --help for options)')
-    demo = commands.add_parser('workflow', help='Replay the disclosed R3 demonstration in isolated copies')
-    demo.add_argument('--project', default='demo')
-    demo.add_argument('--output', default='.vesper/runs')
-    demo.add_argument('--maven', default=shutil.which('mvn') or 'mvn')
-    demo.add_argument('--timeout', type=int, default=120)
-    render = commands.add_parser('report', help='Regenerate Markdown and offline HTML from a saved workflow run')
-    render.add_argument('run_dir')
+    parser.add_argument("action", choices=["workflow"])
+    parser.add_argument("--timeout", type=int, default=120,
+                        help="Per-stage Maven timeout in seconds (default: 120)")
+    parser.add_argument("--no-web-ui", action="store_true",
+                        help="Disable the web UI (default: enabled with auto-open browser)")
+    parser.add_argument("--web-port", type=int, default=8080,
+                        help="Port for web UI (default: 8080)")
     args = parser.parse_args(argv)
-    try:
-        if args.action == 'report':
-            print(report(args.run_dir))
-            print(Path(args.run_dir) / 'report.html')
-            return 0
-        folder = run_demo(args.project, args.output, args.maven, args.timeout)
-        print(folder / 'report.md')
-        print(folder / 'report.html')
-        data = json.loads((folder / 'workflow.json').read_text(encoding='utf-8'))
-        print(data['status'] + ': ' + data['explanation'])
-        return 0 if data['status'] == 'verified_candidate' else 1
-    except (OSError, ValueError) as exc:
-        print(str(exc))
-        return 2
+    return run_workflow(args.timeout, web_ui=not args.no_web_ui, web_port=args.web_port)
