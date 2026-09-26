@@ -379,7 +379,7 @@ No productivity improvement or speedup is claimed.
 
 | File | Participant | Bobcoins | Status |
 |---|---|---|---|
-| `black_sheep_Neelo_Nkhuna_sprint2_summary.png` | Neelo Nkhuna | 3.20 | ✅ Real Bob task summary — Task Id `44fc493d…`, workspace `vesper-1` |
+| `black_sheep_Neelo_Nkhuna_sprint2_summary.png` | Neelo Nkhuna | 0.981 | ✅ Real Bob task summary — Task Id `504a3f2c…`, workspace `vesper-1` |
 | `black_sheep_sam_sprint3_investigation_summary.png` | Sam | 2.61 | ✅ Real Bob task summary — Task Id `fb2c9c38…`, workspace `vesper` |
 | `bob_sessions_black_sheep_nyakalo_kgwale_task04_sprint4_summary.png` | Nyakalo Kgwale | 3.20 | ✅ Real Bob task summary — Task Id `6b14d3d9…`, workspace `vesper` |
 

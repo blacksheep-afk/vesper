@@ -45,3 +45,12 @@ The accepted one-repo, requirements-to-reproducer-to-fix design fits the challen
 
 Next operational dependency: confirm IBM invitation, IDE installation, hackathon account selection, and Bobcoin allocation. LabLab login alone does not verify IBM Bob access.
 
+
+## React clarification — 26 September 2026
+
+Rechecked the public official guide and event page after the team raised a possible React requirement. The guide's "A note on using other technologies" permits any framework or technology subject to its usage policies and requires IBM Bob IDE as a core component. No React requirement was found in the guide. Therefore the report remains a Python-generated offline HTML/CSS/JavaScript document; React is not claimed as part of the stack. This check covers the public sources, not a separate private instruction from an organizer.
+
+Source: https://lablab-ibm-bob-2-hackathon-guide.s3.us.cloud-object-storage.appdomain.cloud/index.html
+
+
+Later implementation choice: the team requested an interactive local workspace, now implemented in React. The standalone report still uses generated HTML/CSS/JavaScript. This adoption does not change the verified event rule: React is optional; Bob IDE must be core.
