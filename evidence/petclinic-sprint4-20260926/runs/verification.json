@@ -1,0 +1,23 @@
+{
+  "status": "verified_candidate",
+  "approval": "pending",
+  "integration": "not_performed",
+  "test_sha256": "02a62f3ce7106a85e9d5239ee454b16f360e7fc48d5c6c72a73f607d425b6ddf",
+  "format_flags": [
+    "-Dspring-javaformat.validate.skip=true"
+  ],
+  "test_files_identical": true,
+  "baseline_test_identities_preserved": true,
+  "baseline_counts": {
+    "tests": 74,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 2
+  },
+  "candidate_counts": {
+    "tests": 76,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 2
+  }
+}

@@ -1,0 +1,223 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------< org.springframework.samples:spring-petclinic >------------
+[INFO] Building petclinic 4.0.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.5.0:clean (default-clean) @ spring-petclinic ---
+[INFO] Deleting C:\Users\LEARNER\Documents\ChatGPT\Personal Project\petclinic-sprint4-work\original\target
+[INFO] 
+[INFO] --- enforcer:3.6.3:enforce (enforce-java) @ spring-petclinic ---
+[INFO] Rule 0: org.apache.maven.enforcer.rules.version.RequireJavaVersion passed
+[INFO] 
+[INFO] --- spring-javaformat:0.0.47:validate (default) @ spring-petclinic ---
+[INFO] skipping format validate as per configuration.
+[INFO] 
+[INFO] --- checkstyle:3.6.0:check (nohttp-checkstyle-validation) @ spring-petclinic ---
+[INFO] You have 0 Checkstyle violations.
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (default) @ spring-petclinic ---
+[INFO] argLine set to "-javaagent:C:\\Users\\LEARNER\\Documents\\ChatGPT\\Personal Project\\petclinic-sprint4-work\\tools\\m2\\org\\jacoco\\org.jacoco.agent\\0.8.15\\org.jacoco.agent-0.8.15-runtime.jar=destfile=C:\\Users\\LEARNER\\Documents\\ChatGPT\\Personal Project\\petclinic-sprint4-work\\original\\target\\jacoco.exec"
+[INFO] 
+[INFO] --- git-commit-id:9.2.0:revision (default) @ spring-petclinic ---
+[INFO] dotGitDirectory 'C:\Users\LEARNER\Documents\ChatGPT\Personal Project\petclinic-sprint4-work\original\.git'
+[INFO] Collected git.build.user.name with value Kgwale NN
+[INFO] Collected git.build.user.email with value kgoalemothiba8@gmail.com
+[INFO] Collected git.branch with value 818c4136ea971c21674525f9053de0d9c7ad8cfe
+[INFO] Collected git.commit.id.describe with value 818c413
+[INFO] Collected git.commit.id.describe-short with value 818c413
+[INFO] Collected git.commit.id with value 818c4136ea971c21674525f9053de0d9c7ad8cfe
+[INFO] Collected git.commit.id.abbrev with value 818c413
+[INFO] Collected git.dirty with value false
+[INFO] Collected git.commit.user.name with value Atul Sharma
+[INFO] Collected git.commit.user.email with value atul.sharma.cse.2021@miet.ac.in
+[INFO] Collected git.commit.message.full with value docs: Fix formatting in Docker container instructions
+
+Signed-off-by: Atul Sharma <atul.sharma.cse.2021@miet.ac.in>
+[INFO] Collected git.commit.message.short with value docs: Fix formatting in Docker container instructions
+[INFO] Collected git.commit.time with value 2026-08-26T12:57:54+02:00
+[INFO] Collected git.commit.author.time with value 2026-08-19T15:20:54+02:00
+[INFO] Collected git.commit.committer.time with value 2026-08-26T12:57:54+02:00
+[INFO] Collected git.remote.origin.url with value https://github.com/spring-projects/spring-petclinic.git
+[INFO] Collected git.tags with value 
+[INFO] Collected git.tag with value 
+[INFO] Collected git.closest.tag.name with value 
+[INFO] Collected git.closest.tag.commit.count with value 
+[INFO] Collected git.total.commit.count with value 1042
+[INFO] Collected git.local.branch.ahead with value NO_REMOTE
+[INFO] Collected git.local.branch.behind with value NO_REMOTE
+[INFO] Collected git.build.time with value 2024-11-28T16:37:52+02:00
+[INFO] Collected git.build.version with value 4.0.0-SNAPSHOT
+[INFO] Collected git.build.host with value TR-O16-D11
+[INFO] including property 'git.tags' in results
+[INFO] including property 'git.build.version' in results
+[INFO] including property 'git.branch' in results
+[INFO] including property 'git.build.host' in results
+[INFO] including property 'git.commit.id' in results
+[INFO] including property 'git.commit.user.email' in results
+[INFO] including property 'git.local.branch.behind' in results
+[INFO] including property 'git.commit.author.time' in results
+[INFO] including property 'git.build.user.name' in results
+[INFO] including property 'git.dirty' in results
+[INFO] including property 'git.closest.tag.commit.count' in results
+[INFO] including property 'git.commit.user.name' in results
+[INFO] including property 'git.commit.id.abbrev' in results
+[INFO] including property 'git.commit.id.describe-short' in results
+[INFO] including property 'git.total.commit.count' in results
+[INFO] including property 'git.commit.id.describe' in results
+[INFO] including property 'git.build.user.email' in results
+[INFO] including property 'git.commit.message.short' in results
+[INFO] including property 'git.commit.committer.time' in results
+[INFO] including property 'git.tag' in results
+[INFO] including property 'git.closest.tag.name' in results
+[INFO] including property 'git.local.branch.ahead' in results
+[INFO] including property 'git.commit.time' in results
+[INFO] including property 'git.build.time' in results
+[INFO] including property 'git.commit.message.full' in results
+[INFO] including property 'git.remote.origin.url' in results
+[INFO] Writing properties file [C:\Users\LEARNER\Documents\ChatGPT\Personal Project\petclinic-sprint4-work\original\target\classes\git.properties] (for project petclinic)...
+[INFO] 
+[INFO] --- spring-boot:4.1.0:build-info (default) @ spring-petclinic ---
+[INFO] 
+[INFO] --- cyclonedx:2.9.1:makeAggregateBom (default) @ spring-petclinic ---
+[INFO] CycloneDX: Resolving Dependencies
+[INFO] CycloneDX: Creating BOM version 1.6 with 106 component(s)
+[INFO] CycloneDX: Writing and validating BOM (JSON): C:\Users\LEARNER\Documents\ChatGPT\Personal Project\petclinic-sprint4-work\original\target\classes\META-INF\sbom\application.cdx.json
+[WARNING] Unknown keyword meta:enum - you should define your own Meta Schema. If the keyword is irrelevant for validation, just use a NonValidationKeyword or if it should generate annotations AnnotationKeyword
+[WARNING] Unknown keyword deprecated - you should define your own Meta Schema. If the keyword is irrelevant for validation, just use a NonValidationKeyword or if it should generate annotations AnnotationKeyword
+[INFO]            attaching as spring-petclinic-4.0.0-SNAPSHOT-cyclonedx.json
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ spring-petclinic ---
+[INFO] Copying 3 resources from src\main\resources to target\classes
+[INFO] Copying 47 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ spring-petclinic ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 30 source files with javac [debug parameters release 17] to target\classes
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ spring-petclinic ---
+[INFO] skip non existing resourceDirectory C:\Users\LEARNER\Documents\ChatGPT\Personal Project\petclinic-sprint4-work\original\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ spring-petclinic ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 21 source files with javac [debug parameters release 17] to target\test-classes
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ spring-petclinic ---
+[WARNING]  Parameter 'systemProperties' is deprecated: use systemPropertyVariables instead
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.springframework.samples.petclinic.owner.VesperPetTypeReproductionTests
+04:16:11.279 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [org.springframework.samples.petclinic.owner.VesperPetTypeReproductionTests]: VesperPetTypeReproductionTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+04:16:12.061 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration org.springframework.samples.petclinic.PetClinicApplication for test class org.springframework.samples.petclinic.owner.VesperPetTypeReproductionTests
+04:16:12.093 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [org.springframework.samples.petclinic.owner.VesperPetTypeReproductionTests]: VesperPetTypeReproductionTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+04:16:12.129 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration org.springframework.samples.petclinic.PetClinicApplication for test class org.springframework.samples.petclinic.owner.VesperPetTypeReproductionTests
+04:16:12.530 [main] INFO org.springframework.boot.devtools.restart.RestartApplicationListener -- Restart disabled due to context in which it is running
+
+
+              |\      _,,,--,,_
+             /,`.-'`'   ._  \-;;,_
+  _______ __|,4-  ) )_   .;.(__`'-'__     ___ __    _ ___ _______
+ |       | '---''(_/._)-'(_\_)   |   |   |   |  |  | |   |       |
+ |    _  |    ___|_     _|       |   |   |   |   |_| |   |       | __ _ _
+ |   |_| |   |___  |   | |       |   |   |   |       |   |       | \ \ \ \
+ |    ___|    ___| |   | |      _|   |___|   |  _    |   |      _|  \ \ \ \
+ |   |   |   |___  |   | |     |_|       |   | | |   |   |     |_    ) ) ) )
+ |___|   |_______| |___| |_______|_______|___|_|  |__|___|_______|  / / / /
+ ==================================================================/_/_/_/
+
+:: Built with Spring Boot :: 4.1.0
+
+
+2026-09-26T04:16:14.173+02:00  INFO 11340 --- [           main] o.s.s.p.o.VesperPetTypeReproductionTests : Starting VesperPetTypeReproductionTests using Java 17.0.20.1 with PID 11340 (started by Learner in C:\Users\LEARNER\Documents\ChatGPT\Personal Project\petclinic-sprint4-work\original)
+2026-09-26T04:16:14.173+02:00  INFO 11340 --- [           main] o.s.s.p.o.VesperPetTypeReproductionTests : No active profile set, falling back to 1 default profile: "default"
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+2026-09-26T04:16:23.018+02:00  INFO 11340 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-09-26T04:16:23.019+02:00  INFO 11340 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-09-26T04:16:23.023+02:00  INFO 11340 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 4 ms
+2026-09-26T04:16:23.158+02:00  INFO 11340 --- [           main] o.s.s.p.o.VesperPetTypeReproductionTests : Started VesperPetTypeReproductionTests in 10.671 seconds (process running for 15.759)
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /owners/1/pets/1/edit
+       Parameters = {name=[Milo], birthDate=[2020-01-01], type=[]}
+          Headers = []
+             Body = null
+    Session Attrs = {org.springframework.web.servlet.support.SessionFlashMapManager.FLASH_MAPS=[FlashMap [attributes={message=Pet details has been edited}, targetRequestPath=/owners/1, targetRequestParams={}]]}
+
+Handler:
+             Type = org.springframework.samples.petclinic.owner.PetController
+           Method = org.springframework.samples.petclinic.owner.PetController#processUpdateForm(Owner, Pet, BindingResult, RedirectAttributes)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = redirect:/owners/{ownerId}
+             View = null
+            Model = null
+
+FlashMap:
+        Attribute = message
+            value = Pet details has been edited
+
+MockHttpServletResponse:
+           Status = 302
+    Error message = null
+          Headers = [Content-Language:"en", Location:"/owners/1"]
+     Content type = null
+             Body = 
+    Forwarded URL = null
+   Redirected URL = /owners/1
+          Cookies = []
+[ERROR] Tests run: 2, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 13.75 s <<< FAILURE! -- in org.springframework.samples.petclinic.owner.VesperPetTypeReproductionTests
+[ERROR] org.springframework.samples.petclinic.owner.VesperPetTypeReproductionTests.existingPetMustRejectMissingType -- Time elapsed: 0.239 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: pets.type_id is NOT NULL: editing must reject a missing type ==> expected: <true> but was: <false>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:139)
+	at org.junit.jupiter.api.AssertTrue.failNotTrue(AssertTrue.java:69)
+	at org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:41)
+	at org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:228)
+	at org.springframework.samples.petclinic.owner.VesperPetTypeReproductionTests.existingPetMustRejectMissingType(VesperPetTypeReproductionTests.java:59)
+
+[ERROR] org.springframework.samples.petclinic.owner.VesperPetTypeReproductionTests.editMustRejectClearedType -- Time elapsed: 0.632 s <<< FAILURE!
+java.lang.AssertionError: Status expected:<200> but was:<302>
+	at org.springframework.test.util.AssertionErrors.fail(AssertionErrors.java:62)
+	at org.springframework.test.util.AssertionErrors.assertEquals(AssertionErrors.java:129)
+	at org.springframework.test.web.servlet.result.StatusResultMatchers.lambda$matcher$0(StatusResultMatchers.java:600)
+	at org.springframework.test.web.servlet.MockMvc$1.andExpect(MockMvc.java:212)
+	at org.springframework.samples.petclinic.owner.VesperPetTypeReproductionTests.editMustRejectClearedType(VesperPetTypeReproductionTests.java:79)
+
+[INFO] 
+[INFO] Results:
+[INFO] 
+[ERROR] Failures: 
+[ERROR]   VesperPetTypeReproductionTests.editMustRejectClearedType:79 Status expected:<200> but was:<302>
+[ERROR]   VesperPetTypeReproductionTests.existingPetMustRejectMissingType:59 pets.type_id is NOT NULL: editing must reject a missing type ==> expected: <true> but was: <false>
+[INFO] 
+[ERROR] Tests run: 2, Failures: 2, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  45.548 s
+[INFO] Finished at: 2026-09-26T04:16:24+02:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:3.5.6:test (default-test) on project spring-petclinic: There are test failures.
+[ERROR] 
+[ERROR] See C:\Users\LEARNER\Documents\ChatGPT\Personal Project\petclinic-sprint4-work\original\target\surefire-reports for the individual test results.
+[ERROR] See dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

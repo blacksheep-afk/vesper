@@ -1,0 +1,8 @@
+{
+  "source_revision": "818c4136ea971c21674525f9053de0d9c7ad8cfe",
+  "changed_tracked_files": [
+    "src/main/java/org/springframework/samples/petclinic/owner/PetValidator.java"
+  ],
+  "all_other_tracked_inputs_identical": true,
+  "zip_sha256": "62360fdce788f18799f93ac1deae57a5fffb6e74af29422b6df5017a60a56471"
+}

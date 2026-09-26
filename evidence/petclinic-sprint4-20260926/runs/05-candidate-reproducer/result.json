@@ -1,0 +1,17 @@
+{
+  "status": "environment_error",
+  "exit_code": 128,
+  "command": [
+    "git",
+    "rev-parse",
+    "HEAD"
+  ],
+  "counts": {
+    "tests": 0,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "duration_seconds": null,
+  "error": "Git rejected candidate checkout ownership before Maven was invoked. Elapsed time was not captured. A retry uses a process-scoped safe.directory for the exact agent-created checkout; no global configuration changed."
+}
