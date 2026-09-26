@@ -1,0 +1,10 @@
+{
+  "decision": "approved",
+  "recorded_at_utc": "2026-09-26T02:26:32.113238+00:00",
+  "source": "Explicit user approval in this task",
+  "user_instruction": "I approve the fix. Commit and push the Sprint 4 patch and evidence to Vesper.",
+  "publication_instruction": "Push on a new branch; do not change main.",
+  "patch_sha256": "eaec842b2196923566d8857025533ffbc8ff395327012dba92ae4f320fe0a1f8",
+  "integration": "not_performed",
+  "scope": "Approval of the candidate fix and publication of its patch and evidence to a separate Vesper branch; not an upstream Petclinic merge."
+}

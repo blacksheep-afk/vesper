@@ -1,0 +1,21 @@
+-------------------------------------------------------------------------------
+Test set: org.springframework.samples.petclinic.owner.VesperPetTypeReproductionTests
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 15.41 s <<< FAILURE! -- in org.springframework.samples.petclinic.owner.VesperPetTypeReproductionTests
+org.springframework.samples.petclinic.owner.VesperPetTypeReproductionTests.existingPetMustRejectMissingType -- Time elapsed: 0.214 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: pets.type_id is NOT NULL: editing must reject a missing type ==> expected: <true> but was: <false>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:139)
+	at org.junit.jupiter.api.AssertTrue.failNotTrue(AssertTrue.java:69)
+	at org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:41)
+	at org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:228)
+	at org.springframework.samples.petclinic.owner.VesperPetTypeReproductionTests.existingPetMustRejectMissingType(VesperPetTypeReproductionTests.java:59)
+
+org.springframework.samples.petclinic.owner.VesperPetTypeReproductionTests.editMustRejectClearedType -- Time elapsed: 0.592 s <<< FAILURE!
+java.lang.AssertionError: Status expected:<200> but was:<302>
+	at org.springframework.test.util.AssertionErrors.fail(AssertionErrors.java:62)
+	at org.springframework.test.util.AssertionErrors.assertEquals(AssertionErrors.java:129)
+	at org.springframework.test.web.servlet.result.StatusResultMatchers.lambda$matcher$0(StatusResultMatchers.java:600)
+	at org.springframework.test.web.servlet.MockMvc$1.andExpect(MockMvc.java:212)
+	at org.springframework.samples.petclinic.owner.VesperPetTypeReproductionTests.editMustRejectClearedType(VesperPetTypeReproductionTests.java:79)
+

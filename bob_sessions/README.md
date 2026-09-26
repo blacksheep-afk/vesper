@@ -31,3 +31,7 @@ black_sheep_<yourname>_task<NN>_<short_description>_summary.png
 Record actual task-summary screenshots after relevant tasks complete.
 Never synthesize, fabricate, or estimate Bobcoin consumption.
 (AGENTS.md: "Record actual task-summary screenshots under bob_sessions; never synthesize them.")
+
+## Nyakalo_Kgwale — Petclinic Sprint 4
+
+[Actual Bob session screenshot](petclinic_sprint_sessions/bob_sessions_black_sheep_nyakalo_kgwale_task04_sprint4_summary.png) supplied by the developer. Task: "Test sprint 4 if is working". Workspace: `vesper`. Displayed consumption: **3.20 Bobcoins**. This task summary records session usage; test outcomes are documented in the Sprint 4 execution evidence.

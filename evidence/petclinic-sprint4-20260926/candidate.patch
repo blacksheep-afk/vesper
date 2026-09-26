@@ -1,0 +1,13 @@
+diff --git a/src/main/java/org/springframework/samples/petclinic/owner/PetValidator.java b/src/main/java/org/springframework/samples/petclinic/owner/PetValidator.java
+index db847c8..7ef6d51 100644
+--- a/src/main/java/org/springframework/samples/petclinic/owner/PetValidator.java
++++ b/src/main/java/org/springframework/samples/petclinic/owner/PetValidator.java
+@@ -48,7 +48,7 @@ public class PetValidator implements Validator {
+ 		}
+ 
+ 		// type validation
+-		if (pet.isNew() && pet.getType() == null) {
++		if (pet.getType() == null) {
+ 			errors.rejectValue("type", REQUIRED, REQUIRED);
+ 		}
+ 
