@@ -64,4 +64,4 @@ The manually executed run is preserved in [evidence/sprint-4/workflow-20260925-2
 
 ## Bob session screenshot
 
-[Nyakalo_Kgwale Sprint 4 task summary](../bob_sessions/black_sheep_nyakalo_kgwale_task04_sprint4_summary.png) is the unmodified screenshot supplied by the developer. It shows the Sprint 4 review request in workspace `vesper` and **0.503 Bobcoins** consumed. The screenshot records session usage; it does not itself display test execution results.
+[Nyakalo_Kgwale Sprint 4 task summary](../bob_sessions/vesper_checkout_sprints/bob_sessions_black_sheep_nyakalo_kgwale_task04_sprint4_summary.png) is the unmodified screenshot supplied by the developer. It shows the Sprint 4 review request in workspace `vesper` and **0.503 Bobcoins** consumed. The screenshot records session usage; it does not itself display test execution results.

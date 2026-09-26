@@ -8,4 +8,4 @@ Task: "I added sprint 2 . test it and tell me if i did well". Workspace: `vesper
 
 ## Nyakalo_Kgwale — Sprint 4
 
-[Actual Bob task-summary screenshot](black_sheep_nyakalo_kgwale_task04_sprint4_summary.png) supplied by the developer. Task: "I added sprint 4 . test it and tell me if i did well". Workspace: `vesper`. Displayed consumption: **0.503 Bobcoins**.
+[Actual Bob task-summary screenshot](vesper_checkout_sprints/bob_sessions_black_sheep_nyakalo_kgwale_task04_sprint4_summary.png) supplied by the developer. Task: "I added sprint 4 . test it and tell me if i did well". Workspace: `vesper`. Displayed consumption: **0.503 Bobcoins**.
