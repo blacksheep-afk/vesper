@@ -96,13 +96,13 @@ Aim for roughly three hours overall. This is a planning target, not a measured c
 
 - [x] Select Spring Petclinic as the proposed second validation target
 - [x] Prepare the sprint plan
-- [ ] Obtain and pin a source revision
-- [ ] Pass the baseline tests
-- [ ] Confirm the investigation scope and expected behaviour
-- [ ] Reproduce a supported defect or record no finding
-- [ ] Verify a candidate repair, if applicable
-- [ ] Complete human review
-- [ ] Save the report and Bob session evidence
+- [x] Obtain and pin a source revision — `818c4136ea971c21674525f9053de0d9c7ad8cfe` (commit `67a5e86`)
+- [x] Pass the baseline tests — 72/74 passed, 2 skipped (Docker), exit 0 (commit `67a5e86`)
+- [x] Confirm the investigation scope and expected behaviour — pet editing, type-required check; interpretation recorded; **explicit developer sign-off not separately documented**
+- [x] Reproduce a supported defect — `VesperPetTypeReproductionTests` failed twice on original (commit `7aa3a03`)
+- [x] Verify a candidate repair — reproducer 2/2 pass, regression 76/0/0/2 pass (commit `7aa3a03`)
+- [x] Complete human review — approved 2026-09-26T02:26:32 UTC (`approval.json`, commit `7aa3a03`)
+- [x] Save the report and Bob session evidence — report and walkthrough created (Sprint 5); screenshots confirmed for all three participants (Neelo Nkhuna, Sam, Nyakalo Kgwale)
 
 ## First milestone
 
