@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "mode": "disclosed-r3-replay",
+  "status": "verified_candidate",
+  "investigation": "reproduced",
+  "repair": "regression_passed",
+  "approval": "pending",
+  "integration": "not_performed",
+  "started_at": 1790382821.1591425,
+  "python": "3.13.15 (tags/v3.13.15:4061bc4, Aug  5 2026, 13:05:39) [MSC v.1944 64 bit (AMD64)]",
+  "attempts": [
+    "01-baseline",
+    "02-original",
+    "03-original-repeat",
+    "04-candidate-reproducer",
+    "05-candidate-regression"
+  ],
+  "explanation": "One disclosed R3 defect reproduced twice: expected 900 cents, observed 1000. The unchanged reproducer and the full baseline test set passed on the candidate. Review the patch and evidence; no approval or integration is inferred.",
+  "input_hashes": {
+    "main/java/dev/vesper/Checkout.java": "15115d32f470e78a79ca9e11c2d4aacc1d0b9f8b57a66cac6096c05ad423fc88",
+    "test/java/dev/vesper/CheckoutTest.java": "ae23b87cbfe209226fc1e0ac78fdd46b9a59d1abca43a67c3f23ebdbf3d76b55",
+    "test/java/dev/vesper/ReproducerR3Test.java": "ea91711e146cdf9cd55427fa48410daed0fc38309468b369ee9ffa6918d7223e"
+  },
+  "requirement_sha256": "0843fbb828cb48e7b46a67e4d61c7d0a732bfcf813885fffdba5efbfe476a378",
+  "java": {
+    "exit_code": 0,
+    "output": "openjdk version \"25.0.3\" 2026-04-21\nOpenJDK Runtime Environment JBR-25.0.3+1-329.124-jcef (build 25.0.3+1-b329.124)\nOpenJDK 64-Bit Server VM JBR-25.0.3+1-329.124-jcef (build 25.0.3+1-b329.124, mixed mode, sharing)\n"
+  },
+  "maven": {
+    "exit_code": 0,
+    "output": "WARNING: A restricted method in java.lang.System has been called\nWARNING: java.lang.System::load has been called by org.fusesource.jansi.internal.JansiLoader in an unnamed module (file:/C:/Users/Admin/vesper-1/.tools/apache-maven-3.9.9/lib/jansi-2.4.1.jar)\nWARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module\nWARNING: Restricted methods will be blocked in a future release unless native access is enabled\n\nApache Maven 3.9.9 (8e8579a9e76f7d015ee5ec7bfcdc97d260186937)\nMaven home: C:\\Users\\Admin\\vesper-1\\.tools\\apache-maven-3.9.9\nJava version: 25.0.3, vendor: JetBrains s.r.o., runtime: C:\\Users\\Admin\\vesper-1\\.tools\\jdk-jbr-25\nDefault locale: en_US, platform encoding: UTF-8\nOS name: \"windows 11\", version: \"10.0\", arch: \"amd64\", family: \"windows\"\n"
+  },
+  "seed_sha256": "612adf1ab0f3760eb31140d2535d85730d0efdc87bd38e81345bf8d05e9b3775",
+  "snapshots": {
+    "baseline": {
+      "pom.xml": "965101acaeeee66de7f49a0ee014024fd8013538aca26f5504ba631823b18899",
+      "requirements.md": "0843fbb828cb48e7b46a67e4d61c7d0a732bfcf813885fffdba5efbfe476a378",
+      "src/main/java/dev/vesper/Checkout.java": "15115d32f470e78a79ca9e11c2d4aacc1d0b9f8b57a66cac6096c05ad423fc88",
+      "src/test/java/dev/vesper/CheckoutTest.java": "ae23b87cbfe209226fc1e0ac78fdd46b9a59d1abca43a67c3f23ebdbf3d76b55",
+      "src/test/java/dev/vesper/ReproducerR3Test.java": "ea91711e146cdf9cd55427fa48410daed0fc38309468b369ee9ffa6918d7223e"
+    },
+    "original": {
+      "pom.xml": "965101acaeeee66de7f49a0ee014024fd8013538aca26f5504ba631823b18899",
+      "requirements.md": "0843fbb828cb48e7b46a67e4d61c7d0a732bfcf813885fffdba5efbfe476a378",
+      "src/main/java/dev/vesper/Checkout.java": "612adf1ab0f3760eb31140d2535d85730d0efdc87bd38e81345bf8d05e9b3775",
+      "src/test/java/dev/vesper/CheckoutTest.java": "ae23b87cbfe209226fc1e0ac78fdd46b9a59d1abca43a67c3f23ebdbf3d76b55",
+      "src/test/java/dev/vesper/ReproducerR3Test.java": "ea91711e146cdf9cd55427fa48410daed0fc38309468b369ee9ffa6918d7223e"
+    },
+    "candidate": {
+      "pom.xml": "965101acaeeee66de7f49a0ee014024fd8013538aca26f5504ba631823b18899",
+      "requirements.md": "0843fbb828cb48e7b46a67e4d61c7d0a732bfcf813885fffdba5efbfe476a378",
+      "src/main/java/dev/vesper/Checkout.java": "15115d32f470e78a79ca9e11c2d4aacc1d0b9f8b57a66cac6096c05ad423fc88",
+      "src/test/java/dev/vesper/CheckoutTest.java": "ae23b87cbfe209226fc1e0ac78fdd46b9a59d1abca43a67c3f23ebdbf3d76b55",
+      "src/test/java/dev/vesper/ReproducerR3Test.java": "ea91711e146cdf9cd55427fa48410daed0fc38309468b369ee9ffa6918d7223e"
+    }
+  },
+  "diff": "--- original/src/main/java/dev/vesper/Checkout.java\n+++ candidate/src/main/java/dev/vesper/Checkout.java\n@@ -11,8 +11,8 @@\n         if (percent < 0 || percent > 100) throw new IllegalArgumentException(\"Discount must be 0..100\");\n         Objects.requireNonNull(expiry, \"expiry\");\n         Objects.requireNonNull(today, \"today\");\n-        if (!today.isBefore(expiry)) return subtotalCents;  // SEEDED BUG (Sprint 2): expiry day incorrectly excluded \u2014 violates R3 \"inclusive\"\n-        // Split before multiplying to avoid overflow for large subtotals.\n+        if (today.isAfter(expiry)) return subtotalCents;  // R3: expiry is inclusive; discount expires only after the expiry date\n+        // Split before multiplying to avoid overflow for large subtotals\n         long discount = (subtotalCents / 100) * percent + ((subtotalCents % 100) * percent) / 100;\n         return subtotalCents - discount;\n     }\n",
+  "duration_seconds": 107.873
+}
