@@ -131,10 +131,12 @@ def report(run_dir):
               'Bob session screenshots must be captured from actual Bob sessions.']
     destination = run_dir / 'report.md'
     destination.write_text('\n'.join(lines) + '\n', encoding='utf-8')
+    from .html_report import render_html
+    render_html(run_dir)
     return destination
 
 
-def run_demo(project, output, maven, timeout=120):
+def run_demo(project, output, maven, timeout=120, *, evidence_kind='maven_execution', on_event=None):
     project, output = Path(project).resolve(), Path(output).resolve()
     if timeout <= 0:
         raise ValueError('Timeout must be positive')
@@ -146,11 +148,20 @@ def run_demo(project, output, maven, timeout=120):
     data = dict(schema_version=1, mode='disclosed-r3-replay', status='blocked', investigation='unresolved',
                 repair='not_attempted', approval='pending', integration='not_performed',
                 started_at=time.time(), python=sys.version, attempts=[], explanation='Workflow did not complete.')
+    data['evidence_kind'] = evidence_kind
     data['runner_sha256'] = digest(__file__)
 
+    def notify(kind, **event):
+        if on_event is not None:
+            on_event(kind, **event)
+
+    notify('run_started', run_dir=str(run_dir))
+
     def attempt(name, workspace, selector=None):
+        notify('stage_started', stage=name)
         result = execute(workspace, run_dir / name, maven, selector, timeout)
         data['attempts'].append(name)
+        notify('stage_finished', stage=name, record=result)
         return result
 
     try:
@@ -227,15 +238,17 @@ def main(argv=None):
     demo.add_argument('--output', default='.vesper/runs')
     demo.add_argument('--maven', default=shutil.which('mvn') or 'mvn')
     demo.add_argument('--timeout', type=int, default=120)
-    render = commands.add_parser('report', help='Regenerate Markdown from a saved workflow run')
+    render = commands.add_parser('report', help='Regenerate Markdown and offline HTML from a saved workflow run')
     render.add_argument('run_dir')
     args = parser.parse_args(argv)
     try:
         if args.action == 'report':
             print(report(args.run_dir))
+            print(Path(args.run_dir) / 'report.html')
             return 0
         folder = run_demo(args.project, args.output, args.maven, args.timeout)
         print(folder / 'report.md')
+        print(folder / 'report.html')
         data = json.loads((folder / 'workflow.json').read_text(encoding='utf-8'))
         print(data['status'] + ': ' + data['explanation'])
         return 0 if data['status'] == 'verified_candidate' else 1

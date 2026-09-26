@@ -183,7 +183,7 @@ def run_case(scenario, folder, runner=None):
             if hasattr(runner, 'run_demo'):
                 with patch.object(runner.subprocess, 'Popen', side_effect=executor.popen), patch.object(
                         runner, 'capture', return_value={'exit_code': 0, 'output': 'SYNTHETIC tool version'}):
-                    result_dir = runner.run_demo(workspace / 'demo', workspace / '.vesper/runs', 'synthetic-maven', 1)
+                    result_dir = runner.run_demo(workspace / 'demo', workspace / '.vesper/runs', 'synthetic-maven', 1, evidence_kind='synthetic_fault_injection')
                 result = json.loads((result_dir / 'workflow.json').read_text(encoding='utf-8'))
                 code = 0 if result['status'] == 'verified_candidate' else 1
             else:
