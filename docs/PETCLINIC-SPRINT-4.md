@@ -12,6 +12,12 @@ The two Docker-dependent skips and the unexecuted Postgres suite are excluded co
 
 [Exact candidate patch](../evidence/petclinic-sprint4-20260926/candidate.patch)
 
-The isolated candidate source remains at `C:/Users/LEARNER/Documents/ChatGPT/Personal Project/petclinic-sprint4-work/candidate`. This milestone was executed in Codex. The developer approved this candidate and publication on a separate Vesper branch. Bob review and its real session screenshot, and Petclinic integration, remain separate actions.
+The isolated candidate source remains at `C:/Users/LEARNER/Documents/ChatGPT/Personal Project/petclinic-sprint4-work/candidate`. This milestone was executed in Codex. The developer approved this candidate and publication on a separate Vesper branch. The developer subsequently supplied the actual Bob task-summary screenshot linked below. Petclinic integration remains a separate action.
 
 [Developer approval and exact patch hash](../evidence/petclinic-sprint4-20260926/approval.json).
+
+## Bob session evidence
+
+![Nyakalo_Kgwale Petclinic Sprint 4 Bob summary](../bob_sessions/petclinic_sprint_sessions/bob_sessions_black_sheep_nyakalo_kgwale_task04_sprint4_summary.png)
+
+Task: "Test sprint 4 if is working". Workspace: `vesper`. Recorded consumption: **3.20 Bobcoins**, as displayed in the supplied screenshot.

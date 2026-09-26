@@ -58,6 +58,12 @@ Clone the pinned source twice into `original` and `candidate`. Use Java 17 and M
 
 For each isolated checkout, run a clean targeted test using `mvn -B clean test -Dtest=VesperPetTypeReproductionTests -Dspring-javaformat.validate.skip=true -DfailIfNoTests=true`; repeat on the original. For the candidate's full regression run `mvn -B clean verify -Dspring-javaformat.validate.skip=true -DfailIfNoTests=true`. Expect two original assertion failures, two candidate passes, and the regression totals above. Each run's JSON records the exact command and environment actually used. Bundled Python scripts show the local capture and identity/hash checks; they expect sibling original/candidate checkouts and a local tools directory.
 
-The developer approved this candidate and publication of its patch and evidence on a separate Vesper branch. [Approval record](approval.json) binds that decision to the exact patch hash. Petclinic integration and subsequent verification remain separate future actions. Historical run metadata retains its approval-pending state at execution time. Implementation and fresh verification here were performed in Codex; no new Bob screenshot or Bobcoin usage is claimed.
+The developer approved this candidate and publication of its patch and evidence on a separate Vesper branch. [Approval record](approval.json) binds that decision to the exact patch hash. Petclinic integration and subsequent verification remain separate future actions. Historical run metadata retains its approval-pending state at execution time. Implementation and fresh execution records here were produced in Codex. The developer subsequently supplied the actual Bob task-summary screenshot below; its session usage is separate from those execution records.
 
 Petclinic source retains its Apache 2.0 notices; see [upstream license](UPSTREAM-LICENSE.txt).
+
+## Supplied Bob task summary
+
+![Nyakalo_Kgwale Petclinic Sprint 4 Bob summary](../../bob_sessions/petclinic_sprint_sessions/bob_sessions_black_sheep_nyakalo_kgwale_task04_sprint4_summary.png)
+
+Task: "Test sprint 4 if is working". Workspace: `vesper`. Displayed consumption: **3.20 Bobcoins**. The screenshot is preserved unchanged and records session usage, not detailed test results.
