@@ -22,11 +22,14 @@ class SSEHandler:
     
     def __init__(self):
         self.clients = []
+        self.events = []
         self.lock = threading.Lock()
     
     def add_client(self, client_queue):
         with self.lock:
             self.clients.append(client_queue)
+            for message in self.events:
+                client_queue.put(message)
     
     def remove_client(self, client_queue):
         with self.lock:
@@ -37,6 +40,7 @@ class SSEHandler:
         """Send an event to all connected clients."""
         message = f"event: {event_type}\ndata: {json.dumps(data)}\n\n"
         with self.lock:
+            self.events.append(message)
             dead_clients = []
             for client_queue in self.clients:
                 try:
@@ -111,6 +115,11 @@ class VesperRequestHandler(http.server.SimpleHTTPRequestHandler):
         pass
 
 
+class ThreadingHTTPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
+    daemon_threads = True
+    allow_reuse_address = True
+
+
 class VesperWebServer:
     """Manages the web server lifecycle and real-time event broadcasting."""
     
@@ -139,7 +148,7 @@ class VesperWebServer:
         handler = lambda *args, **kwargs: VesperRequestHandler(
             *args, sse_handler=self.sse_handler, web_root=self.web_root, **kwargs
         )
-        self.server = socketserver.TCPServer(("localhost", self.port), handler)
+        self.server = ThreadingHTTPServer(("localhost", self.port), handler)
         self.server_thread = threading.Thread(target=self.server.serve_forever, daemon=True)
         self.server_thread.start()
         

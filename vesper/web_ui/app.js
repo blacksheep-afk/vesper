@@ -32,6 +32,10 @@ class VesperUI {
             const data = JSON.parse(event.data);
             this.handleStageUpdate(data);
         });
+
+        this.eventSource.addEventListener('diff', (event) => {
+            this.showDiffViewer(JSON.parse(event.data));
+        });
         
         this.eventSource.addEventListener('complete', (event) => {
             const data = JSON.parse(event.data);
@@ -39,8 +43,9 @@ class VesperUI {
         });
         
         this.eventSource.addEventListener('error', (event) => {
-            const data = JSON.parse(event.data);
-            this.handleError(data);
+            if (event.data) {
+                this.handleError(JSON.parse(event.data));
+            }
         });
         
         this.eventSource.onopen = () => {
@@ -97,10 +102,6 @@ class VesperUI {
         // Update summary
         this.updateSummary(details);
         
-        // Show diff when workflow is complete
-        if (stage === 'report' && status === 'written') {
-            this.showDiffViewer();
-        }
     }
     
     createStageElement(stageName, status, details) {
@@ -174,26 +175,30 @@ class VesperUI {
         this.summaryFindings.textContent = reproducedStages > 0 ? `${reproducedStages} found` : 'None';
     }
     
-    showDiffViewer() {
-        // Show the actual bug vs fix diff
-        this.diffContainer.innerHTML = `
-            <div class="diff-viewer">
-                <div class="diff-column">
-                    <div class="diff-header">Original before repair</div>
-                    <div class="diff-content">
-                        <div class="diff-removed">        if (!today.isBefore(expiry)) return subtotalCents;  // SEEDED BUG (Sprint 2): expiry day incorrectly excluded — violates R3 "inclusive"</div>
-                        <div class="diff-removed">        // Split before multiplying to avoid overflow for large subtotals.</div>
-                    </div>
-                </div>
-                <div class="diff-column">
-                    <div class="diff-header">Candidate proposed repair</div>
-                    <div class="diff-content">
-                        <div class="diff-added">        if (today.isAfter(expiry)) return subtotalCents;  // R3: expiry is inclusive; discount expires only after the expiry date</div>
-                        <div class="diff-added">        // Split before multiplying to avoid overflow for large subtotals</div>
-                    </div>
-                </div>
-            </div>
-        `;
+    showDiffViewer({ original, candidate }) {
+        const viewer = document.createElement('div');
+        viewer.className = 'diff-viewer';
+
+        for (const [title, text, change] of [
+            ['Original before repair', original, 'removed'],
+            ['Candidate proposed repair', candidate, 'added']
+        ]) {
+            const column = document.createElement('div');
+            column.className = 'diff-column';
+            const header = document.createElement('div');
+            header.className = 'diff-header';
+            header.textContent = title;
+            const content = document.createElement('div');
+            content.className = 'diff-content';
+            const line = document.createElement('div');
+            line.className = `diff-${change}`;
+            line.textContent = text;
+            content.appendChild(line);
+            column.append(header, content);
+            viewer.appendChild(column);
+        }
+
+        this.diffContainer.replaceChildren(viewer);
     }
     
     formatStageName(stageName) {

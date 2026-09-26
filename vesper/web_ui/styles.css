@@ -2,18 +2,18 @@
 
 :root {
     /* Sidebar - always dark, warm-black (matches the evidence report) */
-    --sidebar-bg: #17151a;
-    --sidebar-text: #e7e3e6;
-    --sidebar-border: #322e35;
-    --sidebar-muted: #9a939c;
+    --sidebar-bg: #111111;
+    --sidebar-text: #f5f5f5;
+    --sidebar-border: #353535;
+    --sidebar-muted: #b8b8b8;
 
     /* Main content - light mode (default), warm paper tone */
     --main-bg: #ffffff;
-    --paper: #faf9f7;
-    --main-text: #141414;
-    --main-secondary: #63606a;
-    --main-border: #e3e0e5;
-    --main-accent: #141414;
+    --paper: #ffffff;
+    --main-text: #111111;
+    --main-secondary: #555555;
+    --main-border: #dddddd;
+    --main-accent: #111111;
 
     /* Brand accent - the ladybug red, used sparingly */
     --brand-red: #c8202e;
@@ -25,8 +25,8 @@
     --neutral-color: #6b6873;
 
     /* Card styling */
-    --card-bg: #f6f4f1;
-    --card-border: #e3e0e5;
+    --card-bg: #f6f6f6;
+    --card-border: #dddddd;
     --card-shadow: 0 2px 8px rgba(0,0,0,0.06);
 
     /* Diff colors - matched to the evidence report screenshot */
@@ -38,19 +38,6 @@
     --font-serif: Georgia, "Times New Roman", serif;
     --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     --font-mono: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", monospace;
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        --main-bg: #232025;
-        --paper: #232025;
-        --main-text: #f1eef2;
-        --main-secondary: #b6b0ba;
-        --main-border: #3a3640;
-        --card-bg: #2c2831;
-        --card-border: #423d48;
-        --card-shadow: 0 2px 8px rgba(0,0,0,0.35);
-    }
 }
 
 * {
@@ -98,8 +85,8 @@ body {
 }
 
 .ladybug-logo {
-    width: 28px;
-    height: 28px;
+    width: 42px;
+    height: 42px;
     flex-shrink: 0;
 }
 
@@ -283,57 +270,39 @@ h3 {
     border-bottom: 1px solid var(--main-border);
 }
 
-/* Stages: a numbered vertical timeline (avoids cramming 8 cards into a grid) */
+/* Compact four-by-two layout keeps the full verification sequence in view. */
 .stages-container {
-    display: flex;
-    flex-direction: column;
-    counter-reset: stage;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.65rem;
 }
 
 .stage-card {
-    position: relative;
-    padding: 0.9rem 0.5rem 0.9rem 3rem;
-    border-bottom: 1px solid var(--main-border);
-    transition: opacity 0.3s ease;
-}
-
-.stage-card:last-child {
-    border-bottom: none;
-}
-
-.stage-card::before {
-    counter-increment: stage;
-    content: counter(stage, decimal-leading-zero);
-    position: absolute;
-    left: 0;
-    top: 0.9rem;
-    width: 26px;
-    height: 26px;
-    display: grid;
-    place-items: center;
+    min-width: 0;
+    min-height: 92px;
+    padding: 0.7rem;
     border: 1px solid var(--card-border);
-    border-radius: 50%;
-    font: 10px var(--font-mono);
-    color: var(--main-secondary);
+    border-left: 3px solid var(--card-border);
+    border-radius: 4px;
+    background: #fff;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
 .stage-card.pending {
     opacity: 0.55;
 }
 
-.stage-card.running::before {
+.stage-card.running {
     border-color: var(--main-text);
-    color: var(--main-text);
+    background: #f5f5f5;
 }
 
-.stage-card.passed::before {
+.stage-card.passed {
     border-color: var(--success-color);
-    color: var(--success-color);
 }
 
-.stage-card.failed::before {
+.stage-card.failed {
     border-color: var(--error-color);
-    color: var(--error-color);
 }
 
 .stage-header {
@@ -522,12 +491,32 @@ h3 {
         gap: 1rem;
     }
 
-    .diff-viewer {
-        grid-template-columns: 1fr;
+    .stages-container {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        padding: 1.25rem;
     }
 
-    .diff-column {
-        border-right: none;
-        border-bottom: 1px solid var(--card-border);
+    .ladybug-logo {
+        width: 38px;
+        height: 38px;
+    }
+
+    .stages-container {
+        gap: 0.5rem;
+    }
+
+    .stage-card {
+        min-height: 100px;
+        padding: 0.55rem;
+    }
+
+    .stage-header {
+        flex-direction: column;
+        gap: 0.35rem;
     }
 }

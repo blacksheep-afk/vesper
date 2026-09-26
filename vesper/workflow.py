@@ -396,13 +396,18 @@ def run_workflow(timeout, web_ui=True, web_port=8080):
         })
 
     workflow_duration = time.time() - workflow_start
-    stages.append(stage_report(run_dir, stages, workflow_duration))
+    report_result = stage_report(run_dir, stages, workflow_duration)
+    stages.append(report_result)
+    if web_server:
+        web_server.broadcast_stage("report", report_result["status"])
     _save(run_dir, stages, workflow_duration)
     
     # Broadcast diff information
     if web_server:
-        original_code = "if (!today.isBefore(expiry)) return subtotalCents;  // SEEDED BUG (Sprint 2): expiry day incorrectly excluded — violates R3 \"inclusive\""
-        candidate_code = "if (today.isAfter(expiry)) return subtotalCents;  // R3: expiry is inclusive; discount expires only after the expiry date"
+        original_code = next(line.strip() for line in SEEDED_SOURCE.read_text(encoding="utf-8").splitlines()
+                             if "isBefore(expiry)" in line)
+        candidate_code = next(line.strip() for line in (run_dir / "Checkout.java.fixed-bak").read_text(encoding="utf-8").splitlines()
+                              if "isAfter(expiry)" in line)
         web_server.broadcast_diff(original_code, candidate_code)
 
     # Final exit code: 0 only if verify+regress both passed
