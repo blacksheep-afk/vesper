@@ -3,29 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vesper Workflow Results</title>
+    <title>Vesper | Verification dashboard</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="app-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="logo-section">
-                <div class="logo-row">
+        <div class="loading-overlay" id="loading-overlay" role="status" aria-live="polite" aria-hidden="true" hidden>
+            <div class="loading-content">
+                <strong class="loading-label" id="loading-label">Preparing verification</strong>
+                <div class="loading-track" aria-hidden="true">
+                    <svg viewBox="0 0 100 100" class="ladybug-svg loading-ladybug">
+                        <path d="M42 13 Q37 5 32 2M58 13 Q63 5 68 2" fill="none" stroke="#141414" stroke-width="3" stroke-linecap="round"/>
+                        <circle cx="50" cy="21" r="13" fill="#141414"/>
+                        <circle cx="44" cy="19" r="1.8" fill="#fff"/>
+                        <circle cx="56" cy="19" r="1.8" fill="#fff"/>
+                        <path d="M50 29C26 29 15 46 15 63c0 21 15 34 35 34s35-13 35-34c0-17-11-34-35-34Z" fill="#141414"/>
+                        <path d="M50 33.5C29.5 33.5 19.5 48 19.5 63c0 18.5 12.5 29.5 30.5 29.5S80.5 81.5 80.5 63c0-15-10-29.5-30.5-29.5Z" fill="#c8202e"/>
+                        <line x1="50" y1="33.5" x2="50" y2="92.5" stroke="#141414" stroke-width="2.4"/>
+                        <g fill="#e8b923" transform="translate(10 13) scale(0.8)">
+                            <path d="m32 47 2 4.3 4.7.5-3.5 3.2 1 4.6-4.2-2.3-4.2 2.3 1-4.6-3.5-3.2 4.7-.5Z"/>
+                            <path d="m28 66 2 4.3 4.7.5-3.5 3.2 1 4.6-4.2-2.3-4.2 2.3 1-4.6-3.5-3.2 4.7-.5Z"/>
+                            <path d="m37 83 2 4.3 4.7.5-3.5 3.2 1 4.6-4.2-2.3-4.2 2.3 1-4.6-3.5-3.2 4.7-.5Z"/>
+                            <path d="m68 47 2 4.3 4.7.5-3.5 3.2 1 4.6-4.2-2.3-4.2 2.3 1-4.6-3.5-3.2 4.7-.5Z"/>
+                            <path d="m72 66 2 4.3 4.7.5-3.5 3.2 1 4.6-4.2-2.3-4.2 2.3 1-4.6-3.5-3.2 4.7-.5Z"/>
+                            <path d="m63 83 2 4.3 4.7.5-3.5 3.2 1 4.6-4.2-2.3-4.2 2.3 1-4.6-3.5-3.2 4.7-.5Z"/>
+                        </g>
+                    </svg>
+                </div>
+                <span class="loading-detail">The verifier is recording each stage.</span>
+            </div>
+        </div>
+        <main class="main-content">
+            <header class="main-header">
+                <div class="brand-lockup">
                     <div class="ladybug-logo">
-                        <svg viewBox="0 0 100 100" class="ladybug-svg" role="img" aria-label="Vesper ladybug with gold stars">
-                            <!-- Antennae -->
+                        <svg viewBox="0 0 100 100" class="ladybug-svg" role="img" aria-label="Red ladybug with gold stars">
                             <path d="M42 13 Q37 5 32 2M58 13 Q63 5 68 2" fill="none" stroke="#141414" stroke-width="3" stroke-linecap="round"/>
-                            <!-- Head -->
                             <circle cx="50" cy="21" r="13" fill="#141414"/>
                             <circle cx="44" cy="19" r="1.8" fill="#fff"/>
                             <circle cx="56" cy="19" r="1.8" fill="#fff"/>
-                            <!-- Wing shell (black outline, red fill) -->
                             <path d="M50 29C26 29 15 46 15 63c0 21 15 34 35 34s35-13 35-34c0-17-11-34-35-34Z" fill="#141414"/>
                             <path d="M50 33.5C29.5 33.5 19.5 48 19.5 63c0 18.5 12.5 29.5 30.5 29.5S80.5 81.5 80.5 63c0-15-10-29.5-30.5-29.5Z" fill="#c8202e"/>
                             <line x1="50" y1="33.5" x2="50" y2="92.5" stroke="#141414" stroke-width="2.4"/>
-                            <!-- Gold stars instead of dots, three per wing -->
-                            <g fill="#e8b923">
+                            <g fill="#e8b923" transform="translate(10 13) scale(0.8)">
                                 <path d="m32 47 2 4.3 4.7.5-3.5 3.2 1 4.6-4.2-2.3-4.2 2.3 1-4.6-3.5-3.2 4.7-.5Z"/>
                                 <path d="m28 66 2 4.3 4.7.5-3.5 3.2 1 4.6-4.2-2.3-4.2 2.3 1-4.6-3.5-3.2 4.7-.5Z"/>
                                 <path d="m37 83 2 4.3 4.7.5-3.5 3.2 1 4.6-4.2-2.3-4.2 2.3 1-4.6-3.5-3.2 4.7-.5Z"/>
@@ -35,31 +55,20 @@
                             </g>
                         </svg>
                     </div>
-                    <h1 class="app-name">Vesper</h1>
+                    <div class="brand-copy">
+                        <h1 class="app-name">Vesper</h1>
+                        <p class="slogan">Don't trust the fix, test it.</p>
+                    </div>
                 </div>
-                <p class="slogan">Don't trust the fix, test it.</p>
-            </div>
-            
-            <nav class="nav-links">
-                <a href="#" class="nav-link active">Dashboard</a>
-                <a href="#" class="nav-link">Findings</a>
-                <a href="#" class="nav-link">Evidence</a>
-                <a href="#" class="nav-link">Settings</a>
-            </nav>
-            
-            <div class="connection-status" id="connection-status">
-                <span class="status-dot"></span>
-                <span class="status-text">Connecting...</span>
-            </div>
-        </aside>
-        
-        <!-- Main content -->
-        <main class="main-content">
-            <header class="main-header">
-                <h2>Workflow Results</h2>
-                <div class="overall-status">
-                    <span class="status-badge" id="overall-status">Running</span>
-                    <span class="timing" id="total-duration">--</span>
+                <div class="header-meta">
+                    <div class="connection-status" id="connection-status">
+                        <span class="status-dot"></span>
+                        <span class="status-text">Connecting...</span>
+                    </div>
+                    <div class="overall-status">
+                        <span class="status-badge" id="overall-status">Running</span>
+                        <span class="timing" id="total-duration">--</span>
+                    </div>
                 </div>
             </header>
             

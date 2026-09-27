@@ -13,6 +13,8 @@ class VesperUI {
         this.overallStatus = document.getElementById('overall-status');
         this.totalDuration = document.getElementById('total-duration');
         this.diffContainer = document.getElementById('diff-container');
+        this.loadingOverlay = document.getElementById('loading-overlay');
+        this.loadingLabel = document.getElementById('loading-label');
         
         // Summary elements
         this.summaryDuration = document.getElementById('summary-duration');
@@ -60,6 +62,8 @@ class VesperUI {
             if (this.reconnectAttempts < this.maxReconnectAttempts) {
                 this.reconnectAttempts++;
                 setTimeout(() => this.connect(), 2000 * this.reconnectAttempts);
+            } else {
+                this.setLoading(false);
             }
         };
     }
@@ -87,6 +91,12 @@ class VesperUI {
     
     handleStageUpdate(data) {
         const { stage, status, timestamp, ...details } = data;
+
+        if (status === 'running') {
+            this.setLoading(true, `${this.formatStageName(stage)} in progress`);
+        } else if (!this.loadingOverlay.hidden) {
+            this.loadingLabel.textContent = `${this.formatStageName(stage)} recorded`;
+        }
         
         let stageElement = document.getElementById(`stage-${stage}`);
         
@@ -216,6 +226,7 @@ class VesperUI {
         this.overallStatus.textContent = status === 'ok' ? 'Passed' : 'Failed';
         this.totalDuration.textContent = `${duration}s`;
         this.summaryDuration.textContent = `${duration}s`;
+        this.setLoading(false);
         
         this.eventSource.close();
         this.updateConnectionStatus('connected');
@@ -227,9 +238,16 @@ class VesperUI {
         this.overallStatus.className = 'status-badge failed';
         this.overallStatus.textContent = 'Error';
         this.totalDuration.textContent = message;
+        this.setLoading(false);
         
         this.eventSource.close();
         this.updateConnectionStatus('error');
+    }
+
+    setLoading(visible, message) {
+        this.loadingOverlay.hidden = !visible;
+        this.loadingOverlay.setAttribute('aria-hidden', String(!visible));
+        if (message) this.loadingLabel.textContent = message;
     }
 }
 

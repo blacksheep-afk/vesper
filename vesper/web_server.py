@@ -220,58 +220,72 @@ def create_web_ui_files(web_root):
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vesper Workflow Results</title>
+    <title>Vesper | Verification dashboard</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="app-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="logo-section">
-                <div class="logo-row">
-                    <div class="ladybug-logo">
-                        <svg viewBox="0 0 100 100" class="ladybug-svg">
-                            <!-- Ladybug body -->
-                            <ellipse cx="50" cy="50" rx="35" ry="30" fill="#e63946"/>
-                            <!-- Ladybug head -->
-                            <circle cx="50" cy="85" r="12" fill="#e63946"/>
-                            <!-- Gold stars instead of dots -->
-                            <text x="32" y="45" font-size="14" fill="#FFD700">★</text>
-                            <text x="50" y="35" font-size="14" fill="#FFD700">★</text>
-                            <text x="68" y="45" font-size="14" fill="#FFD700">★</text>
-                            <text x="32" y="65" font-size="14" fill="#FFD700">★</text>
-                            <text x="50" y="75" font-size="14" fill="#FFD700">★</text>
-                            <text x="68" y="65" font-size="14" fill="#FFD700">★</text>
-                            <!-- Eyes -->
-                            <circle cx="45" cy="82" r="2" fill="white"/>
-                            <circle cx="55" cy="82" r="2" fill="white"/>
-                        </svg>
-                    </div>
-                    <h1 class="app-name">Vesper</h1>
+        <div class="loading-overlay" id="loading-overlay" role="status" aria-live="polite" aria-hidden="true" hidden>
+            <div class="loading-content">
+                <strong class="loading-label" id="loading-label">Preparing verification</strong>
+                <div class="loading-track" aria-hidden="true">
+                    <svg viewBox="0 0 100 100" class="ladybug-svg loading-ladybug">
+                        <path d="M42 13 Q37 5 32 2M58 13 Q63 5 68 2" fill="none" stroke="#141414" stroke-width="3" stroke-linecap="round"/>
+                        <circle cx="50" cy="21" r="13" fill="#141414"/>
+                        <circle cx="44" cy="19" r="1.8" fill="#fff"/>
+                        <circle cx="56" cy="19" r="1.8" fill="#fff"/>
+                        <path d="M50 29C26 29 15 46 15 63c0 21 15 34 35 34s35-13 35-34c0-17-11-34-35-34Z" fill="#141414"/>
+                        <path d="M50 33.5C29.5 33.5 19.5 48 19.5 63c0 18.5 12.5 29.5 30.5 29.5S80.5 81.5 80.5 63c0-15-10-29.5-30.5-29.5Z" fill="#c8202e"/>
+                        <line x1="50" y1="33.5" x2="50" y2="92.5" stroke="#141414" stroke-width="2.4"/>
+                        <g fill="#e8b923" transform="translate(10 13) scale(0.8)">
+                            <path d="m32 47 2 4.3 4.7.5-3.5 3.2 1 4.6-4.2-2.3-4.2 2.3 1-4.6-3.5-3.2 4.7-.5Z"/>
+                            <path d="m28 66 2 4.3 4.7.5-3.5 3.2 1 4.6-4.2-2.3-4.2 2.3 1-4.6-3.5-3.2 4.7-.5Z"/>
+                            <path d="m37 83 2 4.3 4.7.5-3.5 3.2 1 4.6-4.2-2.3-4.2 2.3 1-4.6-3.5-3.2 4.7-.5Z"/>
+                            <path d="m68 47 2 4.3 4.7.5-3.5 3.2 1 4.6-4.2-2.3-4.2 2.3 1-4.6-3.5-3.2 4.7-.5Z"/>
+                            <path d="m72 66 2 4.3 4.7.5-3.5 3.2 1 4.6-4.2-2.3-4.2 2.3 1-4.6-3.5-3.2 4.7-.5Z"/>
+                            <path d="m63 83 2 4.3 4.7.5-3.5 3.2 1 4.6-4.2-2.3-4.2 2.3 1-4.6-3.5-3.2 4.7-.5Z"/>
+                        </g>
+                    </svg>
                 </div>
-                <p class="slogan">Don't trust the fix, test it.</p>
+                <span class="loading-detail">The verifier is recording each stage.</span>
             </div>
-            
-            <nav class="nav-links">
-                <a href="#" class="nav-link active">Dashboard</a>
-                <a href="#" class="nav-link">Findings</a>
-                <a href="#" class="nav-link">Evidence</a>
-                <a href="#" class="nav-link">Settings</a>
-            </nav>
-            
-            <div class="connection-status" id="connection-status">
-                <span class="status-dot"></span>
-                <span class="status-text">Connecting...</span>
-            </div>
-        </aside>
-        
-        <!-- Main content -->
+        </div>
         <main class="main-content">
             <header class="main-header">
-                <h2>Workflow Results</h2>
-                <div class="overall-status">
-                    <span class="status-badge" id="overall-status">Running</span>
-                    <span class="timing" id="total-duration">--</span>
+                <div class="brand-lockup">
+                    <div class="ladybug-logo">
+                        <svg viewBox="0 0 100 100" class="ladybug-svg" role="img" aria-label="Red ladybug with gold stars">
+                            <path d="M42 13 Q37 5 32 2M58 13 Q63 5 68 2" fill="none" stroke="#141414" stroke-width="3" stroke-linecap="round"/>
+                            <circle cx="50" cy="21" r="13" fill="#141414"/>
+                            <circle cx="44" cy="19" r="1.8" fill="#fff"/>
+                            <circle cx="56" cy="19" r="1.8" fill="#fff"/>
+                            <path d="M50 29C26 29 15 46 15 63c0 21 15 34 35 34s35-13 35-34c0-17-11-34-35-34Z" fill="#141414"/>
+                            <path d="M50 33.5C29.5 33.5 19.5 48 19.5 63c0 18.5 12.5 29.5 30.5 29.5S80.5 81.5 80.5 63c0-15-10-29.5-30.5-29.5Z" fill="#c8202e"/>
+                            <line x1="50" y1="33.5" x2="50" y2="92.5" stroke="#141414" stroke-width="2.4"/>
+                            <g fill="#e8b923" transform="translate(10 13) scale(0.8)">
+                                <path d="m32 47 2 4.3 4.7.5-3.5 3.2 1 4.6-4.2-2.3-4.2 2.3 1-4.6-3.5-3.2 4.7-.5Z"/>
+                                <path d="m28 66 2 4.3 4.7.5-3.5 3.2 1 4.6-4.2-2.3-4.2 2.3 1-4.6-3.5-3.2 4.7-.5Z"/>
+                                <path d="m37 83 2 4.3 4.7.5-3.5 3.2 1 4.6-4.2-2.3-4.2 2.3 1-4.6-3.5-3.2 4.7-.5Z"/>
+                                <path d="m68 47 2 4.3 4.7.5-3.5 3.2 1 4.6-4.2-2.3-4.2 2.3 1-4.6-3.5-3.2 4.7-.5Z"/>
+                                <path d="m72 66 2 4.3 4.7.5-3.5 3.2 1 4.6-4.2-2.3-4.2 2.3 1-4.6-3.5-3.2 4.7-.5Z"/>
+                                <path d="m63 83 2 4.3 4.7.5-3.5 3.2 1 4.6-4.2-2.3-4.2 2.3 1-4.6-3.5-3.2 4.7-.5Z"/>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="brand-copy">
+                        <h1 class="app-name">Vesper</h1>
+                        <p class="slogan">Don't trust the fix, test it.</p>
+                    </div>
+                </div>
+                <div class="header-meta">
+                    <div class="connection-status" id="connection-status">
+                        <span class="status-dot"></span>
+                        <span class="status-text">Connecting...</span>
+                    </div>
+                    <div class="overall-status">
+                        <span class="status-badge" id="overall-status">Running</span>
+                        <span class="timing" id="total-duration">--</span>
+                    </div>
                 </div>
             </header>
             
@@ -349,32 +363,13 @@ def create_web_ui_files(web_root):
     /* Card styling */
     --card-bg: #f8f9fa;
     --card-border: #dee2e6;
-    --card-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    --card-shadow: 0 2px 6px rgba(0,0,0,0.1), 0 12px 32px rgba(0,0,0,0.1);
     
     /* Diff colors - matching screenshot */
     --diff-removed-bg: #ffeef0;
     --diff-removed-text: #a31515;
     --diff-added-bg: #e6ffec;
     --diff-added-text: #6e8a2e;
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        /* Main content - dark mode */
-        --main-bg: #2d2d2d;
-        --main-text: #ffffff;
-        --main-secondary: #b0b0b0;
-        --main-border: #404040;
-        --card-bg: #363636;
-        --card-border: #505050;
-        --card-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        
-        /* Diff colors - dark mode */
-        --diff-removed-bg: #4a2a2a;
-        --diff-removed-text: #ff6b6b;
-        --diff-added-bg: #2a4a2a;
-        --diff-added-text: #6bff6b;
-    }
 }
 
 * {
@@ -387,7 +382,7 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background-color: var(--main-bg);
     color: var(--main-text);
-    line-height: 1.6;
+    line-height: 1.5;
     min-height: 100vh;
 }
 
@@ -422,8 +417,8 @@ body {
 }
 
 .ladybug-logo {
-    width: 32px;
-    height: 32px;
+    width: 48px;
+    height: 48px;
     flex-shrink: 0;
 }
 
@@ -435,19 +430,29 @@ body {
 .app-name {
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--sidebar-text);
+    color: var(--main-text);
     margin: 0;
-    line-height: 1;
+    line-height: 1.1;
+    letter-spacing: 0;
 }
 
 .slogan {
-    font-size: 0.95rem;
-    color: #ffffff;
-    font-style: italic;
+    font-size: 0.85rem;
+    color: var(--main-secondary);
     margin: 0;
-    line-height: 1.5;
-    font-weight: 400;
-    opacity: 0.95;
+    line-height: 1.3;
+}
+
+.brand-lockup {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.brand-copy {
+    display: grid;
+    gap: 4px;
 }
 
 .nav-links {
@@ -481,9 +486,13 @@ body {
     align-items: center;
     gap: 0.5rem;
     font-size: 0.8rem;
-    color: #888;
-    padding-top: 1rem;
-    border-top: 1px solid var(--sidebar-border);
+    color: var(--main-secondary);
+}
+
+.header-meta {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
 }
 
 .status-dot {
@@ -512,7 +521,9 @@ body {
 /* Main content */
 .main-content {
     flex: 1;
-    margin-left: 280px;
+    width: 100%;
+    max-width: 1480px;
+    margin: 0 auto;
     padding: 2rem;
     background-color: var(--main-bg);
 }
@@ -521,32 +532,30 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
-    padding-bottom: 1rem;
+    gap: 1.5rem;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
     border-bottom: 1px solid var(--main-border);
-}
-
-.main-header h2 {
-    font-size: 1.75rem;
-    font-weight: 600;
-    color: var(--main-text);
 }
 
 .overall-status {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 12px;
 }
 
 .status-badge {
     display: inline-block;
-    padding: 0.5rem 1rem;
+    padding: 8px 12px;
     border-radius: 4px;
     font-weight: 600;
-    font-size: 1rem;
+    font-size: 0.875rem;
+    line-height: 1.25;
+    letter-spacing: 0;
     background-color: var(--card-bg);
     color: var(--main-text);
     border: 1px solid var(--card-border);
+    transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
 }
 
 .status-badge.running {
@@ -573,19 +582,92 @@ body {
     font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", monospace;
 }
 
+.loading-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: rgba(255,255,255,0.94);
+}
+
+.loading-overlay[hidden] {
+    display: none;
+}
+
+.loading-content {
+    width: min(640px, 100%);
+    display: grid;
+    gap: 14px;
+    text-align: center;
+}
+
+.loading-label {
+    color: var(--main-text);
+    font-size: 1.1rem;
+}
+
+.loading-track {
+    position: relative;
+    height: 74px;
+    border-bottom: 1px solid var(--main-border);
+}
+
+.loading-track::before {
+    position: absolute;
+    right: 0;
+    bottom: -2px;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #e8b923, #c8202e, transparent);
+    content: "";
+    opacity: 0.55;
+}
+
+.loading-ladybug {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 52px;
+    height: 52px;
+    transform: translate(-50%, -50%);
+    animation: ladybug-cross 2.2s ease-in-out infinite;
+}
+
+.loading-detail {
+    color: var(--main-secondary);
+    font-size: 0.85rem;
+}
+
+@keyframes ladybug-cross {
+    0% { left: 0; opacity: 1; transform: translate(-50%, -50%) rotate(-4deg); }
+    80% { left: calc(100% - 24px); opacity: 1; transform: translate(-50%, -50%) rotate(4deg); }
+    94% { left: calc(100% - 24px); opacity: 0; transform: translate(-50%, -50%); }
+    100% { left: 0; opacity: 0; transform: translate(-50%, -50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .loading-ladybug {
+        left: 50%;
+        animation: none;
+        opacity: 1;
+    }
+}
+
 /* Content grid */
 .content-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    margin-bottom: 2rem;
+    gap: 24px;
+    margin-bottom: 24px;
 }
 
 /* Sections */
 .stages-section, .diff-section, .session-summary {
     background-color: var(--card-bg);
-    border-radius: 8px;
-    padding: 1.5rem;
+    border-radius: 6px;
+    padding: 24px;
     border: 1px solid var(--card-border);
     box-shadow: var(--card-shadow);
 }
@@ -603,29 +685,31 @@ body {
 }
 
 h3 {
-    font-size: 1.25rem;
-    font-weight: 600;
+    font-size: 1.375rem;
+    font-weight: 700;
     color: var(--main-text);
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid var(--main-accent);
+    line-height: 1.25;
+    letter-spacing: 0;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--main-accent);
 }
 
 /* Stages container */
 .stages-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 0.75rem;
+    gap: 8px;
 }
 
 .stage-card {
     background-color: var(--main-bg);
-    border-radius: 6px;
-    padding: 0.6rem;
+    border-radius: 4px;
+    padding: 12px;
     border: 1px solid var(--card-border);
-    border-left: 4px solid var(--card-border);
-    transition: all 0.3s ease;
-    min-height: 85px;
+    border-left: 3px solid var(--card-border);
+    transition: border-color 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
+    min-height: 92px;
 }
 
 .stage-card.pending {
@@ -649,24 +733,27 @@ h3 {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 0.5rem;
-    gap: 0.5rem;
+    margin-bottom: 4px;
+    gap: 8px;
 }
 
 .stage-name {
-    font-weight: 600;
-    font-size: 0.9rem;
+    font-weight: 700;
+    font-size: 1rem;
     color: var(--main-text);
     flex: 1;
-    line-height: 1.2;
+    line-height: 1.25;
+    letter-spacing: 0;
 }
 
 .stage-status {
     font-size: 0.65rem;
     font-weight: 600;
     text-transform: uppercase;
-    padding: 0.2rem 0.4rem;
+    padding: 4px 8px;
     border-radius: 3px;
+    line-height: 1.2;
+    letter-spacing: 0;
     background-color: var(--card-bg);
     color: var(--main-secondary);
     border: 1px solid var(--card-border);
@@ -694,20 +781,23 @@ h3 {
 .stage-details {
     font-size: 0.85rem;
     color: var(--main-secondary);
+    line-height: 1.4;
 }
 
 .stage-details .test-counts {
     font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", monospace;
-    margin-top: 0.5rem;
+    margin-top: 4px;
+    font-size: 0.75rem;
 }
 
 .stage-details .duration {
-    margin-top: 0.25rem;
+    margin-top: 4px;
     font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", monospace;
+    font-size: 0.75rem;
 }
 
 .stage-details .note {
-    margin-top: 0.5rem;
+    margin-top: 4px;
     font-style: italic;
     font-size: 0.8rem;
 }
@@ -721,10 +811,10 @@ h3 {
 }
 
 .diff-placeholder {
-    padding: 2rem;
-    text-align: center;
+    padding: 24px;
+    text-align: left;
     color: var(--main-secondary);
-    font-style: italic;
+    line-height: 1.5;
 }
 
 .diff-viewer {
@@ -744,19 +834,30 @@ h3 {
 
 .diff-header {
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: var(--main-text);
-    margin-bottom: 0.75rem;
-    padding-bottom: 0.5rem;
+    line-height: 1.25;
+    letter-spacing: 0;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
     border-bottom: 1px solid var(--card-border);
 }
 
 .diff-content {
     font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", monospace;
     font-size: 0.85rem;
-    line-height: 1.5;
+    line-height: 1.55;
     white-space: pre-wrap;
-    word-break: break-all;
+    word-break: normal;
+    overflow-wrap: anywhere;
+}
+
+.diff-removed, .diff-added {
+    display: block;
+    padding: 4px 8px;
+    border-radius: 3px;
+    margin-bottom: 4px;
+    line-height: 1.5;
 }
 
 .diff-removed {
@@ -773,26 +874,31 @@ h3 {
 .summary-content {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
+    gap: 16px;
 }
 
 .summary-item {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 4px;
+    padding-top: 8px;
+    border-top: 2px solid var(--main-text);
 }
 
 .summary-item .label {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     color: var(--main-secondary);
     font-weight: 500;
+    letter-spacing: 0;
+    line-height: 1.25;
 }
 
 .summary-item .value {
-    font-size: 1.1rem;
+    font-size: 1.125rem;
     color: var(--main-text);
     font-weight: 600;
     font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", monospace;
+    line-height: 1.25;
 }
 
 /* Responsive */
@@ -824,26 +930,73 @@ h3 {
 }
 
 @media (max-width: 768px) {
-    .sidebar {
-        position: relative;
-        width: 100%;
-        height: auto;
-        border-right: none;
-        border-bottom: 1px solid var(--sidebar-border);
-    }
-    
     .main-content {
-        margin-left: 0;
+        padding: 1.25rem;
     }
     
     .main-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem;
+        gap: 0.75rem;
+    }
+
+    .header-meta {
+        gap: 0.75rem;
     }
     
     .stages-container {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .main-content {
+        padding: 1rem;
+    }
+
+    .main-header {
+        align-items: flex-start;
+    }
+
+    .brand-lockup {
+        gap: 0.55rem;
+    }
+
+    .ladybug-logo {
+        width: 40px;
+        height: 40px;
+    }
+
+    .app-name {
+        font-size: 1.35rem;
+    }
+
+    .slogan {
+        font-size: 0.7rem;
+    }
+
+    .header-meta {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.45rem;
+    }
+
+    .connection-status {
+        font-size: 0.65rem;
+    }
+}
+
+.status-dot {
+    transition: background-color 180ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .stage-card,
+    .status-badge,
+    .status-dot {
+        transition: none;
+    }
+
+    .status-dot {
+        animation: none;
     }
 }
 """)
@@ -864,6 +1017,8 @@ class VesperUI {
         this.overallStatus = document.getElementById('overall-status');
         this.totalDuration = document.getElementById('total-duration');
         this.diffContainer = document.getElementById('diff-container');
+        this.loadingOverlay = document.getElementById('loading-overlay');
+        this.loadingLabel = document.getElementById('loading-label');
         
         // Summary elements
         this.summaryDuration = document.getElementById('summary-duration');
@@ -883,6 +1038,10 @@ class VesperUI {
             const data = JSON.parse(event.data);
             this.handleStageUpdate(data);
         });
+
+        this.eventSource.addEventListener('diff', (event) => {
+            this.showDiffViewer(JSON.parse(event.data));
+        });
         
         this.eventSource.addEventListener('complete', (event) => {
             const data = JSON.parse(event.data);
@@ -890,8 +1049,9 @@ class VesperUI {
         });
         
         this.eventSource.addEventListener('error', (event) => {
-            const data = JSON.parse(event.data);
-            this.handleError(data);
+            if (event.data) {
+                this.handleError(JSON.parse(event.data));
+            }
         });
         
         this.eventSource.onopen = () => {
@@ -906,6 +1066,8 @@ class VesperUI {
             if (this.reconnectAttempts < this.maxReconnectAttempts) {
                 this.reconnectAttempts++;
                 setTimeout(() => this.connect(), 2000 * this.reconnectAttempts);
+            } else {
+                this.setLoading(false);
             }
         };
     }
@@ -933,6 +1095,12 @@ class VesperUI {
     
     handleStageUpdate(data) {
         const { stage, status, timestamp, ...details } = data;
+
+        if (status === 'running') {
+            this.setLoading(true, `${this.formatStageName(stage)} in progress`);
+        } else if (!this.loadingOverlay.hidden) {
+            this.loadingLabel.textContent = `${this.formatStageName(stage)} recorded`;
+        }
         
         let stageElement = document.getElementById(`stage-${stage}`);
         
@@ -1062,6 +1230,7 @@ class VesperUI {
         this.overallStatus.textContent = status === 'ok' ? 'Passed' : 'Failed';
         this.totalDuration.textContent = `${duration}s`;
         this.summaryDuration.textContent = `${duration}s`;
+        this.setLoading(false);
         
         this.eventSource.close();
         this.updateConnectionStatus('connected');
@@ -1073,9 +1242,16 @@ class VesperUI {
         this.overallStatus.className = 'status-badge failed';
         this.overallStatus.textContent = 'Error';
         this.totalDuration.textContent = message;
+        this.setLoading(false);
         
         this.eventSource.close();
         this.updateConnectionStatus('error');
+    }
+
+    setLoading(visible, message) {
+        this.loadingOverlay.hidden = !visible;
+        this.loadingOverlay.setAttribute('aria-hidden', String(!visible));
+        if (message) this.loadingLabel.textContent = message;
     }
 }
 
