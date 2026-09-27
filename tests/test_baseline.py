@@ -17,10 +17,14 @@ class BaselineTests(unittest.TestCase):
     def test_nonzero_exit_not_pass(self): self.assertEqual("execution_failed", self.result(self.suite(), 1))
     def test_missing_reports(self): self.assertEqual("missing_reports", self.result())
     def test_zero_tests(self): self.assertEqual("zero_tests", self.result(self.suite("", tests=0)))
-    def test_skipped_only(self): self.assertEqual("skipped_tests", self.result(self.suite("<testcase><skipped/></testcase>", skipped=1)))
-    def test_failure_even_with_zero_exit(self): self.assertEqual("tests_failed", self.result(self.suite("<testcase><failure/></testcase>", failures=1)))
+    def test_skipped_only(self): self.assertEqual("skipped_tests", self.result(self.suite("<testcase classname='Demo' name='works'><skipped/></testcase>", skipped=1)))
+    def test_failure_even_with_zero_exit(self): self.assertEqual("tests_failed", self.result(self.suite("<testcase classname='Demo' name='works'><failure/></testcase>", failures=1)))
     def test_malformed_report(self): self.assertEqual("invalid_report", self.result("<broken"))
     def test_misleading_counts(self): self.assertEqual("invalid_report", self.result(self.suite("")))
+    def test_missing_test_identity(self): self.assertEqual('invalid_report', self.result(self.suite('<testcase/>')))
+    def test_duplicate_test_identity(self):
+        case = "<testcase classname='Demo' name='works'/>"
+        self.assertEqual('invalid_report', self.result(self.suite(case + case, tests=2)))
     def test_old_report_outside_fresh_directory_is_ignored(self):
         with tempfile.TemporaryDirectory() as temp:
             root=Path(temp); (root/'TEST-old.xml').write_text(self.suite()); (root/'fresh').mkdir()

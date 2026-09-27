@@ -1,0 +1,261 @@
+[
+  {
+    "task": "expiry_a",
+    "expected_correct": false,
+    "result": {
+      "code_correct": false,
+      "production_unchanged": true,
+      "exit_code": 1,
+      "cases": [
+        {
+          "identity": "dev.vesper.HeldOutTest#allBoundaries",
+          "passed": false
+        },
+        {
+          "identity": "dev.vesper.HeldOutTest#rejectsInvalid",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#expired",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#normal",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#invalid",
+          "passed": true
+        }
+      ],
+      "error": null,
+      "duration_seconds": 18.216,
+      "candidate_source_hashes": {
+        "java/dev/vesper/Checkout.java": "e5e267b2597c9d7723b5c4341f96f2c753ba27bf9eeae2119f198d51d5649d2e"
+      },
+      "oracle_sha256": "90ff9d92c9f9aac962a986c787fddb5e2ae098712f605d5b8ce89d6a4220a81f"
+    }
+  },
+  {
+    "task": "expiry_b",
+    "expected_correct": false,
+    "result": {
+      "code_correct": false,
+      "production_unchanged": true,
+      "exit_code": 1,
+      "cases": [
+        {
+          "identity": "dev.vesper.HeldOutTest#allBoundaries",
+          "passed": false
+        },
+        {
+          "identity": "dev.vesper.HeldOutTest#rejectsInvalid",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#expired",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#normal",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#invalid",
+          "passed": true
+        }
+      ],
+      "error": null,
+      "duration_seconds": 18.91,
+      "candidate_source_hashes": {
+        "java/dev/vesper/Checkout.java": "5441c015858664743f8fb1695412fd1efa44c4f49f4abda26ce0b9c328b37e49"
+      },
+      "oracle_sha256": "90ff9d92c9f9aac962a986c787fddb5e2ae098712f605d5b8ce89d6a4220a81f"
+    }
+  },
+  {
+    "task": "arithmetic_a",
+    "expected_correct": false,
+    "result": {
+      "code_correct": false,
+      "production_unchanged": true,
+      "exit_code": 1,
+      "cases": [
+        {
+          "identity": "dev.vesper.HeldOutTest#allBoundaries",
+          "passed": false
+        },
+        {
+          "identity": "dev.vesper.HeldOutTest#rejectsInvalid",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#expired",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#normal",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#invalid",
+          "passed": true
+        }
+      ],
+      "error": null,
+      "duration_seconds": 18.13,
+      "candidate_source_hashes": {
+        "java/dev/vesper/Checkout.java": "dc25b750a61fca97607242f4c5915e221a15f08fbd54823bad8ca5bbb1513583"
+      },
+      "oracle_sha256": "90ff9d92c9f9aac962a986c787fddb5e2ae098712f605d5b8ce89d6a4220a81f"
+    }
+  },
+  {
+    "task": "arithmetic_b",
+    "expected_correct": false,
+    "result": {
+      "code_correct": false,
+      "production_unchanged": true,
+      "exit_code": 1,
+      "cases": [
+        {
+          "identity": "dev.vesper.HeldOutTest#allBoundaries",
+          "passed": false
+        },
+        {
+          "identity": "dev.vesper.HeldOutTest#rejectsInvalid",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#expired",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#normal",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#invalid",
+          "passed": true
+        }
+      ],
+      "error": null,
+      "duration_seconds": 20.228,
+      "candidate_source_hashes": {
+        "java/dev/vesper/Checkout.java": "7d8d592cb3ba0154c2e9d34fb5e5dfc9e7be8230e8ba667350eb5ab2caac2bf3"
+      },
+      "oracle_sha256": "90ff9d92c9f9aac962a986c787fddb5e2ae098712f605d5b8ce89d6a4220a81f"
+    }
+  },
+  {
+    "task": "control_correct",
+    "expected_correct": true,
+    "result": {
+      "code_correct": true,
+      "production_unchanged": true,
+      "exit_code": 0,
+      "cases": [
+        {
+          "identity": "dev.vesper.HeldOutTest#allBoundaries",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.HeldOutTest#rejectsInvalid",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#expired",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#normal",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#invalid",
+          "passed": true
+        }
+      ],
+      "error": null,
+      "duration_seconds": 17.94,
+      "candidate_source_hashes": {
+        "java/dev/vesper/Checkout.java": "15115d32f470e78a79ca9e11c2d4aacc1d0b9f8b57a66cac6096c05ad423fc88"
+      },
+      "oracle_sha256": "90ff9d92c9f9aac962a986c787fddb5e2ae098712f605d5b8ce89d6a4220a81f"
+    }
+  },
+  {
+    "task": "control_ambiguous",
+    "expected_correct": true,
+    "result": {
+      "code_correct": true,
+      "production_unchanged": true,
+      "exit_code": 0,
+      "cases": [
+        {
+          "identity": "dev.vesper.HeldOutTest#allBoundaries",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.HeldOutTest#rejectsInvalid",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#expired",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#normal",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#invalid",
+          "passed": true
+        }
+      ],
+      "error": null,
+      "duration_seconds": 12.447,
+      "candidate_source_hashes": {
+        "java/dev/vesper/Checkout.java": "15115d32f470e78a79ca9e11c2d4aacc1d0b9f8b57a66cac6096c05ad423fc88"
+      },
+      "oracle_sha256": "90ff9d92c9f9aac962a986c787fddb5e2ae098712f605d5b8ce89d6a4220a81f"
+    }
+  },
+  {
+    "task": "known_correct",
+    "expected_correct": true,
+    "result": {
+      "code_correct": true,
+      "production_unchanged": false,
+      "exit_code": 0,
+      "cases": [
+        {
+          "identity": "dev.vesper.HeldOutTest#allBoundaries",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.HeldOutTest#rejectsInvalid",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#expired",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#normal",
+          "passed": true
+        },
+        {
+          "identity": "dev.vesper.OrdinaryTest#invalid",
+          "passed": true
+        }
+      ],
+      "error": null,
+      "duration_seconds": 13.065,
+      "candidate_source_hashes": {
+        "java/dev/vesper/Checkout.java": "15115d32f470e78a79ca9e11c2d4aacc1d0b9f8b57a66cac6096c05ad423fc88"
+      },
+      "oracle_sha256": "90ff9d92c9f9aac962a986c787fddb5e2ae098712f605d5b8ce89d6a4220a81f"
+    }
+  }
+]

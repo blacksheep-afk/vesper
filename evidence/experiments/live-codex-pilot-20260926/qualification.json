@@ -1,0 +1,42 @@
+[
+  {
+    "task": "expiry_a",
+    "status": "verified_candidate",
+    "path": "C:\\Users\\Sibusiso Nkosi\\Documents\\Codex\\2026-09-26\\i-x20\\work\\live-pilot\\qualification\\expiry_a\\gate-2fd8cb1829"
+  },
+  {
+    "task": "expiry_b",
+    "status": "verified_candidate",
+    "path": "C:\\Users\\Sibusiso Nkosi\\Documents\\Codex\\2026-09-26\\i-x20\\work\\live-pilot\\qualification\\expiry_b\\gate-28364a1feb"
+  },
+  {
+    "task": "arithmetic_a",
+    "status": "verified_candidate",
+    "path": "C:\\Users\\Sibusiso Nkosi\\Documents\\Codex\\2026-09-26\\i-x20\\work\\live-pilot\\qualification\\arithmetic_a\\gate-af8b93c348"
+  },
+  {
+    "task": "arithmetic_b",
+    "status": "verified_candidate",
+    "path": "C:\\Users\\Sibusiso Nkosi\\Documents\\Codex\\2026-09-26\\i-x20\\work\\live-pilot\\qualification\\arithmetic_b\\gate-28643975f4"
+  },
+  {
+    "task": "control_correct",
+    "status": "accepted_no_change",
+    "path": "C:\\Users\\Sibusiso Nkosi\\Documents\\Codex\\2026-09-26\\i-x20\\work\\live-pilot\\qualification\\control_correct\\gate-58855acd5c"
+  },
+  {
+    "task": "control_ambiguous",
+    "status": "accepted_no_change",
+    "path": "C:\\Users\\Sibusiso Nkosi\\Documents\\Codex\\2026-09-26\\i-x20\\work\\live-pilot\\qualification\\control_ambiguous\\gate-00c005dba6"
+  },
+  {
+    "task": "incorrect_candidate",
+    "status": "blocked",
+    "path": "C:\\Users\\Sibusiso Nkosi\\Documents\\Codex\\2026-09-26\\i-x20\\work\\live-pilot\\qualification\\incorrect\\gate-5ca3363ba8"
+  },
+  {
+    "task": "changed_test",
+    "status": "blocked",
+    "path": "C:\\Users\\Sibusiso Nkosi\\Documents\\Codex\\2026-09-26\\i-x20\\work\\live-pilot\\qualification\\mutation\\gate-9489734b6d"
+  }
+]

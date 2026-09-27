@@ -1,0 +1,41 @@
+{
+  "command": [
+    "C:\\Users\\Learner\\sam\\vesper\\.tools\\apache-maven-3.9.9/bin\\mvn.CMD",
+    "-B",
+    "clean",
+    "test",
+    "-Dvesper.reportsDirectory=C:\\Users\\Learner\\sam\\vesper\\evidence\\verification-20260926\\workflow-20260926-141036-d39fa35f\\03-original-repeat\\reports",
+    "-DfailIfNoTests=true",
+    "-Dsurefire.failIfNoSpecifiedTests=true",
+    "-Dtest=dev.vesper.ReproducerR3Test#expiryDayMustReceiveDiscount_R3"
+  ],
+  "workspace": "C:\\Users\\Learner\\sam\\vesper\\evidence\\verification-20260926\\workflow-20260926-141036-d39fa35f\\original",
+  "started_at": 1790424676.0134916,
+  "input_hashes_before": {
+    "pom.xml": "965101acaeeee66de7f49a0ee014024fd8013538aca26f5504ba631823b18899",
+    "requirements.md": "0843fbb828cb48e7b46a67e4d61c7d0a732bfcf813885fffdba5efbfe476a378",
+    "src/main/java/dev/vesper/Checkout.java": "612adf1ab0f3760eb31140d2535d85730d0efdc87bd38e81345bf8d05e9b3775",
+    "src/test/java/dev/vesper/CheckoutTest.java": "ae23b87cbfe209226fc1e0ac78fdd46b9a59d1abca43a67c3f23ebdbf3d76b55",
+    "src/test/java/dev/vesper/ReproducerR3Test.java": "f735034999868697df6fc713769801205208df635e709c1fd4127466ddeb55a5"
+  },
+  "status": "execution_failed",
+  "counts": {
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0
+  },
+  "test_ids": [
+    "dev.vesper.ReproducerR3Test#expiryDayMustReceiveDiscount_R3"
+  ],
+  "exit_code": 1,
+  "input_hashes_after": {
+    "pom.xml": "965101acaeeee66de7f49a0ee014024fd8013538aca26f5504ba631823b18899",
+    "requirements.md": "0843fbb828cb48e7b46a67e4d61c7d0a732bfcf813885fffdba5efbfe476a378",
+    "src/main/java/dev/vesper/Checkout.java": "612adf1ab0f3760eb31140d2535d85730d0efdc87bd38e81345bf8d05e9b3775",
+    "src/test/java/dev/vesper/CheckoutTest.java": "ae23b87cbfe209226fc1e0ac78fdd46b9a59d1abca43a67c3f23ebdbf3d76b55",
+    "src/test/java/dev/vesper/ReproducerR3Test.java": "f735034999868697df6fc713769801205208df635e709c1fd4127466ddeb55a5"
+  },
+  "inputs_unchanged": true,
+  "duration_seconds": 15.008
+}

@@ -1,0 +1,51 @@
+{
+  "command": [
+    "C:\\Users\\Learner\\sam\\vesper\\.tools\\apache-maven-3.9.9/bin\\mvn.CMD",
+    "-B",
+    "clean",
+    "test",
+    "-Dvesper.reportsDirectory=C:\\Users\\Learner\\sam\\vesper\\evidence\\verification-20260926\\workflow-20260926-141036-d39fa35f\\01-baseline\\reports",
+    "-DfailIfNoTests=true",
+    "-Dsurefire.failIfNoSpecifiedTests=true"
+  ],
+  "workspace": "C:\\Users\\Learner\\sam\\vesper\\evidence\\verification-20260926\\workflow-20260926-141036-d39fa35f\\baseline",
+  "started_at": 1790424644.448281,
+  "input_hashes_before": {
+    "pom.xml": "965101acaeeee66de7f49a0ee014024fd8013538aca26f5504ba631823b18899",
+    "requirements.md": "0843fbb828cb48e7b46a67e4d61c7d0a732bfcf813885fffdba5efbfe476a378",
+    "src/main/java/dev/vesper/Checkout.java": "15115d32f470e78a79ca9e11c2d4aacc1d0b9f8b57a66cac6096c05ad423fc88",
+    "src/test/java/dev/vesper/CheckoutTest.java": "ae23b87cbfe209226fc1e0ac78fdd46b9a59d1abca43a67c3f23ebdbf3d76b55",
+    "src/test/java/dev/vesper/ReproducerR3Test.java": "f735034999868697df6fc713769801205208df635e709c1fd4127466ddeb55a5"
+  },
+  "status": "passed",
+  "counts": {
+    "tests": 12,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "test_ids": [
+    "dev.vesper.CheckoutTest#invalidPercentRejected",
+    "dev.vesper.CheckoutTest#zeroPercent",
+    "dev.vesper.CheckoutTest#fractionalDiscountRoundsDown",
+    "dev.vesper.CheckoutTest#negativeSubtotalRejected",
+    "dev.vesper.CheckoutTest#fullDiscount",
+    "dev.vesper.CheckoutTest#validDiscount",
+    "dev.vesper.CheckoutTest#largeSubtotalDoesNotOverflow",
+    "dev.vesper.CheckoutTest#zeroSubtotal",
+    "dev.vesper.CheckoutTest#expiryDayIsInclusive",
+    "dev.vesper.CheckoutTest#missingDatesRejected",
+    "dev.vesper.CheckoutTest#expiredDiscountIsRejected",
+    "dev.vesper.ReproducerR3Test#expiryDayMustReceiveDiscount_R3"
+  ],
+  "exit_code": 0,
+  "input_hashes_after": {
+    "pom.xml": "965101acaeeee66de7f49a0ee014024fd8013538aca26f5504ba631823b18899",
+    "requirements.md": "0843fbb828cb48e7b46a67e4d61c7d0a732bfcf813885fffdba5efbfe476a378",
+    "src/main/java/dev/vesper/Checkout.java": "15115d32f470e78a79ca9e11c2d4aacc1d0b9f8b57a66cac6096c05ad423fc88",
+    "src/test/java/dev/vesper/CheckoutTest.java": "ae23b87cbfe209226fc1e0ac78fdd46b9a59d1abca43a67c3f23ebdbf3d76b55",
+    "src/test/java/dev/vesper/ReproducerR3Test.java": "f735034999868697df6fc713769801205208df635e709c1fd4127466ddeb55a5"
+  },
+  "inputs_unchanged": true,
+  "duration_seconds": 19.375
+}

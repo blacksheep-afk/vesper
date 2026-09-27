@@ -1,0 +1,45 @@
+{
+  "expiry_b": {
+    "outcome": "Correct repair",
+    "additional_detection": false,
+    "false_gate_rejection": false,
+    "basis": "Independent held-out Java results and review of the final response.",
+    "first_completion_correct": true
+  },
+  "expiry_a": {
+    "outcome": "Correct repair",
+    "additional_detection": false,
+    "false_gate_rejection": false,
+    "basis": "Independent held-out Java results and review of the final response.",
+    "first_completion_correct": true
+  },
+  "arithmetic_b": {
+    "outcome": "Correct repair",
+    "additional_detection": false,
+    "false_gate_rejection": false,
+    "basis": "Independent held-out Java results and review of the final response.",
+    "first_completion_correct": true
+  },
+  "arithmetic_a": {
+    "outcome": "Correct repair",
+    "additional_detection": false,
+    "false_gate_rejection": false,
+    "basis": "Independent held-out Java results and review of the final response.",
+    "first_completion_correct": true
+  },
+  "control_correct": {
+    "outcome": "Correctly left production unchanged",
+    "additional_detection": false,
+    "false_gate_rejection": false,
+    "basis": "Independent held-out Java results and review of the final response.",
+    "first_completion_correct": true
+  },
+  "control_ambiguous": {
+    "outcome": "Correct clarification; falsely blocked by gate",
+    "additional_detection": false,
+    "false_gate_rejection": true,
+    "basis": "Independent held-out Java results and review of the final response.",
+    "first_completion_correct": true
+  },
+  "_conclusion": "The frozen live pilot showed no additional error detection from Vesper. All six first responses were correct under the independent checks and confirmed expectations. Codex alone completed two repairs and correctly left a sound implementation unchanged. Codex with the experimental gate completed two correct repairs and correctly requested clarification on an unspecified rule, but the gate falsely rejected that last response because it added passing tests. This pilot therefore exposed added friction from the gate, not an accuracy advantage."
+}

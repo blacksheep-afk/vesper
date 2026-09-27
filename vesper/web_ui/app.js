@@ -1,0 +1,257 @@
+// Vesper Web UI - Real-time updates via SSE
+
+class VesperUI {
+    constructor() {
+        this.stages = new Map();
+        this.totalTests = 0;
+        this.completedStages = 0;
+        this.eventSource = null;
+        this.reconnectAttempts = 0;
+        this.maxReconnectAttempts = 5;
+        this.connectionStatus = document.getElementById('connection-status');
+        this.stagesContainer = document.getElementById('stages-container');
+        this.overallStatus = document.getElementById('overall-status');
+        this.totalDuration = document.getElementById('total-duration');
+        this.diffContainer = document.getElementById('diff-container');
+        this.loadingOverlay = document.getElementById('loading-overlay');
+        this.loadingLabel = document.getElementById('loading-label');
+        
+        // Summary elements
+        this.summaryDuration = document.getElementById('summary-duration');
+        this.summaryStages = document.getElementById('summary-stages');
+        this.summaryTests = document.getElementById('summary-tests');
+        this.summaryFindings = document.getElementById('summary-findings');
+        
+        this.connect();
+    }
+    
+    connect() {
+        this.updateConnectionStatus('connecting');
+        
+        this.eventSource = new EventSource('/events');
+        
+        this.eventSource.addEventListener('stage', (event) => {
+            const data = JSON.parse(event.data);
+            this.handleStageUpdate(data);
+        });
+
+        this.eventSource.addEventListener('diff', (event) => {
+            this.showDiffViewer(JSON.parse(event.data));
+        });
+        
+        this.eventSource.addEventListener('complete', (event) => {
+            const data = JSON.parse(event.data);
+            this.handleComplete(data);
+        });
+        
+        this.eventSource.addEventListener('error', (event) => {
+            if (event.data) {
+                this.handleError(JSON.parse(event.data));
+            }
+        });
+        
+        this.eventSource.onopen = () => {
+            this.updateConnectionStatus('connected');
+            this.reconnectAttempts = 0;
+        };
+        
+        this.eventSource.onerror = () => {
+            this.updateConnectionStatus('error');
+            this.eventSource.close();
+            
+            if (this.reconnectAttempts < this.maxReconnectAttempts) {
+                this.reconnectAttempts++;
+                setTimeout(() => this.connect(), 2000 * this.reconnectAttempts);
+            } else {
+                this.setLoading(false);
+            }
+        };
+    }
+    
+    updateConnectionStatus(status) {
+        const dot = this.connectionStatus.querySelector('.status-dot');
+        const text = this.connectionStatus.querySelector('.status-text');
+        
+        dot.className = 'status-dot';
+        
+        switch (status) {
+            case 'connecting':
+                text.textContent = 'Connecting...';
+                break;
+            case 'connected':
+                dot.classList.add('connected');
+                text.textContent = 'Connected';
+                break;
+            case 'error':
+                dot.classList.add('error');
+                text.textContent = 'Disconnected';
+                break;
+        }
+    }
+    
+    handleStageUpdate(data) {
+        const { stage, status, timestamp, ...details } = data;
+
+        if (status === 'running') {
+            this.setLoading(true, `${this.formatStageName(stage)} in progress`);
+        } else if (!this.loadingOverlay.hidden) {
+            this.loadingLabel.textContent = `${this.formatStageName(stage)} recorded`;
+        }
+        
+        let stageElement = document.getElementById(`stage-${stage}`);
+        
+        if (!stageElement) {
+            stageElement = this.createStageElement(stage, status, details);
+            this.stagesContainer.appendChild(stageElement);
+        } else {
+            this.updateStageElement(stageElement, status, details);
+        }
+        
+        this.stages.set(stage, { status, details, timestamp });
+        
+        // Update summary
+        this.updateSummary(details);
+        
+    }
+    
+    createStageElement(stageName, status, details) {
+        const element = document.createElement('div');
+        element.id = `stage-${stageName}`;
+        element.className = `stage-card ${status}`;
+        
+        element.innerHTML = `
+            <div class="stage-header">
+                <span class="stage-name">${this.formatStageName(stageName)}</span>
+                <span class="stage-status ${status}">${status}</span>
+            </div>
+            <div class="stage-details">
+                ${this.renderStageDetails(details)}
+            </div>
+        `;
+        
+        return element;
+    }
+    
+    updateStageElement(element, status, details) {
+        element.className = `stage-card ${status}`;
+        
+        const statusBadge = element.querySelector('.stage-status');
+        statusBadge.className = `stage-status ${status}`;
+        statusBadge.textContent = status;
+        
+        const detailsContainer = element.querySelector('.stage-details');
+        detailsContainer.innerHTML = this.renderStageDetails(details);
+    }
+    
+    renderStageDetails(details) {
+        if (!details || Object.keys(details).length === 0) {
+            return '<div class="duration">Waiting...</div>';
+        }
+        
+        let html = '';
+        
+        if (details.counts) {
+            const { tests, failures, errors, skipped } = details.counts;
+            html += `<div class="test-counts">Tests: ${tests} | Failures: ${failures} | Errors: ${errors} | Skipped: ${skipped}</div>`;
+        }
+        
+        if (details.duration_seconds) {
+            html += `<div class="duration">Duration: ${details.duration_seconds}s</div>`;
+        }
+        
+        if (details.note) {
+            html += `<div class="note">${details.note}</div>`;
+        }
+        
+        if (details.error) {
+            html += `<div class="note" style="color: var(--error-color)">Error: ${details.error}</div>`;
+        }
+        
+        return html;
+    }
+    
+    updateSummary(details) {
+        if (details.counts) {
+            this.totalTests = Math.max(this.totalTests, details.counts.tests);
+            this.summaryTests.textContent = this.totalTests;
+        }
+        
+        // Count completed stages
+        this.completedStages = this.stages.size;
+        this.summaryStages.textContent = `${this.completedStages}/8`;
+        
+        // Update findings based on stage results
+        const reproducedStages = Array.from(this.stages.values()).filter(s => s.status === 'reproduced').length;
+        this.summaryFindings.textContent = reproducedStages > 0 ? `${reproducedStages} found` : 'None';
+    }
+    
+    showDiffViewer({ original, candidate }) {
+        const viewer = document.createElement('div');
+        viewer.className = 'diff-viewer';
+
+        for (const [title, text, change] of [
+            ['Original before repair', original, 'removed'],
+            ['Candidate proposed repair', candidate, 'added']
+        ]) {
+            const column = document.createElement('div');
+            column.className = 'diff-column';
+            const header = document.createElement('div');
+            header.className = 'diff-header';
+            header.textContent = title;
+            const content = document.createElement('div');
+            content.className = 'diff-content';
+            const line = document.createElement('div');
+            line.className = `diff-${change}`;
+            line.textContent = text;
+            content.appendChild(line);
+            column.append(header, content);
+            viewer.appendChild(column);
+        }
+
+        this.diffContainer.replaceChildren(viewer);
+    }
+    
+    formatStageName(stageName) {
+        // Convert stage names to readable format
+        return stageName
+            .split('_')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
+    }
+    
+    handleComplete(data) {
+        const { status, duration } = data;
+        
+        this.overallStatus.className = `status-badge ${status === 'ok' ? 'passed' : 'failed'}`;
+        this.overallStatus.textContent = status === 'ok' ? 'Passed' : 'Failed';
+        this.totalDuration.textContent = `${duration}s`;
+        this.summaryDuration.textContent = `${duration}s`;
+        this.setLoading(false);
+        
+        this.eventSource.close();
+        this.updateConnectionStatus('connected');
+    }
+    
+    handleError(data) {
+        const { message } = data;
+        
+        this.overallStatus.className = 'status-badge failed';
+        this.overallStatus.textContent = 'Error';
+        this.totalDuration.textContent = message;
+        this.setLoading(false);
+        
+        this.eventSource.close();
+        this.updateConnectionStatus('error');
+    }
+
+    setLoading(visible, message) {
+        this.loadingOverlay.hidden = !visible;
+        this.loadingOverlay.setAttribute('aria-hidden', String(!visible));
+        if (message) this.loadingLabel.textContent = message;
+    }
+}
+
+// Initialize the UI when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    new VesperUI();
+});

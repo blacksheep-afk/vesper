@@ -1,5 +1,29 @@
 # Vesper
 
+## Frontend branch: live dashboard
+
+The live workflow dashboard uses `vesper/web_ui/index.html`, `styles.css` and `app.js`. Edit these files directly; no npm build is needed. The Python server no longer embeds competing asset templates, and serves assets with `Cache-Control: no-store`. Refresh after edits; there is no automatic hot reload.
+
+Run a real verification with `python -m vesper workflow --timeout 300`. Its dashboard stops 30 seconds after completion. For a persistent styling preview of an existing result, run:
+
+```text
+python -m vesper dashboard --run-dir .vesper/runs/<saved-run-folder> --port 8080
+```
+
+This prints the exact asset path and saved record being served. It stays open until Ctrl+C and does not rerun tests. Use a real saved folder containing `result.json`. The page displays that saved result; it is not a new live verification.
+
+The React workspace below is a separate interface. Its `web/src/workspace.css` must be built with `npm ci` and `npm run build` from `web/`, producing `vesper/assets/workspace.css`. That build does not style the live dashboard. On this branch the React launch currently imports a missing `run_demo` function; use the dashboard commands above. This existing backend mismatch is not repaired by the styling changes.
+
+## Interactive local workspace
+
+Vesper now has a React workspace connected to the real local verifier: select the supported checkout demo, confirm the requirement, run Maven verification, inspect findings/patch/logs, and record a separate human decision. The four-star ladybug represents requirement, reproduction, verification and human review.
+
+Run `python -m vesper workspace` from the project root with Java 17+ and Maven on PATH, then open `http://127.0.0.1:8765`. On the current Windows setup, first run `. ./scripts/use-local-tools.ps1`. Built frontend assets are included; Node is only needed for frontend development. See [workspace guide](docs/WORKSPACE.md).
+
+This version runs the disclosed R3 replay using its existing candidate fix. It does not accept arbitrary GitHub URLs, generate AI repairs, or merge changes. The standalone evidence report remains available as an export.
+
+> Current verification status: the restored runner passes the 44 Python checks and the 16-case synthetic challenge. See [verified results and limits](docs/VERIFICATION-20260926.md) and [submission readiness](docs/SUBMISSION-READINESS.md). The original demo Java evidence is historical. A fresh six-task [live Codex pilot](docs/LIVE-CODEX-COMPARISON-20260926.md) completed: both conditions handled their tasks correctly, with no additional error detected by the experimental Vesper gate. The frozen gate falsely blocked one correct control; this was fixed separately after the trial.
+
 **Vesper doesn't ask developers to trust AI. It makes AI back its claims with evidence.**
 
 A developer workflow built around IBM Bob IDE that connects code review, bug reproduction, repair and testing. Previously named ProofLoop.
@@ -75,15 +99,15 @@ A test failure alone is not enough: the expectation must be valid and the failur
 - [x] Verify the local Java, Maven and Python toolchain
 - [x] Build the standalone demo and establish passing baseline tests
 - [x] Reproduce one requirement-linked bug
-- [x] Prepare and verify a candidate fix (Sprint 3 — integrated, 12/12 pass)
+- [x] Prepare and verify a candidate fix (Sprint 3 â€” integrated, 12/12 pass)
 - [x] Connect the stages into one Bob workflow (`python -m vesper workflow`)
 - [x] Generate a report from actual results (`workflow_report.md` in each run dir)
-- [ ] Measure impact — timing study methodology documented; measurements pending
-- [ ] Record narrated demo video (≤3 min, ≥90s working solution)
+- [ ] Measure impact â€” timing study methodology documented; measurements pending
+- [ ] Record narrated demo video (â‰¤3 min, â‰¥90s working solution)
 - [ ] Capture Bob task 04 session screenshot
-- [ ] Submit hackathon form — **do not submit without user instruction**
+- [ ] Submit hackathon form â€” **do not submit without user instruction**
 
-Sprints 1–3 complete: 12 Java tests pass (11 original + 1 frozen reproducer), 10 Python runner checks pass, fix integrated. Sprint 5 workflow runner operational. Bob session screenshots for tasks 01–03 captured; task 04 pending.
+Sprints 1â€“3 complete: 12 Java tests pass (11 original + 1 frozen reproducer), 10 Python runner checks pass, fix integrated. Sprint 5 workflow runner operational. Bob session screenshots for tasks 01â€“03 captured; task 04 pending.
 
 ## Task breakdown
 
@@ -228,6 +252,13 @@ The supplied R3 demonstration now runs sequentially with `python -m vesper workf
 
 ## Testing the workflow
 
+The merged runner has known verification gaps. The next experiment tests whether
+its gate rejects misleading evidence before comparing Codex alone with Codex plus
+Vesper. See the [experiment results](docs/EXPERIMENT-1-RESULTS.md) and
+[comparison protocol](docs/EXPERIMENT-1-VERIFICATION-GATE.md). Run the synthetic
+challenge with `python -m experiments.gate_challenge`; it currently exits nonzero
+because the gate fails several acceptance checks. This is not a live agent benchmark.
+
 1. Run the existing suite and establish a passing, nonempty baseline.
 2. Confirm the meaning of the selected requirement.
 3. Run the reproducer on the original code and inspect the actual failure.
@@ -266,3 +297,9 @@ Developed by the Black Sheep team for the IBM Bob 2.0 Hackathon.
 MIT License. See [LICENSE](LICENSE). Copyright (c) 2026 Black Sheep Team.
 
 The event requires an original, MIT-compliant submission. No third-party code is included. All demo data is synthetic.
+
+## Visual evidence report
+
+Open [the saved R3 report](evidence/verification-20260926/workflow-20260926-141036-d39fa35f/report.html) in a browser. It works offline and shows the recorded execution trail, side-by-side patch, raw records, fingerprints, and pending human decision. This is a new presentation of saved Java evidence, not a new Java execution.
+
+`python -m vesper report <run-directory>` regenerates both Markdown and HTML; new demo runs produce both automatically. Synthetic challenge reports explicitly say no Java executed. See [report design and validation](docs/REPORT-DESIGN.md) and [next test sprints](docs/NEXT-TEST-SPRINTS.md).

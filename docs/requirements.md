@@ -21,3 +21,8 @@ Use a small synthetic checkout/discount service with a standalone Maven test sui
 
 ## Out of scope
 Multiple languages, automated PRs/merging, hosted arbitrary-repository execution, dashboard accounts, and parallel repair jobs.
+
+
+## Local workspace milestone
+
+The team requested a real interactive local verifier on 26 September 2026. A loopback-only React workspace may invoke the supported R3 runner, display actual progress and evidence, and retain a separate patch-bound human review. This supersedes the initial no-app-server boundary only for that local adapter. Hosted arbitrary-repository execution, cloud accounts, automatic integration and parallel repairs remain outside scope. A cold Maven cache may download dependencies; browser assets are served locally.

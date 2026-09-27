@@ -21,6 +21,8 @@ def classify(report_dir, exit_code):
             if root.tag != "testsuite":
                 raise ValueError("Expected Surefire testsuite")
             cases = root.findall("testcase")
+            if any(not c.get('classname', '').strip() or not c.get('name', '').strip() for c in cases):
+                raise ValueError('Every executed case needs a class and method identity')
             observed = dict(tests=len(cases), failures=sum(c.find("failure") is not None for c in cases),
                             errors=sum(c.find("error") is not None for c in cases),
                             skipped=sum(c.find("skipped") is not None for c in cases))
@@ -29,6 +31,8 @@ def classify(report_dir, exit_code):
                     raise ValueError("Report counts disagree with test cases")
                 counts[key] += value
             identities.extend(c.get("classname", "") + "#" + c.get("name", "") for c in cases)
+        if len(identities) != len(set(identities)):
+            raise ValueError('Duplicate test identities')
     except (ET.ParseError, ValueError, OSError):
         return dict(status="invalid_report", counts=counts, test_ids=identities)
     if exit_code != 0: status = "execution_failed"

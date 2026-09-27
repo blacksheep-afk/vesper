@@ -1,14 +1,14 @@
-"""Sprint 4/5 workflow runner — full end-to-end demonstration of the Vesper R3 cycle.
+"""Sprint 4/5 workflow runner â€” full end-to-end demonstration of the Vesper R3 cycle.
 
 Stages (sequential):
-  1. baseline     — clean Maven build, all tests must pass
-  2. seed         — swap in the seeded (buggy) Checkout.java
-  3. reproduce    — run the frozen ReproducerR3Test; must FAIL
-  4. regress_bug  — full suite on seeded code; records which tests fail
-  5. restore      — reinstate the integrated (fixed) Checkout.java
-  6. verify       — run the frozen reproducer on fixed code; must PASS
-  7. regress_fix  — full suite on fixed code; all must pass
-  8. report       — write a human-readable summary of every stage
+  1. baseline     â€” clean Maven build, all tests must pass
+  2. seed         â€” swap in the seeded (buggy) Checkout.java
+  3. reproduce    â€” run the frozen ReproducerR3Test; must FAIL
+  4. regress_bug  â€” full suite on seeded code; records which tests fail
+  5. restore      â€” reinstate the integrated (fixed) Checkout.java
+  6. verify       â€” run the frozen reproducer on fixed code; must PASS
+  7. regress_fix  â€” full suite on fixed code; all must pass
+  8. report       â€” write a human-readable summary of every stage
 
 Run only trusted local projects. Never modify the frozen reproducer test.
 """
@@ -24,6 +24,9 @@ if sys.stdout.encoding and sys.stdout.encoding.lower().replace("-", "") != "utf8
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 import time
 from pathlib import Path
+
+# Import web server for real-time UI
+from vesper.web_server import VesperWebServer, create_web_ui_files
 
 SEEDED_SOURCE = Path("demo/evidence/seeded/Checkout.java.seeded")
 APP_SOURCE    = Path("demo/src/main/java/dev/vesper/Checkout.java")
@@ -81,7 +84,7 @@ def _stage_header(n, name):
 # ---------------------------------------------------------------------------
 
 def stage_baseline(run_dir, timeout):
-    _stage_header(1, "baseline — fixed source, all tests must pass")
+    _stage_header(1, "baseline â€” fixed source, all tests must pass")
     reports = run_dir / "baseline_reports"
     reports.mkdir(parents=True)
     code, out, dur = _mvn(
@@ -102,7 +105,7 @@ def stage_baseline(run_dir, timeout):
 
 
 def stage_seed(run_dir):
-    _stage_header(2, "seed — swap in the disclosed seeded (buggy) Checkout.java")
+    _stage_header(2, "seed â€” swap in the disclosed seeded (buggy) Checkout.java")
     src = SEEDED_SOURCE.resolve()
     dst = APP_SOURCE.resolve()
     if not src.is_file():
@@ -116,7 +119,7 @@ def stage_seed(run_dir):
 
 
 def stage_reproduce(run_dir, timeout):
-    _stage_header(3, "reproduce — frozen ReproducerR3Test must FAIL on seeded code")
+    _stage_header(3, "reproduce â€” frozen ReproducerR3Test must FAIL on seeded code")
     reports = run_dir / "reproduce_reports"
     reports.mkdir(parents=True)
     code, out, dur = _mvn(
@@ -127,18 +130,18 @@ def stage_reproduce(run_dir, timeout):
         ".", timeout, "reproduce",
     )
     counts, ids = _parse_surefire(reports)
-    # We WANT a failure here — that is the reproduction
+    # We WANT a failure here â€” that is the reproduction
     reproduced = (counts.get("failures", 0) > 0 and code != 0)
     status = "reproduced" if reproduced else "not_reproduced"
     print(out[-3000:])
     print(f">> {status}  ({counts})  {dur}s")
     return dict(stage="reproduce", status=status, exit_code=code,
                 counts=counts, test_ids=ids, duration_seconds=dur,
-                note="EXPECTED failure on seeded code — confirms defect is present")
+                note="EXPECTED failure on seeded code â€” confirms defect is present")
 
 
 def stage_regress_bug(run_dir, timeout):
-    _stage_header(4, "regress_bug — full suite on seeded code")
+    _stage_header(4, "regress_bug â€” full suite on seeded code")
     reports = run_dir / "regress_bug_reports"
     reports.mkdir(parents=True)
     code, out, dur = _mvn(
@@ -152,11 +155,11 @@ def stage_regress_bug(run_dir, timeout):
     print(f">> exit {code}  ({counts})  {dur}s")
     return dict(stage="regress_bug", exit_code=code,
                 counts=counts, test_ids=ids, duration_seconds=dur,
-                note="Full regression on seeded code — failures expected from R3 boundary bug")
+                note="Full regression on seeded code â€” failures expected from R3 boundary bug")
 
 
 def stage_restore(run_dir):
-    _stage_header(5, "restore — reinstate the integrated fixed Checkout.java")
+    _stage_header(5, "restore â€” reinstate the integrated fixed Checkout.java")
     bak = run_dir / "Checkout.java.fixed-bak"
     dst = APP_SOURCE.resolve()
     if not bak.is_file():
@@ -168,7 +171,7 @@ def stage_restore(run_dir):
 
 
 def stage_verify(run_dir, timeout):
-    _stage_header(6, "verify — frozen ReproducerR3Test must PASS on fixed code")
+    _stage_header(6, "verify â€” frozen ReproducerR3Test must PASS on fixed code")
     reports = run_dir / "verify_reports"
     reports.mkdir(parents=True)
     code, out, dur = _mvn(
@@ -189,7 +192,7 @@ def stage_verify(run_dir, timeout):
 
 
 def stage_regress_fix(run_dir, timeout):
-    _stage_header(7, "regress_fix — full suite on fixed code; all must pass")
+    _stage_header(7, "regress_fix â€” full suite on fixed code; all must pass")
     reports = run_dir / "regress_fix_reports"
     reports.mkdir(parents=True)
     code, out, dur = _mvn(
@@ -212,9 +215,9 @@ def stage_regress_fix(run_dir, timeout):
 
 
 def stage_report(run_dir, stages, workflow_duration):
-    _stage_header(8, "report — human-readable summary")
+    _stage_header(8, "report â€” human-readable summary")
     lines = [
-        "# Vesper Workflow Report — Sprint 5 Rehearsal",
+        "# Vesper Workflow Report â€” Sprint 5 Rehearsal",
         "",
         f"Run directory : {run_dir}",
         f"Total duration: {round(workflow_duration, 1)}s",
@@ -227,25 +230,25 @@ def stage_report(run_dir, stages, workflow_duration):
     for s in stages:
         c = s.get("counts", {})
         lines.append(
-            f"| {s['stage']} | {s.get('status', s.get('exit_code', '—'))} "
-            f"| {c.get('tests','—')} | {c.get('failures','—')} "
-            f"| {s.get('duration_seconds','—')}s |"
+            f"| {s['stage']} | {s.get('status', s.get('exit_code', 'â€”'))} "
+            f"| {c.get('tests','â€”')} | {c.get('failures','â€”')} "
+            f"| {s.get('duration_seconds','â€”')}s |"
         )
 
     lines += [
         "",
         "## Finding",
         "",
-        "**R3 — expiry-day boundary (seeded defect, disclosed):**",
-        "  Seeded: `!today.isBefore(expiry)` → discount skipped on expiry day.",
-        "  Fix:    `today.isAfter(expiry)`   → discount applied on expiry day.",
+        "**R3 â€” expiry-day boundary (seeded defect, disclosed):**",
+        "  Seeded: `!today.isBefore(expiry)` â†’ discount skipped on expiry day.",
+        "  Fix:    `today.isAfter(expiry)`   â†’ discount applied on expiry day.",
         "",
         "## Verification outcome",
     ]
     verify  = next((s for s in stages if s["stage"] == "verify"),  {})
     regress = next((s for s in stages if s["stage"] == "regress_fix"), {})
-    lines.append(f"  Reproducer (fixed code): {verify.get('status','—')}")
-    lines.append(f"  Full regression (fixed) : {regress.get('status','—')}")
+    lines.append(f"  Reproducer (fixed code): {verify.get('status','â€”')}")
+    lines.append(f"  Full regression (fixed) : {regress.get('status','â€”')}")
 
     report_path = run_dir / "workflow_report.md"
     report_path.write_text("\n".join(lines), encoding="utf-8")
@@ -258,14 +261,23 @@ def stage_report(run_dir, stages, workflow_duration):
 # Main entry
 # ---------------------------------------------------------------------------
 
-def run_workflow(timeout):
+def run_workflow(timeout, web_ui=True, web_port=8080):
     run_id = time.strftime("workflow-%Y%m%d-%H%M%S")
     run_dir = RUNS_DIR / run_id
     run_dir.mkdir(parents=True, exist_ok=False)
 
-    print(f"\nVesper workflow — run ID: {run_id}")
+    print(f"\nVesper workflow â€” run ID: {run_id}")
     print(f"Run directory  : {run_dir}")
     print(f"Timeout/stage  : {timeout}s")
+
+    # Initialize web server if requested
+    web_server = None
+    if web_ui:
+        web_ui_dir = Path(__file__).resolve().parent / "web_ui"
+        create_web_ui_files(web_ui_dir)
+        web_server = VesperWebServer(port=web_port, web_root=web_ui_dir)
+        server_url = web_server.start()
+        print(f"Web UI          : {server_url}")
 
     workflow_start = time.time()
     stages = []
@@ -275,45 +287,145 @@ def run_workflow(timeout):
     if "!today.isBefore" in fixed_line14:
         print("\nWARNING: Checkout.java appears to have the seeded bug already in place.")
         print("Restore the fixed version before running the workflow.")
+        if web_server:
+            web_server.broadcast_error("Checkout.java has seeded bug already in place")
+            web_server.stop()
         return 2
 
     # Run all stages; if seed fails, do not proceed (can't restore what wasn't saved)
+    if web_server:
+        web_server.broadcast_stage("baseline", "running")
+    
     result = stage_baseline(run_dir, timeout)
     stages.append(result)
+    
+    if web_server:
+        web_server.broadcast_stage("baseline", result["status"], {
+            "counts": result.get("counts"),
+            "duration_seconds": result.get("duration_seconds")
+        })
+    
     if result["status"] != "passed":
         print("\nABORTED: baseline must pass before proceeding.")
         _save(run_dir, stages, time.time() - workflow_start)
+        if web_server:
+            web_server.broadcast_complete("failed", time.time() - workflow_start)
+            web_server.stop()
         return 1
 
+    if web_server:
+        web_server.broadcast_stage("seed", "running")
+    
     result = stage_seed(run_dir)
     stages.append(result)
+    
+    if web_server:
+        web_server.broadcast_stage("seed", result["status"], {
+            "note": "Swapped in seeded Checkout.java"
+        })
+    
     if result["status"] != "ok":
         print("\nABORTED: could not swap in seeded source.")
         _save(run_dir, stages, time.time() - workflow_start)
+        if web_server:
+            web_server.broadcast_complete("failed", time.time() - workflow_start)
+            web_server.stop()
         return 1
 
     try:
+        if web_server:
+            web_server.broadcast_stage("reproduce", "running")
+        
         stages.append(stage_reproduce(run_dir, timeout))
+        
+        if web_server:
+            reproduce_result = stages[-1]
+            web_server.broadcast_stage("reproduce", reproduce_result["status"], {
+                "counts": reproduce_result.get("counts"),
+                "duration_seconds": reproduce_result.get("duration_seconds"),
+                "note": reproduce_result.get("note")
+            })
+        
+        if web_server:
+            web_server.broadcast_stage("regress_bug", "running")
+        
         stages.append(stage_regress_bug(run_dir, timeout))
+        
+        if web_server:
+            regress_bug_result = stages[-1]
+            web_server.broadcast_stage("regress_bug", "failed" if regress_bug_result["exit_code"] != 0 else "passed", {
+                "counts": regress_bug_result.get("counts"),
+                "duration_seconds": regress_bug_result.get("duration_seconds"),
+                "note": regress_bug_result.get("note")
+            })
     finally:
         # Always restore the fixed source, even on error
+        if web_server:
+            web_server.broadcast_stage("restore", "running")
+        
         restore_result = stage_restore(run_dir)
         stages.append(restore_result)
+        
+        if web_server:
+            web_server.broadcast_stage("restore", restore_result["status"], {
+                "note": "Restored fixed Checkout.java"
+            })
 
+    if web_server:
+        web_server.broadcast_stage("verify", "running")
+    
     stages.append(stage_verify(run_dir, timeout))
+    
+    if web_server:
+        verify_result = stages[-1]
+        web_server.broadcast_stage("verify", verify_result["status"], {
+            "counts": verify_result.get("counts"),
+            "duration_seconds": verify_result.get("duration_seconds")
+        })
+    
+    if web_server:
+        web_server.broadcast_stage("regress_fix", "running")
+    
     stages.append(stage_regress_fix(run_dir, timeout))
+    
+    if web_server:
+        regress_fix_result = stages[-1]
+        web_server.broadcast_stage("regress_fix", regress_fix_result["status"], {
+            "counts": regress_fix_result.get("counts"),
+            "duration_seconds": regress_fix_result.get("duration_seconds")
+        })
 
     workflow_duration = time.time() - workflow_start
-    stages.append(stage_report(run_dir, stages, workflow_duration))
+    report_result = stage_report(run_dir, stages, workflow_duration)
+    stages.append(report_result)
+    if web_server:
+        web_server.broadcast_stage("report", report_result["status"])
     _save(run_dir, stages, workflow_duration)
+    
+    # Broadcast diff information
+    if web_server:
+        original_code = next(line.strip() for line in SEEDED_SOURCE.read_text(encoding="utf-8").splitlines()
+                             if "isBefore(expiry)" in line)
+        candidate_code = next(line.strip() for line in (run_dir / "Checkout.java.fixed-bak").read_text(encoding="utf-8").splitlines()
+                              if "isAfter(expiry)" in line)
+        web_server.broadcast_diff(original_code, candidate_code)
 
     # Final exit code: 0 only if verify+regress both passed
     verify  = next((s for s in stages if s["stage"] == "verify"),     {})
     regress = next((s for s in stages if s["stage"] == "regress_fix"), {})
     ok = (verify.get("status") == "verified"
           and regress.get("status") == "all_passed")
+    
     print(f"\n{'WORKFLOW PASSED [OK]' if ok else 'WORKFLOW FAILED [!!]'}  "
           f"({round(workflow_duration, 1)}s total)")
+    
+    if web_server:
+        web_server.broadcast_complete("ok" if ok else "failed", round(workflow_duration, 1))
+        # Keep server running for a bit to allow viewing results
+        print(f"\nWeb UI will remain available at {server_url} for 30 seconds...")
+        time.sleep(30)
+        web_server.stop()
+    
     return 0 if ok else 1
 
 
@@ -329,5 +441,9 @@ def main(argv=None):
     parser.add_argument("action", choices=["workflow"])
     parser.add_argument("--timeout", type=int, default=120,
                         help="Per-stage Maven timeout in seconds (default: 120)")
+    parser.add_argument("--no-web-ui", action="store_true",
+                        help="Disable the web UI (default: enabled with auto-open browser)")
+    parser.add_argument("--web-port", type=int, default=8080,
+                        help="Port for web UI (default: 8080)")
     args = parser.parse_args(argv)
-    return run_workflow(args.timeout)
+    return run_workflow(args.timeout, web_ui=not args.no_web_ui, web_port=args.web_port)

@@ -8,3 +8,5 @@ __pycache__/
 !.env.example
 
 .tools/
+
+web/node_modules/

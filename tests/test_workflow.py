@@ -53,7 +53,7 @@ class WorkflowTests(unittest.TestCase):
 
     def workflow(self):
         with patch('vesper.workflow.execute', side_effect=self.fake_execute), patch('vesper.workflow.capture', return_value={'output': 'fixture'}):
-            directory = run_demo(self.project, self.root / 'runs', 'fake')
+            directory = run_demo(self.project, self.root / 'runs', 'fake', evidence_kind='synthetic_fault_injection')
         return directory, json.loads((directory / 'workflow.json').read_text())
 
     def test_complete_sequence_and_report_keep_approval_pending(self):
@@ -63,7 +63,7 @@ class WorkflowTests(unittest.TestCase):
         self.assertEqual('pending', data['approval'])
         self.assertEqual('correct source', (self.project / SOURCE).read_text())
         self.assertIn('-seeded source', data['diff'])
-        self.assertIn('pending review', report(directory).read_text())
+        self.assertIn('pending review', report(directory).read_text(encoding='utf-8'))
 
     def test_setup_failure_blocks_before_investigation(self):
         self.mode = 'environment_error'
