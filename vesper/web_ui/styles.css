@@ -1,40 +1,28 @@
-/* Vesper Web UI Styles - Sidebar Layout */
+/* Live dashboard stylesheet. Edit here; no frontend build required. */
 
 :root {
-    /* Sidebar - always dark, warm-black (matches the evidence report) */
     --sidebar-bg: #111111;
     --sidebar-text: #f5f5f5;
     --sidebar-border: #353535;
     --sidebar-muted: #b8b8b8;
-
-    /* Main content - light mode (default), warm paper tone */
     --main-bg: #ffffff;
     --paper: #ffffff;
     --main-text: #111111;
     --main-secondary: #555555;
     --main-border: #dddddd;
     --main-accent: #111111;
-
-    /* Brand accent - the ladybug red, used sparingly */
     --brand-red: #c8202e;
     --brand-gold: #e8b923;
-
-    /* Status colors - kept to pass/fail semantics only */
     --success-color: #2f7a4d;
     --error-color: #b3261e;
     --neutral-color: #6b6873;
-
-    /* Card styling */
     --card-bg: #f6f6f6;
     --card-border: #dddddd;
-    --card-shadow: 0 2px 6px rgba(0,0,0,0.06), 0 12px 32px rgba(0,0,0,0.06);
-
-    /* Diff colors - matched to the evidence report screenshot */
+    --card-shadow: 0 1px 2px rgba(0,0,0,0.06);
     --diff-removed-bg: #f4e0d9;
     --diff-removed-text: #782d24;
     --diff-added-bg: #e1eddc;
     --diff-added-text: #285030;
-
     --font-serif: Georgia, "Times New Roman", serif;
     --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     --font-mono: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", monospace;
@@ -59,31 +47,6 @@ body {
     min-height: 100vh;
 }
 
-/* Sidebar */
-.sidebar {
-    width: 280px;
-    background-color: var(--sidebar-bg);
-    color: var(--sidebar-text);
-    display: flex;
-    flex-direction: column;
-    padding: 2rem 1.5rem;
-    border-right: 1px solid var(--sidebar-border);
-    position: fixed;
-    height: 100vh;
-    overflow-y: auto;
-}
-
-.logo-section {
-    margin-bottom: 2rem;
-}
-
-.logo-row {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    margin-bottom: 0.85rem;
-}
-
 .ladybug-logo {
     width: 42px;
     height: 42px;
@@ -97,62 +60,35 @@ body {
 }
 
 .app-name {
-    font-family: var(--font-serif);
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--sidebar-text);
     margin: 0;
+    font-family: var(--font-serif);
+    font-weight: 700;
+    color: var(--main-text);
+    font-size: 2.25rem;
     line-height: 1;
-    letter-spacing: -0.3px;
+    letter-spacing: -0.035em;
 }
 
 .slogan {
-    font-size: 0.85rem;
-    color: #f1eef2;
     font-style: italic;
     margin: 0;
-    line-height: 1.5;
     font-weight: 400;
-    padding-left: 2px;
     border-left: 2px solid var(--brand-red);
-    padding-left: 10px;
-}
-
-.nav-links {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    margin-bottom: auto;
-}
-
-.nav-link {
-    color: var(--sidebar-muted);
-    text-decoration: none;
-    padding: 0.75rem 1rem;
-    border-radius: 6px;
-    transition: background-color 0.2s;
-    font-size: 0.95rem;
-}
-
-.nav-link:hover {
-    background-color: rgba(255,255,255,0.08);
-    color: var(--sidebar-text);
-}
-
-.nav-link.active {
-    background-color: #fff;
-    color: #141414;
-    font-weight: 600;
+    color: var(--main-secondary);
+    padding-left: 8px;
+    font-size: 0.875rem;
+    line-height: 1.5;
 }
 
 .connection-status {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 8px;
+    padding-top: 0;
+    border-top: 0;
+    color: var(--main-secondary);
     font-size: 0.8rem;
-    color: var(--sidebar-muted);
-    padding-top: 1rem;
-    border-top: 1px solid var(--sidebar-border);
+    line-height: 1.25;
 }
 
 .status-dot {
@@ -161,6 +97,8 @@ body {
     border-radius: 50%;
     background-color: var(--neutral-color);
     animation: pulse 2s infinite;
+    transition: background-color 180ms ease;
+    flex-shrink: 0;
 }
 
 .status-dot.connected {
@@ -173,19 +111,13 @@ body {
     animation: none;
 }
 
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
-}
-
-/* Main content */
 .main-content {
     flex: 1;
     width: 100%;
     max-width: 1480px;
     margin: 0 auto;
-    padding: 2rem;
     background-color: var(--paper);
+    padding: 40px;
 }
 
 .main-header {
@@ -193,21 +125,22 @@ body {
     justify-content: space-between;
     align-items: center;
     gap: 1.5rem;
-    margin-bottom: 24px;
-    padding: 0 0 16px;
+    padding: 0 0 24px;
     border-bottom: 1px solid var(--main-border);
+    margin-bottom: 32px;
+    padding-bottom: 32px;
 }
 
 .brand-lockup {
     display: flex;
     align-items: center;
-    gap: 12px;
     min-width: 0;
+    gap: 16px;
 }
 
 .brand-copy {
     display: grid;
-    gap: 4px;
+    gap: 8px;
 }
 
 .brand-lockup .ladybug-logo {
@@ -215,34 +148,10 @@ body {
     height: 48px;
 }
 
-.app-name {
-    font-family: var(--font-serif);
-    font-size: 1.65rem;
-    font-weight: 700;
-    color: var(--main-text);
-    line-height: 1.1;
-    letter-spacing: 0;
-}
-
-.slogan {
-    color: var(--main-secondary);
-    font-size: 0.85rem;
-    line-height: 1.4;
-}
-
 .header-meta {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
-}
-
-.connection-status {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--main-secondary);
-    font-size: 0.8rem;
-    line-height: 1.25;
+    gap: 24px;
 }
 
 .overall-status {
@@ -253,8 +162,6 @@ body {
 
 .status-badge {
     display: inline-block;
-    padding: 8px 12px;
-    border-radius: 4px;
     font-weight: 600;
     font-size: 0.875rem;
     line-height: 1.25;
@@ -262,6 +169,8 @@ body {
     background-color: var(--card-bg);
     color: var(--main-text);
     border: 1px solid var(--card-border);
+    padding: 10px 16px;
+    border-radius: 6px;
 }
 
 .status-badge.running {
@@ -283,9 +192,10 @@ body {
 }
 
 .timing {
-    font-size: 0.875rem;
     color: var(--main-secondary);
     font-family: var(--font-mono);
+    white-space: nowrap;
+    font-size: 0.8125rem;
 }
 
 .loading-overlay {
@@ -305,19 +215,23 @@ body {
 .loading-content {
     width: min(640px, 100%);
     display: grid;
-    gap: 14px;
-    text-align: center;
+    text-align: left;
+    gap: 24px;
 }
 
 .loading-label {
     color: var(--main-text);
-    font-size: 1.1rem;
+    line-height: 1.4;
+    font-family: var(--font-serif);
+    font-size: 1.75rem;
+    font-weight: 400;
 }
 
 .loading-track {
     position: relative;
     height: 74px;
     border-bottom: 1px solid var(--main-border);
+    margin-inline: 24px;
 }
 
 .loading-track::before {
@@ -344,72 +258,55 @@ body {
 .loading-detail {
     color: var(--main-secondary);
     font-size: 0.85rem;
+    line-height: 1.5;
 }
 
-@keyframes ladybug-cross {
-    0% { left: 0; opacity: 1; transform: translate(-50%, -50%) rotate(-4deg); }
-    80% { left: calc(100% - 24px); opacity: 1; transform: translate(-50%, -50%) rotate(4deg); }
-    94% { left: calc(100% - 24px); opacity: 0; transform: translate(-50%, -50%); }
-    100% { left: 0; opacity: 0; transform: translate(-50%, -50%); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .loading-ladybug {
-        left: 50%;
-        animation: none;
-        opacity: 1;
-    }
-}
-
-/* Content grid */
 .content-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 24px;
-    margin-bottom: 24px;
+    gap: 32px;
+    margin-bottom: 32px;
 }
 
-/* Sections */
 .stages-section, .diff-section, .session-summary {
     background-color: var(--main-bg);
-    border-radius: 6px;
-    padding: 24px;
     border: 1px solid var(--card-border);
-    box-shadow: var(--card-shadow);
+    padding: 32px;
+    border-radius: 8px;
+    box-shadow: none;
 }
 
 h3 {
     font-family: var(--font-serif);
-    font-size: 1.375rem;
-    font-weight: 700;
     color: var(--main-text);
-    line-height: 1.25;
-    letter-spacing: 0;
-    margin-bottom: 16px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--main-border);
+    font-size: 1.75rem;
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 24px;
+    padding-bottom: 0;
+    border-bottom: 0;
+    letter-spacing: -0.025em;
 }
 
-/* Compact four-by-two layout keeps the full verification sequence in view. */
 .stages-container {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 8px;
+    gap: 16px;
 }
 
 .stage-card {
     min-width: 0;
-    min-height: 92px;
-    padding: 12px;
     border: 1px solid var(--card-border);
     border-left: 3px solid var(--card-border);
-    border-radius: 4px;
     background: #fff;
     transition: border-color 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
+    padding: 20px;
+    border-radius: 6px;
+    min-height: 144px;
 }
 
 .stage-card.pending {
-    opacity: 0.55;
+    opacity: 1;
 }
 
 .stage-card.running {
@@ -428,32 +325,37 @@ h3 {
 .stage-header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 4px;
-    gap: 8px;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+    align-items: baseline;
 }
 
 .stage-name {
-    font-weight: 700;
-    font-size: 1rem;
     color: var(--main-text);
     flex: 1;
-    line-height: 1.25;
     letter-spacing: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.4;
 }
 
 .stage-status {
-    font-size: 0.65rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0;
+    letter-spacing: 0.04em;
     line-height: 1.2;
-    padding: 4px 8px;
     border-radius: 3px;
     background-color: var(--card-bg);
     color: var(--main-secondary);
     border: 1px solid var(--card-border);
     white-space: nowrap;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.625rem;
+    padding: 4px 6px;
+    min-height: 22px;
 }
 
 .stage-status.running {
@@ -477,40 +379,43 @@ h3 {
 .stage-details {
     font-size: 0.85rem;
     color: var(--main-secondary);
-    line-height: 1.4;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
 }
 
 .stage-details .test-counts {
     font-family: var(--font-mono);
-    margin-top: 4px;
+    margin-top: 8px;
     font-size: 0.75rem;
 }
 
 .stage-details .duration {
-    margin-top: 4px;
+    margin-top: 8px;
     font-family: var(--font-mono);
     font-size: 0.75rem;
 }
 
 .stage-details .note {
-    margin-top: 4px;
+    margin-top: 8px;
     font-style: italic;
-    font-size: 0.8rem;
+    font-size: 0.8125rem;
+    line-height: 1.6;
 }
 
-/* Diff container */
 .diff-container {
     background-color: var(--main-bg);
-    border-radius: 4px;
     border: 1px solid var(--card-border);
     overflow: hidden;
+    border-radius: 6px;
 }
 
 .diff-placeholder {
-    padding: 24px;
     text-align: left;
     color: var(--main-secondary);
     line-height: 1.5;
+    padding: 32px;
+    min-height: 112px;
+    font-size: 0.875rem;
 }
 
 .diff-viewer {
@@ -520,8 +425,9 @@ h3 {
 }
 
 .diff-column {
-    padding: 1rem;
+    min-width: 0;
     border-right: 1px solid var(--card-border);
+    padding: 24px;
 }
 
 .diff-column:last-child {
@@ -530,31 +436,33 @@ h3 {
 
 .diff-header {
     font-weight: 600;
-    font-size: 0.8rem;
     text-transform: uppercase;
-    letter-spacing: 0;
-    line-height: 1.25;
     color: var(--main-secondary);
-    margin-bottom: 8px;
-    padding-bottom: 8px;
     border-bottom: 1px solid var(--card-border);
+    line-height: 1.5;
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    min-height: 40px;
 }
 
 .diff-content {
     font-family: var(--font-mono);
-    font-size: 0.8rem;
-    line-height: 1.55;
     white-space: pre-wrap;
     word-break: normal;
     overflow-wrap: anywhere;
+    tab-size: 4;
+    font-size: 0.8125rem;
+    line-height: 1.8;
 }
 
 .diff-removed, .diff-added {
     display: block;
-    padding: 4px 8px;
-    border-radius: 3px;
-    margin-bottom: 4px;
-    line-height: 1.5;
+    border-radius: 2px;
+    padding: 12px 16px;
+    line-height: 1.8;
+    margin-bottom: 0;
 }
 
 .diff-removed {
@@ -567,125 +475,287 @@ h3 {
     color: var(--diff-added-text);
 }
 
-/* Session summary */
 .summary-content {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 16px;
+    gap: 24px;
 }
 
 .summary-item {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    padding-top: 8px;
     border-top: 2px solid var(--main-text);
+    padding-top: 16px;
+    gap: 12px;
+    border-top-width: 1px;
 }
 
 .summary-item .label {
-    font-size: 0.75rem;
     color: var(--main-secondary);
     font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0;
-    line-height: 1.25;
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    line-height: 1.5;
 }
 
 .summary-item .value {
-    font-size: 1.125rem;
     color: var(--main-text);
-    font-weight: 600;
     font-family: var(--font-mono);
-    line-height: 1.25;
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+    min-height: 32px;
+    font-size: 1.75rem;
+    font-weight: 500;
+    line-height: 1.2;
 }
 
-.status-dot {
-    transition: background-color 180ms ease;
+.main-content, .header-meta, .overall-status, .brand-copy {
+    min-width: 0;
+}
+
+.status-badge, .stage-status {
+    transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+
+.timing, .stage-details {
+    font-variant-numeric: tabular-nums;
+}
+
+.diff-header, .summary-item .label {
+    letter-spacing: 0.04em;
+}
+
+.stage-card.pending .stage-name {
+    color: var(--main-secondary);
+}
+
+a {
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+}
+
+a:hover {
+    text-decoration-thickness: 2px;
+}
+
+a:active {
+    text-underline-offset: 2px;
+}
+
+a:focus-visible {
+    outline: 2px solid var(--main-accent);
+    outline-offset: 4px;
+}
+
+.stage-details .test-counts, .stage-details .duration {
+    font-size: 0.75rem;
+    line-height: 1.8;
+}
+
+.stage-details .duration, .stage-details .note {
+    margin-top: 12px;
+}
+
+@keyframes pulse {
+0%, 100% {
+    opacity: 1;
+}
+    50% {
+    opacity: 0.5;
+}
+}
+
+@keyframes ladybug-cross {
+0% {
+    left: 0;
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(-4deg);
+}
+    80% {
+    left: calc(100% - 24px);
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(4deg);
+}
+    94% {
+    left: calc(100% - 24px);
+    opacity: 0;
+    transform: translate(-50%, -50%);
+}
+    100% {
+    left: 0;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+}
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .stage-card,
-    .status-badge,
-    .status-dot {
-        transition: none;
-    }
-
-    .status-dot {
-        animation: none;
-    }
+.loading-ladybug {
+    left: 50%;
+    animation: none;
+    opacity: 1;
 }
 
-/* Responsive */
+.stage-card,
+    .status-badge,
+    .status-dot {
+    transition: none;
+}
+
+.status-dot {
+    animation: none;
+}
+
+.status-badge, .stage-status {
+    transition: none;
+}
+
+}
+
 @media (max-width: 768px) {
-    .main-content {
-        padding: 1.25rem;
-    }
+.main-content {
+    padding: 1.25rem;
+}
 
-    .main-header {
-        align-items: center;
-        gap: 0.75rem;
-    }
+.main-header {
+    align-items: center;
+    gap: 0.75rem;
+    padding-bottom: 24px;
+    margin-bottom: 24px;
+}
 
-    .header-meta {
-        gap: 0.75rem;
-    }
+.header-meta {
+    gap: 12px;
+}
 
-    .connection-status {
-        font-size: 0.7rem;
-    }
+.connection-status {
+    font-size: 0.7rem;
+}
 
-    .stages-container {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+.stages-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.app-name {
+    font-size: 1.875rem;
+}
+
+.content-grid {
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+.diff-column {
+    padding: 16px;
+}
+
 }
 
 @media (max-width: 480px) {
-    .main-content {
-        padding: 1rem;
-    }
+.main-content {
+    padding: 16px;
+}
 
-    .main-header {
-        align-items: flex-start;
-    }
+.main-header {
+    align-items: flex-start;
+}
 
-    .brand-lockup {
-        gap: 0.55rem;
-    }
+.brand-lockup {
+    gap: 8px;
+}
 
-    .brand-lockup .ladybug-logo {
-        width: 40px;
-        height: 40px;
-    }
+.brand-lockup .ladybug-logo {
+    width: 40px;
+    height: 40px;
+}
 
-    .app-name {
-        font-size: 1.35rem;
-    }
+.app-name {
+    font-size: 1.625rem;
+}
 
-    .slogan {
-        font-size: 0.7rem;
-    }
+.slogan {
+    font-size: 0.7rem;
+}
 
-    .header-meta {
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 0.45rem;
-    }
+.header-meta {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
 
-    .connection-status {
-        font-size: 0.65rem;
-    }
+.connection-status {
+    font-size: 0.65rem;
+}
 
-    .stages-container {
-        gap: 0.5rem;
-    }
+.stages-container {
+    gap: 8px;
+}
 
-    .stage-card {
-        min-height: 100px;
-        padding: 0.55rem;
-    }
+.stage-card {
+    min-height: 100px;
+    padding: 12px;
+}
 
-    .stage-header {
-        flex-direction: column;
-        gap: 0.35rem;
-    }
+.stage-header {
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.overall-status {
+    gap: 8px;
+}
+
+.status-badge {
+    padding: 8px;
+    font-size: 0.75rem;
+}
+
+.timing {
+    font-size: 0.6875rem;
+}
+
+.stages-section, .diff-section, .session-summary {
+    padding: 16px;
+}
+
+.stage-name {
+    font-size: 0.875rem;
+}
+
+.diff-column {
+    padding: 12px;
+}
+
+.diff-removed, .diff-added {
+    padding: 8px;
+}
+
+.summary-item .value {
+    font-size: 1.5rem;
+}
+
+}
+
+@media (max-width: 1100px) {
+.main-content {
+    padding: 24px;
+}
+
+.stages-section, .diff-section, .session-summary {
+    padding: 24px;
+}
+
+.stage-card {
+    padding: 16px;
+}
+
+.stages-container {
+    gap: 12px;
+}
+
 }

@@ -1,5 +1,8 @@
 import sys
-if len(sys.argv) > 1 and sys.argv[1] == 'baseline':
+if len(sys.argv) > 1 and sys.argv[1] == 'dashboard':
+    from .dashboard import main
+    raise SystemExit(main(sys.argv[2:]))
+elif len(sys.argv) > 1 and sys.argv[1] == 'baseline':
     from .baseline import main
 elif len(sys.argv) > 1 and sys.argv[1] == 'workspace':
     from .workspace import main

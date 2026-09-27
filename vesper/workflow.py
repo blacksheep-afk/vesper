@@ -1,14 +1,14 @@
-"""Sprint 4/5 workflow runner — full end-to-end demonstration of the Vesper R3 cycle.
+"""Sprint 4/5 workflow runner â€” full end-to-end demonstration of the Vesper R3 cycle.
 
 Stages (sequential):
-  1. baseline     — clean Maven build, all tests must pass
-  2. seed         — swap in the seeded (buggy) Checkout.java
-  3. reproduce    — run the frozen ReproducerR3Test; must FAIL
-  4. regress_bug  — full suite on seeded code; records which tests fail
-  5. restore      — reinstate the integrated (fixed) Checkout.java
-  6. verify       — run the frozen reproducer on fixed code; must PASS
-  7. regress_fix  — full suite on fixed code; all must pass
-  8. report       — write a human-readable summary of every stage
+  1. baseline     â€” clean Maven build, all tests must pass
+  2. seed         â€” swap in the seeded (buggy) Checkout.java
+  3. reproduce    â€” run the frozen ReproducerR3Test; must FAIL
+  4. regress_bug  â€” full suite on seeded code; records which tests fail
+  5. restore      â€” reinstate the integrated (fixed) Checkout.java
+  6. verify       â€” run the frozen reproducer on fixed code; must PASS
+  7. regress_fix  â€” full suite on fixed code; all must pass
+  8. report       â€” write a human-readable summary of every stage
 
 Run only trusted local projects. Never modify the frozen reproducer test.
 """
@@ -84,7 +84,7 @@ def _stage_header(n, name):
 # ---------------------------------------------------------------------------
 
 def stage_baseline(run_dir, timeout):
-    _stage_header(1, "baseline — fixed source, all tests must pass")
+    _stage_header(1, "baseline â€” fixed source, all tests must pass")
     reports = run_dir / "baseline_reports"
     reports.mkdir(parents=True)
     code, out, dur = _mvn(
@@ -105,7 +105,7 @@ def stage_baseline(run_dir, timeout):
 
 
 def stage_seed(run_dir):
-    _stage_header(2, "seed — swap in the disclosed seeded (buggy) Checkout.java")
+    _stage_header(2, "seed â€” swap in the disclosed seeded (buggy) Checkout.java")
     src = SEEDED_SOURCE.resolve()
     dst = APP_SOURCE.resolve()
     if not src.is_file():
@@ -119,7 +119,7 @@ def stage_seed(run_dir):
 
 
 def stage_reproduce(run_dir, timeout):
-    _stage_header(3, "reproduce — frozen ReproducerR3Test must FAIL on seeded code")
+    _stage_header(3, "reproduce â€” frozen ReproducerR3Test must FAIL on seeded code")
     reports = run_dir / "reproduce_reports"
     reports.mkdir(parents=True)
     code, out, dur = _mvn(
@@ -130,18 +130,18 @@ def stage_reproduce(run_dir, timeout):
         ".", timeout, "reproduce",
     )
     counts, ids = _parse_surefire(reports)
-    # We WANT a failure here — that is the reproduction
+    # We WANT a failure here â€” that is the reproduction
     reproduced = (counts.get("failures", 0) > 0 and code != 0)
     status = "reproduced" if reproduced else "not_reproduced"
     print(out[-3000:])
     print(f">> {status}  ({counts})  {dur}s")
     return dict(stage="reproduce", status=status, exit_code=code,
                 counts=counts, test_ids=ids, duration_seconds=dur,
-                note="EXPECTED failure on seeded code — confirms defect is present")
+                note="EXPECTED failure on seeded code â€” confirms defect is present")
 
 
 def stage_regress_bug(run_dir, timeout):
-    _stage_header(4, "regress_bug — full suite on seeded code")
+    _stage_header(4, "regress_bug â€” full suite on seeded code")
     reports = run_dir / "regress_bug_reports"
     reports.mkdir(parents=True)
     code, out, dur = _mvn(
@@ -155,11 +155,11 @@ def stage_regress_bug(run_dir, timeout):
     print(f">> exit {code}  ({counts})  {dur}s")
     return dict(stage="regress_bug", exit_code=code,
                 counts=counts, test_ids=ids, duration_seconds=dur,
-                note="Full regression on seeded code — failures expected from R3 boundary bug")
+                note="Full regression on seeded code â€” failures expected from R3 boundary bug")
 
 
 def stage_restore(run_dir):
-    _stage_header(5, "restore — reinstate the integrated fixed Checkout.java")
+    _stage_header(5, "restore â€” reinstate the integrated fixed Checkout.java")
     bak = run_dir / "Checkout.java.fixed-bak"
     dst = APP_SOURCE.resolve()
     if not bak.is_file():
@@ -171,7 +171,7 @@ def stage_restore(run_dir):
 
 
 def stage_verify(run_dir, timeout):
-    _stage_header(6, "verify — frozen ReproducerR3Test must PASS on fixed code")
+    _stage_header(6, "verify â€” frozen ReproducerR3Test must PASS on fixed code")
     reports = run_dir / "verify_reports"
     reports.mkdir(parents=True)
     code, out, dur = _mvn(
@@ -192,7 +192,7 @@ def stage_verify(run_dir, timeout):
 
 
 def stage_regress_fix(run_dir, timeout):
-    _stage_header(7, "regress_fix — full suite on fixed code; all must pass")
+    _stage_header(7, "regress_fix â€” full suite on fixed code; all must pass")
     reports = run_dir / "regress_fix_reports"
     reports.mkdir(parents=True)
     code, out, dur = _mvn(
@@ -215,9 +215,9 @@ def stage_regress_fix(run_dir, timeout):
 
 
 def stage_report(run_dir, stages, workflow_duration):
-    _stage_header(8, "report — human-readable summary")
+    _stage_header(8, "report â€” human-readable summary")
     lines = [
-        "# Vesper Workflow Report — Sprint 5 Rehearsal",
+        "# Vesper Workflow Report â€” Sprint 5 Rehearsal",
         "",
         f"Run directory : {run_dir}",
         f"Total duration: {round(workflow_duration, 1)}s",
@@ -230,25 +230,25 @@ def stage_report(run_dir, stages, workflow_duration):
     for s in stages:
         c = s.get("counts", {})
         lines.append(
-            f"| {s['stage']} | {s.get('status', s.get('exit_code', '—'))} "
-            f"| {c.get('tests','—')} | {c.get('failures','—')} "
-            f"| {s.get('duration_seconds','—')}s |"
+            f"| {s['stage']} | {s.get('status', s.get('exit_code', 'â€”'))} "
+            f"| {c.get('tests','â€”')} | {c.get('failures','â€”')} "
+            f"| {s.get('duration_seconds','â€”')}s |"
         )
 
     lines += [
         "",
         "## Finding",
         "",
-        "**R3 — expiry-day boundary (seeded defect, disclosed):**",
-        "  Seeded: `!today.isBefore(expiry)` → discount skipped on expiry day.",
-        "  Fix:    `today.isAfter(expiry)`   → discount applied on expiry day.",
+        "**R3 â€” expiry-day boundary (seeded defect, disclosed):**",
+        "  Seeded: `!today.isBefore(expiry)` â†’ discount skipped on expiry day.",
+        "  Fix:    `today.isAfter(expiry)`   â†’ discount applied on expiry day.",
         "",
         "## Verification outcome",
     ]
     verify  = next((s for s in stages if s["stage"] == "verify"),  {})
     regress = next((s for s in stages if s["stage"] == "regress_fix"), {})
-    lines.append(f"  Reproducer (fixed code): {verify.get('status','—')}")
-    lines.append(f"  Full regression (fixed) : {regress.get('status','—')}")
+    lines.append(f"  Reproducer (fixed code): {verify.get('status','â€”')}")
+    lines.append(f"  Full regression (fixed) : {regress.get('status','â€”')}")
 
     report_path = run_dir / "workflow_report.md"
     report_path.write_text("\n".join(lines), encoding="utf-8")
@@ -266,14 +266,14 @@ def run_workflow(timeout, web_ui=True, web_port=8080):
     run_dir = RUNS_DIR / run_id
     run_dir.mkdir(parents=True, exist_ok=False)
 
-    print(f"\nVesper workflow — run ID: {run_id}")
+    print(f"\nVesper workflow â€” run ID: {run_id}")
     print(f"Run directory  : {run_dir}")
     print(f"Timeout/stage  : {timeout}s")
 
     # Initialize web server if requested
     web_server = None
     if web_ui:
-        web_ui_dir = Path("vesper/web_ui")
+        web_ui_dir = Path(__file__).resolve().parent / "web_ui"
         create_web_ui_files(web_ui_dir)
         web_server = VesperWebServer(port=web_port, web_root=web_ui_dir)
         server_url = web_server.start()
